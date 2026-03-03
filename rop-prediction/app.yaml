@@ -1,0 +1,34 @@
+command:
+  - "streamlit"
+  - "run"
+  - "app/main.py"
+  - "--server.port=8000"
+  - "--server.headless=true"
+  - "--server.enableCORS=false"
+  - "--server.enableXsrfProtection=false"
+
+resources:
+  - name: drilling-lakebase
+    description: "Lakebase PostgreSQL — predictions and alerts for ROP demo app"
+    database:
+      instance: drilling-demo-lakebase
+
+env:
+  - name: PGHOST
+    valueFrom: drilling-lakebase
+  - name: PGUSER
+    valueFrom: drilling-lakebase
+  # Static port — valueFrom injects non-numeric values for PGPORT
+  - name: PGPORT
+    value: "5432"
+  # Override database name — Lakebase default is "databricks_postgres"
+  - name: PGDATABASE_OVERRIDE
+    value: "drilling_demo_app"
+  - name: ROP_GAP_THRESHOLD
+    value: "20.0"
+  - name: MSE_HIGH_THRESHOLD
+    value: "150000.0"
+  - name: DEFAULT_WELL
+    value: "MIP_3H"
+  - name: MLFLOW_MODEL_NAME
+    value: "rop_xgb_mseel"

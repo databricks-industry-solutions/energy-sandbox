@@ -1,0 +1,55 @@
+{
+  "name": "ESP Alert Monitor",
+  "description": "Polls new HIGH/MEDIUM predictions and creates esp_alerts in Lakebase with 4h deduplication window",
+  "tags": {"project": "esp-pm", "team": "mlops"},
+  "job_clusters": [
+    {
+      "job_cluster_key": "alert_cluster",
+      "new_cluster": {
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "num_workers": 1,
+        "custom_tags": {"project": "esp-pm", "job_type": "alert_monitor"}
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "task_key": "alert_monitor",
+      "job_cluster_key": "alert_cluster",
+      "python_wheel_task": {
+        "package_name": "esp_alert_monitor",
+        "entry_point": "monitor"
+      },
+      "libraries": [
+        {"pypi": {"package": "psycopg2-binary==2.9.9"}},
+        {"pypi": {"package": "databricks-sdk==0.28.0"}}
+      ],
+      "timeout_seconds": 0,
+      "max_retries": 5,
+      "min_retry_interval_millis": 30000,
+      "environment_key": "alert_env"
+    }
+  ],
+  "environments": [
+    {
+      "environment_key": "alert_env",
+      "spec": {
+        "client": "1",
+        "dependencies": [
+          "psycopg2-binary==2.9.9",
+          "databricks-sdk==0.28.0"
+        ]
+      }
+    }
+  ],
+  "schedule": {
+    "quartz_cron_expression": "0 */5 * * * ?",
+    "timezone_id": "UTC",
+    "pause_status": "UNPAUSED"
+  },
+  "email_notifications": {
+    "on_failure": ["mlops@company.com"]
+  },
+  "max_concurrent_runs": 1
+}

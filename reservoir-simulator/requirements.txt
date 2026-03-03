@@ -1,0 +1,7 @@
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+databricks-sdk>=0.38.0
+databricks-sql-connector>=3.1.0
+numpy>=1.26.0
+scipy>=1.14.0
+websockets>=13.0

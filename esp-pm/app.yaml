@@ -1,0 +1,34 @@
+command:
+  - "streamlit"
+  - "run"
+  - "app/main.py"
+  - "--server.port=8000"
+  - "--server.headless=true"
+  - "--server.enableCORS=false"
+  - "--server.enableXsrfProtection=false"
+
+env:
+  - name: THRESHOLD_HIGH
+    value: "0.65"
+  - name: THRESHOLD_MEDIUM
+    value: "0.30"
+  - name: DEFAULT_WINDOW_DAYS
+    value: "7"
+  - name: CLAUDE_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "<your-warehouse-id>"
+  - name: PGUSER
+    valueFrom: esp-pm-lakebase
+  - name: PGPORT
+    valueFrom: esp-pm-lakebase
+  - name: PGDATABASE_OVERRIDE
+    value: "esp_pm_app"
+
+resources:
+  - name: esp-pm-lakebase
+    description: "Lakebase PostgreSQL for ESP PM alerts and work orders"
+    database:
+      instance_name: esp-pm-db
+      database_name: esp_pm_app
+      permission: CAN_CONNECT_AND_CREATE

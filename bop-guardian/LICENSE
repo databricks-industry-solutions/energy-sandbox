@@ -1,0 +1,41 @@
+Databricks License
+Copyright (2025) Databricks, Inc.
+
+Definitions.
+
+Agreement: The agreement between Databricks, Inc., and you governing
+the use of the Databricks Services, as that term is defined in the
+Master Cloud Services Agreement (MCSA) between Databricks, Inc., and
+you or the Beta Services Terms between Databricks, Inc., and you, or
+the Databricks License Agreement between Databricks, Inc. and you
+(collectively, the "Agreement").
+
+Software: The source code and object code to which this license
+applies.
+
+Scope of Use. You may not use this Software except in connection with
+your use of the Databricks Services pursuant to the Agreement. Your
+use of the Software must comply at all times with any restrictions
+applicable to the Databricks Services, generally, and must be used in
+accordance with any applicable documentation. You may view, use, copy,
+modify, publish, and/or distribute the Software solely for your
+internal, non-commercial purposes.  You may not sublicense any of your
+rights under this license.
+
+Redistribution. You may redistribute and sublicense the Software so
+long as all use is in connection with the Databricks Services. You may
+reproduce and distribute copies of the Software with modifications
+under the terms of this License if you add a prominent notice stating
+that you changed the Software.
+
+Termination. The license granted to you in this License forms part of
+the Agreement and shall terminate upon the termination of the
+Agreement.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL DATABRICKS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.

@@ -1,0 +1,41 @@
+# Databricks
+.databricks/
+.dbx/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+# Keep frontend/dist/ (compiled SPA needed at runtime)
+!frontend/dist/
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Node
+frontend/node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude Code
+.claude/

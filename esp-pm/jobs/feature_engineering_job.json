@@ -1,0 +1,43 @@
+{
+  "name": "ESP Feature Engineering",
+  "description": "Hourly feature engineering job — computes rolling stats and SAP features, writes to esp_ai.gold.esp_features",
+  "tags": {"project": "esp-pm", "team": "mlops"},
+  "job_clusters": [
+    {
+      "job_cluster_key": "feature_cluster",
+      "new_cluster": {
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "num_workers": 4,
+        "spark_conf": {
+          "spark.databricks.delta.preview.enabled": "true",
+          "spark.sql.adaptive.enabled": "true",
+          "spark.databricks.io.cache.enabled": "true"
+        },
+        "custom_tags": {"project": "esp-pm"}
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "task_key": "feature_engineering",
+      "job_cluster_key": "feature_cluster",
+      "notebook_task": {
+        "notebook_path": "/Shared/esp-pm/notebooks/02_feature_engineering",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 3600,
+      "max_retries": 2,
+      "min_retry_interval_millis": 300000
+    }
+  ],
+  "schedule": {
+    "quartz_cron_expression": "0 0 * * * ?",
+    "timezone_id": "UTC",
+    "pause_status": "UNPAUSED"
+  },
+  "email_notifications": {
+    "on_failure": ["mlops@company.com"]
+  },
+  "max_concurrent_runs": 1
+}

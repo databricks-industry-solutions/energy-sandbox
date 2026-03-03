@@ -1,0 +1,40 @@
+{
+  "name": "ESP Inference Streaming",
+  "description": "Continuous streaming inference job — scores new feature snapshots every 5 minutes via Structured Streaming",
+  "tags": {"project": "esp-pm", "team": "mlops"},
+  "job_clusters": [
+    {
+      "job_cluster_key": "inference_cluster",
+      "new_cluster": {
+        "spark_version": "15.4.x-scala2.12",
+        "node_type_id": "i3.xlarge",
+        "num_workers": 2,
+        "spark_conf": {
+          "spark.databricks.delta.preview.enabled": "true",
+          "spark.sql.streaming.metricsEnabled": "true"
+        },
+        "custom_tags": {"project": "esp-pm", "job_type": "streaming"}
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "task_key": "inference_streaming",
+      "job_cluster_key": "inference_cluster",
+      "notebook_task": {
+        "notebook_path": "/Shared/esp-pm/notebooks/05_inference_streaming",
+        "source": "WORKSPACE"
+      },
+      "timeout_seconds": 0,
+      "max_retries": 5,
+      "min_retry_interval_millis": 60000
+    }
+  ],
+  "continuous": {
+    "pause_status": "UNPAUSED"
+  },
+  "email_notifications": {
+    "on_failure": ["mlops@company.com"]
+  },
+  "max_concurrent_runs": 1
+}

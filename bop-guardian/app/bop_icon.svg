@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- Riser pipe top -->
+  <rect x="27" y="2" width="10" height="8" rx="1" fill="#00D4FF" opacity="0.7"/>
+  <!-- Annular (dome top) -->
+  <rect x="14" y="10" width="36" height="10" rx="4" fill="#00D4FF"/>
+  <!-- Upper ram -->
+  <rect x="16" y="22" width="32" height="8" rx="2" fill="#22c55e"/>
+  <polygon points="14,24 10,26 14,28" fill="#22c55e" opacity="0.6"/>
+  <polygon points="50,24 54,26 50,28" fill="#22c55e" opacity="0.6"/>
+  <!-- Lower ram -->
+  <rect x="16" y="32" width="32" height="8" rx="2" fill="#eab308"/>
+  <polygon points="14,34 10,36 14,38" fill="#eab308" opacity="0.6"/>
+  <polygon points="50,34 54,36 50,38" fill="#eab308" opacity="0.6"/>
+  <!-- Blind shear ram -->
+  <rect x="14" y="42" width="36" height="10" rx="2" fill="#ef4444"/>
+  <!-- Shear X -->
+  <line x1="20" y1="44" x2="26" y2="50" stroke="#fff" stroke-width="1.2" opacity="0.4"/>
+  <line x1="26" y1="44" x2="20" y2="50" stroke="#fff" stroke-width="1.2" opacity="0.4"/>
+  <line x1="38" y1="44" x2="44" y2="50" stroke="#fff" stroke-width="1.2" opacity="0.4"/>
+  <line x1="44" y1="44" x2="38" y2="50" stroke="#fff" stroke-width="1.2" opacity="0.4"/>
+  <!-- Wellbore bottom -->
+  <rect x="27" y="52" width="10" height="10" rx="1" fill="#00D4FF" opacity="0.7"/>
+</svg>

@@ -9,7 +9,12 @@ A collection of Databricks solution accelerators for the **upstream oil & gas** 
 
 | Project | Description | Key Technologies |
 |---------|-------------|-----------------|
-| [**Oil Pump Vibration Monitor**](oil-pump-monitor/) | Real-time vibration monitoring platform for fracking pumps in the North Dakota Bakken Formation. Live dashboards, FFT spectrum analysis, anomaly detection, and an AI operations assistant. | Databricks Apps, FastAPI, React, Lakebase, Foundation Model API |
+| [**BOP Guardian**](bop-guardian/) | Offshore Blowout Preventer monitoring command center with a digital twin P&ID schematic, five agentic AI sub-agents, predictive maintenance, SAP ERP integration, and crew management. | Databricks Apps, Streamlit, Lakebase, Foundation Model API |
+| [**ESP Predictive Maintenance**](esp-pm/) | Electric Submersible Pump monitoring and failure prediction for 12 wells across the Permian Basin, Eagle Ford, DJ Basin, Bakken, and Marcellus. XGBoost ML pipeline, streaming inference, and SAP maintenance integration. | Databricks Apps, Streamlit, Lakebase, XGBoost, Foundation Model API |
+| [**LAS Viewer**](las-viewer/) | Enterprise well log visualization and petrophysics platform. Interactive SVG log curve viewer, automated QC, processing recipes, and AI-powered petrophysical advisory. | Databricks Apps, FastAPI, React, Lakebase, Foundation Model API |
+| [**Oil Pump Vibration Monitor**](oil-pump-monitor/) | Real-time vibration monitoring for fracking pumps in the North Dakota Bakken Formation. Live dashboards, FFT spectrum analysis, anomaly detection, and an AI operations assistant. | Databricks Apps, FastAPI, React, Lakebase, Foundation Model API |
+| [**Reservoir Simulator**](reservoir-simulator/) | Interactive 3D reservoir simulation and production optimization platform calibrated to the Norne field (North Sea) benchmark. Scenario management, well performance, economic evaluation, and SAP ERP integration. | Databricks Apps, Streamlit, Three.js, Lakebase, Foundation Model API |
+| [**ROP Prediction**](rop-prediction/) | Real-time Rate of Penetration prediction and drilling optimization using MSEEL field data. XGBoost ML pipeline, Spark Structured Streaming inference, hazard detection, and SAP ERP integration. | Databricks Apps, Streamlit, Lakebase, XGBoost, Foundation Model API |
 
 ## Getting Started
 
