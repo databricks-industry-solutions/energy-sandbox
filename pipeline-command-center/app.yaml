@@ -1,0 +1,12 @@
+command:
+  - "streamlit"
+  - "run"
+  - "app/main.py"
+  - "--server.port=8000"
+  - "--server.headless=true"
+  - "--server.enableCORS=false"
+  - "--server.enableXsrfProtection=false"
+
+env:
+  - name: ENVIRONMENT
+    value: "production"
