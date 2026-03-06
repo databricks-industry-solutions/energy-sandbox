@@ -98,22 +98,13 @@ cd ..
 
 3. The app auto-creates the Lakebase database and seeds sample well data on first startup.
 
-### Run Locally
-
-```bash
-pip install -r requirements.txt
-uvicorn app:app --host 0.0.0.0 --port 8000
-```
-
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | **Frontend** | React 18 + TypeScript 5.6 + Vite 5.4 + Recharts |
-| **Backend** | FastAPI + Uvicorn (async Python) |
 | **Database** | Lakebase (Databricks managed PostgreSQL 16) |
 | **AI** | Foundation Model API (Petrophysics Advisor) |
-| **Auth** | Databricks SDK with JWT token auto-refresh |
 | **Visualization** | Native SVG for log curve tracks |
 
 ## Project Support
@@ -125,19 +116,6 @@ Any issues discovered through the use of this project should be filed as GitHub 
 ## Third-Party Library Licenses
 
 (c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
-
-### Python
-
-| Library | License | Source |
-|---------|---------|--------|
-| fastapi | MIT | https://github.com/tiangolo/fastapi |
-| uvicorn | BSD 3-Clause | https://github.com/encode/uvicorn |
-| asyncpg | Apache 2.0 | https://github.com/MagicStack/asyncpg |
-| databricks-sdk | Databricks License | https://github.com/databricks/databricks-sdk-py |
-| numpy | BSD 3-Clause | https://github.com/numpy/numpy |
-| scipy | BSD 3-Clause | https://github.com/scipy/scipy |
-
-### JavaScript / TypeScript
 
 | Library | License | Source |
 |---------|---------|--------|

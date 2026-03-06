@@ -78,13 +78,10 @@ The Res Flow engine is a lightweight analytical simulator calibrated to the [Nor
 
 | Component | Technology |
 |-----------|------------|
-| Backend | FastAPI + Uvicorn |
 | Frontend | React 18 + TypeScript + Vite |
 | 3D Rendering | Three.js + React Three Fiber + Drei |
 | Charts | Recharts |
-| Simulation Engine | Python analytical model (NumPy + SciPy) |
 | Data Platform | Databricks SQL Warehouse + Unity Catalog |
-| Local State | SQLite |
 
 ## Getting Started
 
@@ -112,19 +109,6 @@ The Res Flow engine is a lightweight analytical simulator calibrated to the [Nor
    databricks apps deploy reservoir-simulator --source-code-path /Workspace/Users/<your-email>/reservoir-simulator
    ```
 
-### Run Locally
-
-```bash
-# Backend
-pip install -r requirements.txt
-uvicorn app:app --host 0.0.0.0 --port 8000
-
-# Frontend (development)
-cd frontend
-npm install
-npm run dev
-```
-
 ## Project Support
 
 Please note the code in this project is provided for your exploration only, and is not formally supported by Databricks with Service Level Agreements (SLAs). It is provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of this project.
@@ -134,20 +118,6 @@ Any issues discovered through the use of this project should be filed as GitHub 
 ## Third-Party Library Licenses
 
 (c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
-
-### Backend Dependencies
-
-| Library | License | Source |
-|---------|---------|--------|
-| fastapi | MIT | https://github.com/tiangolo/fastapi |
-| uvicorn | BSD 3-Clause | https://github.com/encode/uvicorn |
-| databricks-sdk | Databricks License | https://github.com/databricks/databricks-sdk-py |
-| databricks-sql-connector | Apache 2.0 | https://github.com/databricks/databricks-sql-python |
-| numpy | BSD 3-Clause | https://github.com/numpy/numpy |
-| scipy | BSD 3-Clause | https://github.com/scipy/scipy |
-| websockets | BSD 3-Clause | https://github.com/python-websockets/websockets |
-
-### Frontend Dependencies
 
 | Library | License | Source |
 |---------|---------|--------|

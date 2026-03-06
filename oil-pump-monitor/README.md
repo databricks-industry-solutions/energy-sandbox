@@ -27,12 +27,9 @@ Fracking pump failures from undetected vibration anomalies — bearing faults, c
 | Layer | Technology |
 |-------|-----------|
 | **Frontend** | React 18, TypeScript, Vite, Recharts, Lucide React |
-| **Backend** | FastAPI, Uvicorn (async), AsyncPG |
 | **Database** | Lakebase (managed PostgreSQL) |
 | **AI** | Databricks Foundation Model API (Claude) via OpenAI-compatible SDK |
 | **Deployment** | Databricks Apps |
-
-The FastAPI backend serves the pre-built React SPA from `frontend/dist/` and exposes REST API endpoints under `/api/`. A background simulator generates realistic vibration telemetry every 2 seconds, writing directly to Lakebase. The AI agent pre-fetches live sensor data in parallel before each LLM call for low-latency, data-rich responses.
 
 ## Pumps Monitored
 
@@ -59,17 +56,6 @@ The simulator injects anomalies with 3% probability per reading. The AI agent re
 | **Overspeed** | RPM >400, high frequency, elevated temperature | Critical — thermal shutdown risk |
 
 <img src="images/opm_spectrum.png" alt="Oil Pump Vibration Monitor — FFT Spectrum Analysis" width="100%">
-
-## API Endpoints
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/pumps` | List all pump definitions with GPS coordinates |
-| `GET` | `/api/pumps/{pump_id}/live` | Latest vibration reading for a pump |
-| `GET` | `/api/pumps/{pump_id}/history` | Historical readings with time range filter |
-| `GET` | `/api/pumps/{pump_id}/spectrum` | FFT frequency spectrum (0–50 Hz) |
-| `GET` | `/api/field-summary` | Aggregated field health across all pumps |
-| `POST` | `/api/agent` | Chat with the Genie AI operations assistant |
 
 ## Getting Started
 
@@ -106,13 +92,6 @@ npm run build
 
 The built assets in `frontend/dist/` are already included in the repository for deployment.
 
-### Run Locally
-
-```bash
-pip install -r requirements.txt
-DATABRICKS_PROFILE=<your-profile> python -m uvicorn app:app --host 0.0.0.0 --port 8000
-```
-
 ## Database Schema
 
 | Table | Description |
@@ -130,22 +109,6 @@ Any issues discovered through the use of this project should be filed as GitHub 
 ## Third-Party Library Licenses
 
 (c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
-
-### Backend Dependencies
-
-| Library | License | Source |
-|---------|---------|--------|
-| fastapi | MIT | https://github.com/fastapi/fastapi |
-| uvicorn | BSD 3-Clause | https://github.com/encode/uvicorn |
-| asyncpg | Apache 2.0 | https://github.com/MagicStack/asyncpg |
-| aiohttp | Apache 2.0 | https://github.com/aio-libs/aiohttp |
-| databricks-sdk | Databricks License | https://github.com/databricks/databricks-sdk-py |
-| pydantic | MIT | https://github.com/pydantic/pydantic |
-| numpy | BSD 3-Clause | https://github.com/numpy/numpy |
-| scipy | BSD 3-Clause | https://github.com/scipy/scipy |
-| openai | MIT | https://github.com/openai/openai-python |
-
-### Frontend Dependencies
 
 | Library | License | Source |
 |---------|---------|--------|

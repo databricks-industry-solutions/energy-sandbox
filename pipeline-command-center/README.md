@@ -108,13 +108,6 @@ Midstream pipeline operators manage hundreds of miles of trunk lines with compre
 
 3. Open the app URL printed by the deploy command.
 
-### Run Locally
-
-```bash
-pip install -r app/requirements.txt
-streamlit run app/main.py --server.port=8000
-```
-
 ## Simulated Event Cycle
 
 The simulator runs a repeating 40-tick event cycle to demonstrate anomaly detection and agent response:
@@ -145,13 +138,3 @@ Please note the code in this project is provided for your exploration only, and 
 
 Any issues discovered through the use of this project should be filed as GitHub Issues on this repository. They will be reviewed on a best-effort basis but no formal SLA or support is guaranteed.
 
-## Third-Party Library Licenses
-
-(c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
-
-| Library | Version | License | Source |
-|---------|---------|---------|--------|
-| streamlit | >=1.35.0 | Apache 2.0 | https://github.com/streamlit/streamlit |
-| pandas | >=2.1.0 | BSD 3-Clause | https://github.com/pandas-dev/pandas |
-| plotly | >=5.20.0 | MIT | https://github.com/plotly/plotly.py |
-| numpy | >=1.26.0 | BSD 3-Clause | https://github.com/numpy/numpy |

@@ -127,41 +127,9 @@ The simulator runs a 20-tick cycle to demonstrate real-time anomaly detection:
 2. Import notebooks to your workspace and run or schedule them via Databricks Jobs (see `jobs/` for JSON definitions).
 3. Optionally run `seed_demo_data.py` to populate sample telemetry.
 
-### Run Locally
-
-```bash
-pip install -r app/requirements.txt
-streamlit run app/main.py --server.port=8000
-```
-
 ## Project Support
 
 Please note the code in this project is provided for your exploration only, and is not formally supported by Databricks with Service Level Agreements (SLAs). It is provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of this project.
 
 Any issues discovered through the use of this project should be filed as GitHub Issues on this repository. They will be reviewed on a best-effort basis but no formal SLA or support is guaranteed.
 
-## Third-Party Library Licenses
-
-(c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
-
-### App Dependencies
-
-| Library | License | Source |
-|---------|---------|--------|
-| streamlit | Apache 2.0 | https://github.com/streamlit/streamlit |
-| pandas | BSD 3-Clause | https://github.com/pandas-dev/pandas |
-| plotly | MIT | https://github.com/plotly/plotly.py |
-| altair | BSD 3-Clause | https://github.com/vega/altair |
-| psycopg2 | LGPL 3.0 | https://github.com/psycopg/psycopg2 |
-| databricks-sdk | Databricks License | https://github.com/databricks/databricks-sdk-py |
-| anthropic | MIT | https://github.com/anthropics/anthropic-sdk-python |
-| python-dotenv | BSD 3-Clause | https://github.com/theskumar/python-dotenv |
-
-### ML Pipeline Dependencies
-
-| Library | License | Source |
-|---------|---------|--------|
-| xgboost | Apache 2.0 | https://github.com/dmlc/xgboost |
-| mlflow | Apache 2.0 | https://github.com/mlflow/mlflow |
-| shap | MIT | https://github.com/shap/shap |
-| scikit-learn | BSD 3-Clause | https://github.com/scikit-learn/scikit-learn |
