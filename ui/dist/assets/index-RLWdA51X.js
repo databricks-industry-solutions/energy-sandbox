@@ -43,7 +43,7 @@ Error generating stack: `+s.message+`
     if(mapInst.current)return;
     const map=new window.maplibregl.Map({
       container:mapRef.current,
-      style:"https://tiles.openfreemap.org/styles/dark",
+      style:{version:8,name:"Dark Basemap",sources:{"osm-tiles":{type:"raster",tiles:["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],tileSize:256,attribution:"&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",maxzoom:19}},layers:[{id:"base",type:"raster",source:"osm-tiles",paint:{"raster-brightness-max":0.25,"raster-saturation":-0.8,"raster-contrast":0.3}}]},
       center:[-103.50,31.80],zoom:12.5,pitch:45,bearing:-10
     });
     map.addControl(new window.maplibregl.NavigationControl(),"top-right");
