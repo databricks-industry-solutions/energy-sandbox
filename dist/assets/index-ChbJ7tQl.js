@@ -43,7 +43,7 @@ Error generating stack: `+o.message+`
     if(mapInst.current)return;
     const map=new window.maplibregl.Map({
       container:mapRef.current,
-      style:{version:8,name:"Dark Field",sources:{"osm-tiles":{type:"raster",tiles:["https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}@2x.png"],tileSize:256,attribution:"&copy; CARTO"}},layers:[{id:"base",type:"raster",source:"osm-tiles",minzoom:0,maxzoom:18}]},
+      style:"https://tiles.openfreemap.org/styles/dark",
       center:[-103.50,31.80],zoom:12.5,pitch:45,bearing:-10
     });
     map.addControl(new window.maplibregl.NavigationControl(),"top-right");
