@@ -46,7 +46,7 @@ NAV_ITEMS = [
 
 def _inject_css():
     st.markdown(f"""<style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+    /* JetBrains Mono: system-installed or falls back to monospace */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"],
     .stApp, .main .block-container {{background-color:{BG}!important;color:{TXT}!important;}}
     [data-testid="stSidebar"] {{background-color:{PANEL}!important;border-right:1px solid {BORDER}!important;}}
