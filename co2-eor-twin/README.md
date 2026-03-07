@@ -162,7 +162,7 @@ The Field Overview uses MapLibre GL JS with CARTO dark basemap to render:
 |-------|-----------|
 | **Frontend** | React 18, MapLibre GL JS, Vite |
 | **Backend** | Express.js, TypeScript |
-| **Geospatial** | MapLibre GL JS, CARTO Dark Basemap, GeoJSON |
+| **Geospatial** | MapLibre GL JS, OpenFreeMap (OSM), GeoJSON |
 | **Deployment** | Databricks Apps |
 | **Data** | Unity Catalog, Delta Lake (medallion architecture) |
 
