@@ -6,7 +6,7 @@
 
 A real-time digital twin command center for CO₂ Enhanced Oil Recovery field operations in the Delaware Basin. Built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) using Express.js, React, and MapLibre GL, this solution demonstrates geospatial field monitoring, subsurface fiber optic sensing (DAS/DTS), multi-agent AI advisory, injection pattern optimization, and carbon accounting on the Databricks Lakehouse Platform.
 
-<img src="images/field_overview.png" alt="CO₂-EOR Digital Twin — Field Overview with Geospatial Map" width="100%">
+<img src="images/digital_twin_operations.png" alt="CO₂-EOR Digital Twin — Operations P&ID Digital Twin" width="100%">
 
 ## Overview
 
