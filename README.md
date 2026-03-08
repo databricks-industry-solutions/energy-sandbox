@@ -4,15 +4,15 @@
 
 # CO₂-EOR Digital Twin
 
-A real-time digital twin command center for CO₂ Enhanced Oil Recovery field operations in the Delaware Basin. Built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) using Express.js, React, and MapLibre GL, this solution demonstrates geospatial field monitoring, subsurface fiber optic sensing (DAS/DTS), multi-agent AI advisory, injection pattern optimization, and carbon accounting on the Databricks Lakehouse Platform.
+A near real-time digital twin command center for CO₂ Enhanced Oil Recovery field operations in the Delaware Basin. Built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) using Express.js, React, and MapLibre GL, this solution demonstrates geospatial field monitoring, subsurface fiber optic sensing (DAS/DTS), multi-agent AI advisory, injection pattern optimization, and carbon accounting on the Databricks Lakehouse Platform.
 
 <img src="images/digital_twin_operations.png" alt="CO₂-EOR Digital Twin — Operations P&ID Digital Twin" width="100%">
 
 ## Overview
 
-CO₂-EOR (Enhanced Oil Recovery) uses supercritical carbon dioxide injection to mobilize residual oil from mature reservoirs while permanently storing CO₂ underground. Managing these operations requires real-time visibility across wells, injection patterns, facilities, subsurface conditions, and carbon balance. This accelerator delivers:
+CO₂-EOR (Enhanced Oil Recovery) uses supercritical carbon dioxide injection to mobilize residual oil from mature reservoirs while permanently storing CO₂ underground. Managing these operations requires near real-time visibility across wells, injection patterns, facilities, subsurface conditions, and carbon balance. This accelerator delivers:
 
-- **Geospatial Field Overview** — MapLibre GL interactive map with dark basemap showing all wells (producers, injectors, WAG), pipelines, facilities, CO₂ sources, monitoring points, and fleet vehicles with custom icon markers and real-time status
+- **Geospatial Field Overview** — MapLibre GL interactive map with dark basemap showing all wells (producers, injectors, WAG), pipelines, facilities, CO₂ sources, monitoring points, and fleet vehicles with custom icon markers and near real-time status
 - **Operations Dashboard** — Digital twin P&ID visualization with live well status, flow rates, pressures, and equipment health across the field
 - **Subsurface Monitoring** — Reservoir pressure & CO₂ saturation maps, DAS fiber optic waterfall plots, DTS temperature profiles, microseismic event tracking, and BHP/injectivity analysis
 - **Injection Pattern Monitoring** — Pattern-level CO₂ injection rates, WAG ratios, reservoir pressure tracking, and utilization metrics across 4 flood patterns
@@ -122,7 +122,7 @@ Integrated risk scoring across reservoir, well integrity, and surface facility d
 
 | Tab | Description |
 |-----|-------------|
-| **Field Overview** | MapLibre GL geospatial map with icon-based well markers, pipelines, facilities, CO₂ sources, and real-time AI agent advisory chat panel |
+| **Field Overview** | MapLibre GL geospatial map with icon-based well markers, pipelines, facilities, CO₂ sources, and near real-time AI agent advisory chat panel |
 | **Operations** | Digital twin visualization with well status cards, flow rates, pressures, and equipment health |
 | **Subsurface** | Reservoir pressure/saturation maps, DAS fiber optic waterfall, DTS temperature profiles, microseismic monitoring, BHP & injectivity, risk assessment |
 | **Injection Patterns** | Pattern-level injection metrics, WAG ratios, CO₂ utilization, and reservoir pressure monitoring |
