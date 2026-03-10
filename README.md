@@ -19,6 +19,7 @@ CO₂-EOR (Enhanced Oil Recovery) uses supercritical carbon dioxide injection to
 - **CO₂ Balance & Storage** — Carbon accounting dashboard tracking injected, recycled, purchased, and stored CO₂ volumes with compliance metrics
 - **Well Economics** — Per-well and field-level economic analysis with revenue, OpEx, CO₂ costs, and netback calculations
 - **Multi-Agent AI Advisory** — Five specialized AI agents (monitoring, optimization, maintenance, commercial, orchestrator) providing contextual recommendations via interactive chat
+- **Facility Maintenance** — AI-powered maintenance scheduler with perceive-reason-act agent loop, automatic work order generation, technician scheduling, HSE/compliance enforcement, and reliability prediction metrics
 
 ## Subsurface Monitoring
 
@@ -86,7 +87,7 @@ Integrated risk scoring across reservoir, well integrity, and surface facility d
                            │
                     ┌──────▼──────┐
                     │   React +   │  Databricks App
-                    │  Express.js │  8-tab command center
+                    │  Express.js │  8-tab command center + maintenance
                     └─────────────┘
 ```
 
@@ -128,7 +129,7 @@ Integrated risk scoring across reservoir, well integrity, and surface facility d
 | **Injection Patterns** | Pattern-level injection metrics, WAG ratios, CO₂ utilization, and reservoir pressure monitoring |
 | **CO₂ Balance** | Carbon accounting — injected vs. recycled vs. purchased vs. stored, compliance tracking |
 | **Economics** | Per-well revenue, OpEx, CO₂ costs, netback analysis, and incremental EOR economics |
-| **Shift Log** | Operational shift handover log with timestamped events and notes |
+| **Facility Maintenance** | AI-powered maintenance scheduler with perceive-reason-act agent loop, work order generation, technician scheduling, HSE/compliance enforcement, reliability metrics, and audit trail |
 | **Data & AI Flow** | Interactive architecture diagram showing the medallion pipeline from SCADA through agents |
 
 ## AI Agents
@@ -140,6 +141,7 @@ Integrated risk scoring across reservoir, well integrity, and surface facility d
 | **Maintenance** | Equipment health | Workover scheduling, ESP monitoring, facility maintenance |
 | **Commercial** | Economic analysis | Revenue forecasting, CO₂ cost optimization, netback analysis |
 | **Orchestrator** | Multi-agent coordination | Cross-agent recommendation synthesis, priority ranking |
+| **Facility Scheduler** | Perceive-reason-act maintenance | Asset risk scoring, work order generation, technician assignment, HSE/compliance checks, reliability prediction |
 
 ## Geospatial Features
 
