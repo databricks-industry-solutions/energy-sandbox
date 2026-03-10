@@ -1,0 +1,49 @@
+bundle:
+  name: esp-pm
+
+resources:
+  apps:
+    esp-pm:
+      name: esp-pm
+      description: ESP Performance Monitor
+      source_code_path: .
+
+      resources:
+        - name: esp-pm-lakebase
+          description: "Lakebase PostgreSQL for ESP PM alerts and work orders"
+          database:
+            instance_name: esp-pm-db
+            database_name: esp_pm_app
+            permission: CAN_CONNECT_AND_CREATE
+
+      env:
+        - name: THRESHOLD_HIGH
+          value: "0.65"
+        - name: THRESHOLD_MEDIUM
+          value: "0.30"
+        - name: DEFAULT_WINDOW_DAYS
+          value: "7"
+        - name: CLAUDE_MODEL
+          value: "databricks-claude-sonnet-4-5"
+        - name: DATABRICKS_WAREHOUSE_ID
+          value: "<your-warehouse-id>"
+        - name: PGUSER
+          value_from: esp-pm-lakebase
+        - name: PGPORT
+          value_from: esp-pm-lakebase
+        - name: PGDATABASE_OVERRIDE
+          value: "esp_pm_app"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

@@ -1,0 +1,27 @@
+bundle:
+  name: co2-eor-twin
+
+resources:
+  apps:
+    co2-eor-twin:
+      name: co2-eor-twin
+      description: CO2 EOR Digital Twin
+      source_code_path: .
+
+      env:
+        - name: PORT
+          value: "8000"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

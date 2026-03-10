@@ -1,0 +1,39 @@
+bundle:
+  name: oil-pump-monitor
+
+resources:
+  apps:
+    oil-pump-monitor:
+      name: oil-pump-monitor
+      description: Oil Pump Vibration Monitor
+      source_code_path: .
+
+      resources:
+        - name: database
+          description: "Lakebase Postgres for vibration data"
+          database:
+            instance: oil-pump-monitor-db
+
+      env:
+        - name: PGHOST
+          value_from: database
+        - name: PGPORT
+          value_from: database
+        - name: PGDATABASE
+          value_from: database
+        - name: PGUSER
+          value_from: database
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

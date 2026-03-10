@@ -1,0 +1,39 @@
+bundle:
+  name: las-viewer
+
+resources:
+  apps:
+    las-viewer:
+      name: las-viewer
+      description: LAS Well Log Viewer
+      source_code_path: .
+
+      resources:
+        - name: database
+          description: "Lakebase Postgres for LAS well log storage and processing"
+          database:
+            instance: las-viewer-db
+
+      env:
+        - name: PGHOST
+          value_from: database
+        - name: PGPORT
+          value_from: database
+        - name: PGDATABASE
+          value_from: database
+        - name: PGUSER
+          value_from: database
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

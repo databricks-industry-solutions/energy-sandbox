@@ -1,0 +1,47 @@
+bundle:
+  name: rop-prediction
+
+resources:
+  apps:
+    rop-prediction:
+      name: rop-prediction
+      description: Rate of Penetration Prediction
+      source_code_path: .
+
+      resources:
+        - name: drilling-lakebase
+          description: "Lakebase PostgreSQL — predictions and alerts for ROP demo app"
+          database:
+            instance: drilling-demo-lakebase
+
+      env:
+        - name: PGHOST
+          value_from: drilling-lakebase
+        - name: PGUSER
+          value_from: drilling-lakebase
+        - name: PGPORT
+          value: "5432"
+        - name: PGDATABASE_OVERRIDE
+          value: "drilling_demo_app"
+        - name: ROP_GAP_THRESHOLD
+          value: "20.0"
+        - name: MSE_HIGH_THRESHOLD
+          value: "150000.0"
+        - name: DEFAULT_WELL
+          value: "MIP_3H"
+        - name: MLFLOW_MODEL_NAME
+          value: "rop_xgb_mseel"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

@@ -1,0 +1,34 @@
+bundle:
+  name: reservoir-simulator
+
+resources:
+  apps:
+    reservoir-simulator:
+      name: reservoir-simulator
+      description: Reservoir Simulator
+      source_code_path: .
+
+      resources:
+        - name: sql-warehouse
+          description: "SQL warehouse for reading sim results from Unity Catalog"
+          sql_warehouse:
+            id: "87e069097741b56c"
+            permission: CAN_USE
+
+      env:
+        - name: DATABRICKS_WAREHOUSE_ID
+          value_from: sql-warehouse
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor

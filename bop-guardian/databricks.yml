@@ -1,0 +1,27 @@
+bundle:
+  name: bop-guardian
+
+resources:
+  apps:
+    bop-guardian:
+      name: bop-guardian
+      description: BOP Guardian
+      source_code_path: .
+
+      env:
+        - name: ENVIRONMENT
+          value: "production"
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      profile: fe-vm-oil-pump-monitor
