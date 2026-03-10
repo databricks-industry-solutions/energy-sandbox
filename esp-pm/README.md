@@ -105,7 +105,14 @@ The simulator runs a 20-tick cycle to demonstrate real-time anomaly detection:
 - Databricks CLI installed and configured
 - Unity Catalog enabled
 
-### Deploy the Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Update `app.yaml` with your warehouse ID and Lakebase instance name.
 

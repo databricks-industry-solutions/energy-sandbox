@@ -83,7 +83,14 @@ npm run build
 cd ..
 ```
 
-### Deploy as a Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Import the app into your workspace:
    ```bash

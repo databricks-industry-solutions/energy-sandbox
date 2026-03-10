@@ -95,7 +95,14 @@ The Res Flow engine is a lightweight analytical simulator calibrated to the [Nor
 - Unity Catalog enabled
 - Node.js 18+ (for frontend builds)
 
-### Deploy the Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Update `app.yaml` with your SQL Warehouse ID.
 

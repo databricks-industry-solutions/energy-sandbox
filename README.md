@@ -21,6 +21,16 @@ A collection of Databricks solution accelerators for the **upstream and midstrea
 
 Each project is self-contained in its own directory with its own README, deployment instructions, and dependencies. Navigate to the project folder for detailed setup guides.
 
+### Deploy with Databricks Asset Bundles
+
+Each project includes a `databricks.yml` for deployment via [Databricks Asset Bundles](https://docs.databricks.com/en/dev-tools/bundles/index.html):
+
+```bash
+cd <project-directory>
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
 ## Project Support
 
 Please note the code in this project is provided for your exploration only, and is not formally supported by Databricks with Service Level Agreements (SLAs). It is provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of this project.

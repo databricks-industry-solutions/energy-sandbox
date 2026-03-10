@@ -78,7 +78,14 @@ The simulator injects anomalies with 3% probability per reading. The AI agent re
 - A Databricks workspace with [Databricks Apps](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) and [Lakebase](https://docs.databricks.com/en/lakebase/index.html)
 - Databricks CLI installed and configured
 
-### Deploy the Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Import the app into your workspace:
    ```bash

@@ -86,7 +86,14 @@ Offshore drilling operations depend on the BOP stack as the last line of defense
 - A Databricks workspace with [Databricks Apps](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) enabled
 - Databricks CLI installed and configured
 
-### Deploy as a Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Clone this repository into your Databricks workspace:
    ```bash

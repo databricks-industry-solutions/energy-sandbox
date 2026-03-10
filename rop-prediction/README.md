@@ -104,7 +104,14 @@ The simulator runs a 30-tick cycle to demonstrate real-time hazard detection:
 - Unity Catalog enabled
 - MSEEL drilling data mounted or uploaded to volumes
 
-### Deploy the Databricks App
+### Deploy with Databricks Asset Bundles (recommended)
+
+```bash
+databricks bundle deploy -t dev
+databricks bundle run -t dev
+```
+
+### Deploy manually
 
 1. Update `app.yaml` with your Lakebase instance name if different.
 
