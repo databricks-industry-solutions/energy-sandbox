@@ -12,6 +12,7 @@ const commercial_1 = __importDefault(require("./routes/commercial"));
 const map_1 = __importDefault(require("./routes/map"));
 const agent_1 = __importDefault(require("./routes/agent"));
 const shift_1 = __importDefault(require("./routes/shift"));
+const scheduler_1 = __importDefault(require("./routes/scheduler"));
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
 app.use((0, cors_1.default)());
@@ -22,6 +23,11 @@ app.use('/api/commercial', commercial_1.default);
 app.use('/api/map', map_1.default);
 app.use('/api/agent', agent_1.default);
 app.use('/api/shift', shift_1.default);
+app.use('/api/scheduler', scheduler_1.default);
+// Serve facility maintenance page
+app.get('/facility-maintenance', (_req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '..', 'ui', 'dist', 'facility-maintenance.html'));
+});
 // Serve UI in production
 const uiDist = path_1.default.join(__dirname, '..', 'ui', 'dist');
 app.use(express_1.default.static(uiDist));

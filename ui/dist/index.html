@@ -15,5 +15,31 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Inject Facility Maintenance tab into nav.tab-bar alongside existing tabs
+      (function() {
+        let tries = 0;
+        const inject = () => {
+          const tabBar = document.querySelector('nav.tab-bar');
+          if (tabBar && !document.getElementById('fm-tab-btn')) {
+            // Hide Shift Log tab
+            tabBar.querySelectorAll('.tab-btn').forEach(t => {
+              if (t.textContent.trim() === 'Shift Log') t.style.display = 'none';
+            });
+            // Add Facility Maintenance tab
+            const btn = document.createElement('button');
+            btn.id = 'fm-tab-btn';
+            btn.className = 'tab-btn';
+            btn.textContent = 'Facility Maintenance';
+            btn.addEventListener('click', () => {
+              window.location.href = '/facility-maintenance';
+            });
+            tabBar.appendChild(btn);
+          }
+          if (++tries < 30) setTimeout(inject, 500);
+        };
+        setTimeout(inject, 500);
+      })();
+    </script>
   </body>
 </html>
