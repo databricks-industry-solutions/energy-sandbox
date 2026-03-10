@@ -1,6 +1,0 @@
-command:
-  - node
-  - dist/index.js
-env:
-  - name: PORT
-    value: "8000"
