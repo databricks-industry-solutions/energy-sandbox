@@ -46,7 +46,7 @@ NAV_ITEMS = [
 
 def _inject_css():
     st.markdown(f"""<style>
-    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap');
+    /* JetBrains Mono: system-installed or falls back to monospace */
     html, body, [data-testid="stAppViewContainer"], [data-testid="stApp"],
     .stApp, .main .block-container {{background-color:{BG}!important;color:{TXT}!important;}}
     [data-testid="stSidebar"] {{background-color:{PANEL}!important;border-right:1px solid {BORDER}!important;}}
@@ -177,7 +177,7 @@ def _pipeline_svg(components: list[dict]) -> str:
         return (f'<rect x="{x}" y="{y}" width="{w}" height="5" rx="2" fill="{BORDER}"/>'
                 f'<rect x="{x}" y="{y}" width="{fw}" height="5" rx="2" fill="{c}"/>')
 
-    svg = f"""<svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg"
+    svg = f"""<svg viewBox="0 0 980 560" xmlns="http://www.w3.org/2000/svg"
         style="width:100%;background:{PANEL};border-radius:10px;border:1px solid {BORDER};">
     <defs>
         <style>
@@ -273,8 +273,8 @@ def _pipeline_svg(components: list[dict]) -> str:
     </text>
 
     <!-- ── MAIN PIPELINE (horizontal trunk) ── -->
-    <line x1="60" y1="260" x2="900" y2="260" class="pipe-bg"/>
-    <line x1="60" y1="260" x2="900" y2="260" class="pipe" stroke-dasharray="12,4">
+    <line x1="60" y1="260" x2="920" y2="260" class="pipe-bg"/>
+    <line x1="60" y1="260" x2="920" y2="260" class="pipe" stroke-dasharray="12,4">
         <animate attributeName="stroke-dashoffset" from="32" to="0" dur="2s" repeatCount="indefinite"/>
     </line>
 
@@ -287,147 +287,211 @@ def _pipeline_svg(components: list[dict]) -> str:
     <text x="60"  y="280" class="sub-label" text-anchor="middle">MP 0</text>
     <text x="260" y="280" class="sub-label" text-anchor="middle">MP 18.5</text>
     <text x="540" y="280" class="sub-label" text-anchor="middle">MP 52</text>
-    <text x="900" y="280" class="sub-label" text-anchor="middle">MP 87.3</text>
+    <text x="920" y="280" class="sub-label" text-anchor="middle">MP 87.3</text>
 
-    <!-- ── INLET TERMINAL (left) ── -->
-    <rect x="20" y="70" width="120" height="160" class="{"station-box-crit" if comp_map.get("PS-01",{}).get("health",1)<0.6 else "station-box"}"/>
-    <text x="80" y="88" text-anchor="middle" class="label" fill="{CYAN}">INLET TERMINAL</text>
+    <!-- ── INLET TERMINAL — Tank Farm ── -->
+    <!-- Silhouette: two storage tanks above station box -->
+    <g opacity="0.4">
+      <rect x="22" y="52" width="22" height="18" rx="2" fill="none" stroke="{CYAN}" stroke-width="1"/>
+      <ellipse cx="33" cy="52" rx="11" ry="3" fill="{CARD}" stroke="{CYAN}" stroke-width="1"/>
+      <rect x="54" y="56" width="18" height="14" rx="2" fill="none" stroke="{CYAN}" stroke-width="1"/>
+      <ellipse cx="63" cy="56" rx="9" ry="3" fill="{CARD}" stroke="{CYAN}" stroke-width="1"/>
+      <line x1="44" y1="64" x2="54" y2="64" stroke="{CYAN}" stroke-width="1"/>
+      <line x1="33" y1="49" x2="33" y2="44" stroke="{CYAN}" stroke-width="0.8"/>
+      <path d="M16,70 L16,68 L76,68 L76,70" fill="none" stroke="{CYAN}" stroke-width="0.6"/>
+    </g>
+    <!-- Station box -->
+    <rect x="10" y="70" width="140" height="178" class="{"station-box-crit" if comp_map.get("PS-01",{}).get("health",1)<0.6 else "station-box"}"/>
+    <text x="80" y="86" text-anchor="middle" class="label" fill="{CYAN}" font-size="10">INLET TERMINAL</text>
 
-    <!-- Pig Launcher -->
-    <rect x="32" y="96" width="96" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-pig" x="34" y="100" width="14" height="14"/>
-    <text x="84" y="114" text-anchor="middle" class="sub-label">PIG-01 Launcher</text>
-    <g transform="translate(110,108)">{_dot("PIG-01")}</g>
+    <rect x="18" y="92" width="124" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-pig" x="22" y="96" width="14" height="14"/>
+    <text x="40" y="109" text-anchor="start" class="sub-label">PIG-01 Launcher</text>
+    <g transform="translate(132,104)">{_dot("PIG-01")}</g>
 
-    <!-- Pump Station 1 -->
-    <rect x="32" y="130" width="96" height="36" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-pump" x="34" y="134" width="16" height="16"/>
-    <text x="84" y="146" text-anchor="middle" class="sub-label">PS-01 Booster</text>
-    <g transform="translate(110,152)">{_dot("PS-01")}</g>
-    {_health_bar("PS-01", 36, 158, 88)}
+    <rect x="18" y="122" width="124" height="34" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-pump" x="22" y="126" width="16" height="16"/>
+    <text x="42" y="138" text-anchor="start" class="sub-label">PS-01 Booster</text>
+    <g transform="translate(132,142)">{_dot("PS-01")}</g>
+    {_health_bar("PS-01", 22, 150, 116)}
 
-    <!-- Meter Inlet -->
-    <rect x="32" y="172" width="96" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-meter" x="34" y="174" width="14" height="14"/>
-    <text x="84" y="190" text-anchor="middle" class="sub-label">MET-01 Custody</text>
-    <g transform="translate(110,186)">{_dot("MET-01")}</g>
+    <rect x="18" y="162" width="124" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-meter" x="22" y="166" width="14" height="14"/>
+    <text x="40" y="179" text-anchor="start" class="sub-label">MET-01 Custody</text>
+    <g transform="translate(132,175)">{_dot("MET-01")}</g>
 
-    <!-- RTU-01 -->
-    <rect x="32" y="206" width="96" height="20" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-rtu" x="34" y="207" width="12" height="12"/>
-    <text x="84" y="220" text-anchor="middle" class="sub-label">RTU-01 SCADA</text>
-    <g transform="translate(110,216)">{_dot("RTU-01")}</g>
+    <rect x="18" y="192" width="124" height="22" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-rtu" x="22" y="194" width="12" height="12"/>
+    <text x="38" y="207" text-anchor="start" class="sub-label">RTU-01 SCADA</text>
+    <g transform="translate(132,203)">{_dot("RTU-01")}</g>
 
-    <!-- Connector to trunk -->
-    <line x1="80" y1="230" x2="80" y2="260" class="pipe" stroke-width="2"/>
+    <!-- CP badge -->
+    <rect x="18" y="218" width="124" height="22" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-cp" x="22" y="220" width="12" height="12"/>
+    <text x="38" y="233" text-anchor="start" class="sub-label">CP-01 Cathodic</text>
+    <g transform="translate(132,229)">{_dot("CP-01")}</g>
+
+    <line x1="80" y1="248" x2="80" y2="260" class="pipe" stroke-width="2"/>
 
     <!-- ── SEGMENT 1 ── -->
     <rect x="155" y="290" width="100" height="50" class="{"station-box-alert" if comp_map.get("SEG-01",{}).get("health",1)<0.8 else "station-box"}"/>
-    <use href="#ico-pipe" x="157" y="294" width="14" height="14"/>
-    <text x="210" y="308" text-anchor="middle" class="label" font-size="10">SEG-01</text>
-    <text x="205" y="320" text-anchor="middle" class="sub-label">Gathering 16″</text>
-    <g transform="translate(205,335)">{_dot("SEG-01")}</g>
+    <use href="#ico-pipe" x="160" y="294" width="14" height="14"/>
+    <text x="178" y="308" text-anchor="start" class="label" font-size="10">SEG-01</text>
+    <text x="178" y="320" text-anchor="start" class="sub-label">Gathering 16″</text>
+    <g transform="translate(242,304)">{_dot("SEG-01")}</g>
     {_health_bar("SEG-01", 165, 340, 80)}
 
-    <!-- ── COMPRESSOR STATION ALPHA (top) ── -->
-    <rect x="210" y="70" width="130" height="140" class="{"station-box-crit" if comp_map.get("CS-01",{}).get("health",1)<0.6 else "station-box"}"/>
-    <text x="275" y="88" text-anchor="middle" class="label" fill="{CYAN}">CS ALPHA</text>
+    <!-- ── CS ALPHA — Compressor Building ── -->
+    <!-- Silhouette: peaked industrial shed roof + exhaust stack above box -->
+    <g opacity="0.4">
+      <!-- Shed roofline -->
+      <polyline points="210,70 275,52 340,70" fill="none" stroke="{CYAN}" stroke-width="1.2"/>
+      <!-- Exhaust stack with flame -->
+      <rect x="330" y="42" width="5" height="28" rx="1" fill="none" stroke="{CYAN}" stroke-width="0.8"/>
+      <path d="M329,42 C332,35 337,38 335,42" fill="{ORANGE}" opacity="0.5" stroke="none"/>
+      <!-- Air intake louvres on left wall -->
+      <line x1="214" y1="62" x2="222" y2="62" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="214" y1="65" x2="222" y2="65" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="214" y1="68" x2="222" y2="68" stroke="{CYAN}" stroke-width="0.6"/>
+    </g>
+    <!-- Station box -->
+    <rect x="210" y="70" width="130" height="178" class="{"station-box-crit" if comp_map.get("CS-01",{}).get("health",1)<0.6 else "station-box"}"/>
+    <text x="275" y="86" text-anchor="middle" class="label" fill="{CYAN}" font-size="10">CS ALPHA</text>
 
-    <rect x="222" y="96" width="106" height="36" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-comp" x="224" y="100" width="16" height="16"/>
-    <text x="280" y="112" text-anchor="middle" class="sub-label">CS-01 Compressor</text>
-    <g transform="translate(312,118)">{_dot("CS-01")}</g>
-    {_health_bar("CS-01", 226, 126, 98)}
+    <rect x="220" y="92" width="110" height="34" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-comp" x="224" y="96" width="16" height="16"/>
+    <text x="244" y="108" text-anchor="start" class="sub-label">CS-01 Compr.</text>
+    <g transform="translate(320,108)">{_dot("CS-01")}</g>
+    {_health_bar("CS-01", 224, 120, 102)}
 
-    <!-- VLV-01 -->
-    <rect x="222" y="140" width="106" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-valve" x="224" y="143" width="14" height="14"/>
-    <text x="280" y="158" text-anchor="middle" class="sub-label">VLV-01 Block Valve</text>
-    <g transform="translate(312,154)">{_dot("VLV-01")}</g>
+    <rect x="220" y="132" width="110" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-valve" x="224" y="136" width="14" height="14"/>
+    <text x="242" y="149" text-anchor="start" class="sub-label">VLV-01 Block</text>
+    <g transform="translate(320,145)">{_dot("VLV-01")}</g>
 
-    <!-- CP System -->
-    <rect x="222" y="174" width="106" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-cp" x="224" y="176" width="14" height="14"/>
-    <text x="280" y="192" text-anchor="middle" class="sub-label">CP-01 Cathodic Prot.</text>
-    <g transform="translate(312,188)">{_dot("CP-01")}</g>
+    <!-- Large compressor schematic in empty space -->
+    <g transform="translate(235,170)" opacity="0.2">
+      <!-- Compressor casing (large circle) -->
+      <circle cx="40" cy="35" r="28" fill="none" stroke="{CYAN}" stroke-width="1.2"/>
+      <!-- Inner impeller hub -->
+      <circle cx="40" cy="35" r="8" fill="none" stroke="{CYAN}" stroke-width="1"/>
+      <!-- Impeller blades -->
+      <line x1="40" y1="7" x2="40" y2="63" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="12" y1="35" x2="68" y2="35" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="20" y1="15" x2="60" y2="55" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="60" y1="15" x2="20" y2="55" stroke="{CYAN}" stroke-width="0.6"/>
+      <!-- Suction pipe (left) -->
+      <rect x="-10" y="28" width="22" height="14" rx="2" fill="none" stroke="{CYAN}" stroke-width="0.8"/>
+      <text x="-5" y="39" fill="{CYAN}" font-size="6" font-family="JetBrains Mono,monospace">IN</text>
+      <!-- Discharge pipe (right) -->
+      <rect x="68" y="28" width="22" height="14" rx="2" fill="none" stroke="{CYAN}" stroke-width="0.8"/>
+      <text x="72" y="39" fill="{CYAN}" font-size="6" font-family="JetBrains Mono,monospace">OUT</text>
+    </g>
 
     <!-- Connector -->
-    <line x1="275" y1="210" x2="275" y2="260" class="pipe" stroke-width="2"/>
+    <line x1="275" y1="248" x2="275" y2="260" class="pipe" stroke-width="2"/>
 
     <!-- ── SEGMENT 2 ── -->
     <rect x="365" y="290" width="100" height="50" class="{"station-box-crit" if comp_map.get("SEG-02",{}).get("health",1)<0.6 else ("station-box-alert" if comp_map.get("SEG-02",{}).get("health",1)<0.8 else "station-box")}"/>
-    <use href="#ico-pipe" x="367" y="294" width="14" height="14"/>
-    <text x="420" y="308" text-anchor="middle" class="label" font-size="10">SEG-02</text>
-    <text x="415" y="320" text-anchor="middle" class="sub-label">Trunk 24″ (33.5 mi)</text>
-    <g transform="translate(415,335)">{_dot("SEG-02")}</g>
+    <use href="#ico-pipe" x="370" y="294" width="14" height="14"/>
+    <text x="388" y="308" text-anchor="start" class="label" font-size="10">SEG-02</text>
+    <text x="388" y="320" text-anchor="start" class="sub-label">Trunk 24″ (33.5 mi)</text>
+    <g transform="translate(452,304)">{_dot("SEG-02")}</g>
     {_health_bar("SEG-02", 375, 340, 80)}
 
-    <!-- ── MIDPOINT STATION ── -->
-    <rect x="470" y="70" width="140" height="160" class="{"station-box-crit" if comp_map.get("PS-02",{}).get("health",1)<0.6 else "station-box"}"/>
-    <text x="540" y="88" text-anchor="middle" class="label" fill="{CYAN}">MIDPOINT STATION</text>
+    <!-- ── MIDPOINT STATION — Pump House ── -->
+    <!-- Silhouette: flat industrial roof with parapet + vent ducts above box -->
+    <g opacity="0.4">
+      <!-- Flat roof with parapet walls -->
+      <line x1="470" y1="70" x2="610" y2="70" stroke="{CYAN}" stroke-width="1.2"/>
+      <line x1="470" y1="66" x2="470" y2="70" stroke="{CYAN}" stroke-width="1"/>
+      <line x1="610" y1="66" x2="610" y2="70" stroke="{CYAN}" stroke-width="1"/>
+      <!-- Ventilation ducts -->
+      <rect x="498" y="60" width="12" height="10" rx="1" fill="none" stroke="{CYAN}" stroke-width="0.8"/>
+      <rect x="555" y="60" width="12" height="10" rx="1" fill="none" stroke="{CYAN}" stroke-width="0.8"/>
+      <!-- Vent pipes -->
+      <line x1="504" y1="60" x2="504" y2="55" stroke="{CYAN}" stroke-width="0.6"/>
+      <line x1="561" y1="60" x2="561" y2="55" stroke="{CYAN}" stroke-width="0.6"/>
+    </g>
+    <!-- Station box -->
+    <rect x="470" y="70" width="140" height="178" class="{"station-box-crit" if comp_map.get("PS-02",{}).get("health",1)<0.6 else "station-box"}"/>
+    <text x="540" y="86" text-anchor="middle" class="label" fill="{CYAN}" font-size="10">MIDPOINT STATION</text>
 
-    <rect x="482" y="96" width="116" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-comp" x="484" y="100" width="14" height="14"/>
-    <text x="545" y="114" text-anchor="middle" class="sub-label">CS-02 Compressor</text>
-    <g transform="translate(582,108)">{_dot("CS-02")}</g>
+    <rect x="480" y="92" width="120" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-comp" x="484" y="96" width="14" height="14"/>
+    <text x="502" y="109" text-anchor="start" class="sub-label">CS-02 Compr.</text>
+    <g transform="translate(590,104)">{_dot("CS-02")}</g>
 
-    <rect x="482" y="130" width="116" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-pump" x="484" y="133" width="14" height="14"/>
-    <text x="545" y="148" text-anchor="middle" class="sub-label">PS-02 Mainline Pump</text>
-    <g transform="translate(582,144)">{_dot("PS-02")}</g>
-    {_health_bar("PS-02", 486, 152, 108)}
+    <rect x="480" y="122" width="120" height="34" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-pump" x="484" y="126" width="16" height="16"/>
+    <text x="504" y="138" text-anchor="start" class="sub-label">PS-02 Mainline</text>
+    <g transform="translate(590,138)">{_dot("PS-02")}</g>
+    {_health_bar("PS-02", 484, 150, 112)}
 
-    <rect x="482" y="164" width="116" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-valve" x="484" y="167" width="14" height="14"/>
-    <text x="545" y="182" text-anchor="middle" class="sub-label">VLV-02 Block Valve</text>
-    <g transform="translate(582,178)">{_dot("VLV-02")}</g>
+    <rect x="480" y="162" width="120" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-valve" x="484" y="166" width="14" height="14"/>
+    <text x="502" y="179" text-anchor="start" class="sub-label">VLV-02 Block</text>
+    <g transform="translate(590,175)">{_dot("VLV-02")}</g>
 
-    <rect x="482" y="198" width="116" height="24" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-rtu" x="484" y="200" width="12" height="12"/>
-    <text x="545" y="214" text-anchor="middle" class="sub-label">RTU-02 SCADA</text>
-    <g transform="translate(582,210)">{_dot("RTU-02")}</g>
+    <rect x="480" y="192" width="120" height="22" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-rtu" x="484" y="194" width="12" height="12"/>
+    <text x="500" y="207" text-anchor="start" class="sub-label">RTU-02 SCADA</text>
+    <g transform="translate(590,203)">{_dot("RTU-02")}</g>
 
     <!-- Connector -->
-    <line x1="540" y1="228" x2="540" y2="260" class="pipe" stroke-width="2"/>
+    <line x1="540" y1="248" x2="540" y2="260" class="pipe" stroke-width="2"/>
 
     <!-- ── SEGMENT 3 ── -->
     <rect x="640" y="290" width="100" height="50" class="{"station-box-alert" if comp_map.get("SEG-03",{}).get("health",1)<0.8 else "station-box"}"/>
-    <use href="#ico-pipe" x="642" y="294" width="14" height="14"/>
-    <text x="695" y="308" text-anchor="middle" class="label" font-size="10">SEG-03</text>
-    <text x="690" y="320" text-anchor="middle" class="sub-label">Trunk 24″ (35.3 mi)</text>
-    <g transform="translate(690,335)">{_dot("SEG-03")}</g>
+    <use href="#ico-pipe" x="645" y="294" width="14" height="14"/>
+    <text x="663" y="308" text-anchor="start" class="label" font-size="10">SEG-03</text>
+    <text x="663" y="320" text-anchor="start" class="sub-label">Trunk 24″ (35.3 mi)</text>
+    <g transform="translate(727,304)">{_dot("SEG-03")}</g>
     {_health_bar("SEG-03", 650, 340, 80)}
 
-    <!-- ── DELIVERY TERMINAL (right) ── -->
-    <rect x="810" y="70" width="130" height="160" class="station-box"/>
-    <text x="875" y="88" text-anchor="middle" class="label" fill="{CYAN}">DELIVERY TERMINAL</text>
+    <!-- ── DELIVERY TERMINAL — Storage Tanks ── -->
+    <!-- Silhouette: two storage tanks above box -->
+    <g opacity="0.4">
+      <rect x="820" y="52" width="28" height="18" rx="2" fill="none" stroke="{CYAN}" stroke-width="1"/>
+      <ellipse cx="834" cy="52" rx="14" ry="3" fill="{CARD}" stroke="{CYAN}" stroke-width="1"/>
+      <!-- level gauge -->
+      <line x1="842" y1="54" x2="842" y2="68" stroke="{GREEN}" stroke-width="0.8"/>
+      <rect x="860" y="56" width="22" height="14" rx="2" fill="none" stroke="{CYAN}" stroke-width="1"/>
+      <ellipse cx="871" cy="56" rx="11" ry="3" fill="{CARD}" stroke="{CYAN}" stroke-width="1"/>
+      <!-- pipe between tanks -->
+      <line x1="848" y1="64" x2="860" y2="64" stroke="{CYAN}" stroke-width="1"/>
+      <!-- loading arm spur -->
+      <line x1="882" y1="63" x2="896" y2="63" stroke="{CYAN}" stroke-width="0.8"/>
+      <line x1="896" y1="63" x2="896" y2="70" stroke="{CYAN}" stroke-width="0.8"/>
+      <!-- containment berm -->
+      <path d="M816,70 L816,68 L900,68 L900,70" fill="none" stroke="{CYAN}" stroke-width="0.6"/>
+    </g>
+    <!-- Station box -->
+    <rect x="810" y="70" width="130" height="178" class="station-box"/>
+    <text x="875" y="86" text-anchor="middle" class="label" fill="{CYAN}" font-size="10">DELIVERY TERMINAL</text>
 
-    <!-- VLV-03 -->
-    <rect x="822" y="96" width="106" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-valve" x="824" y="99" width="14" height="14"/>
-    <text x="880" y="114" text-anchor="middle" class="sub-label">VLV-03 Block Valve</text>
-    <g transform="translate(912,108)">{_dot("VLV-03")}</g>
+    <rect x="820" y="92" width="110" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-valve" x="824" y="96" width="14" height="14"/>
+    <text x="842" y="109" text-anchor="start" class="sub-label">VLV-03 Block</text>
+    <g transform="translate(920,104)">{_dot("VLV-03")}</g>
 
-    <!-- Meter Delivery -->
-    <rect x="822" y="130" width="106" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-meter" x="824" y="132" width="14" height="14"/>
-    <text x="880" y="148" text-anchor="middle" class="sub-label">MET-02 Custody</text>
-    <g transform="translate(912,144)">{_dot("MET-02")}</g>
+    <rect x="820" y="122" width="110" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-meter" x="824" y="126" width="14" height="14"/>
+    <text x="842" y="139" text-anchor="start" class="sub-label">MET-02 Cust.</text>
+    <g transform="translate(920,135)">{_dot("MET-02")}</g>
 
-    <!-- Pig Receiver -->
-    <rect x="822" y="164" width="106" height="28" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-pig" x="824" y="167" width="14" height="14"/>
-    <text x="880" y="182" text-anchor="middle" class="sub-label">PIG-02 Receiver</text>
-    <g transform="translate(912,178)">{_dot("PIG-02")}</g>
+    <rect x="820" y="152" width="110" height="26" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-pig" x="824" y="156" width="14" height="14"/>
+    <text x="842" y="169" text-anchor="start" class="sub-label">PIG-02 Recv.</text>
+    <g transform="translate(920,165)">{_dot("PIG-02")}</g>
 
-    <!-- RTU-03 -->
-    <rect x="822" y="198" width="106" height="24" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
-    <use href="#ico-rtu" x="824" y="200" width="12" height="12"/>
-    <text x="880" y="214" text-anchor="middle" class="sub-label">RTU-03 SCADA</text>
-    <g transform="translate(912,210)">{_dot("RTU-03")}</g>
+    <rect x="820" y="182" width="110" height="22" rx="4" fill="{PANEL}" stroke="{BORDER}"/>
+    <use href="#ico-rtu" x="824" y="184" width="12" height="12"/>
+    <text x="840" y="197" text-anchor="start" class="sub-label">RTU-03 SCADA</text>
+    <g transform="translate(920,193)">{_dot("RTU-03")}</g>
 
     <!-- Connector -->
-    <line x1="875" y1="228" x2="875" y2="260" class="pipe" stroke-width="2"/>
+    <line x1="875" y1="248" x2="875" y2="260" class="pipe" stroke-width="2"/>
 
     <!-- ── Legend ── -->
     <g transform="translate(60,400)">

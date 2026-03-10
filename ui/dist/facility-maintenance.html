@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Facility Maintenance — CO₂-EOR Digital Twin</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0f1a;--surface:#111827;--card:#1e293b;--border:#334155;--text:#e2e8f0;--muted:#94a3b8;--accent:#3b82f6;--green:#22c55e;--yellow:#eab308;--red:#ef4444;--orange:#f97316;--purple:#a855f7;--cyan:#06b6d4}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5}
+a{color:var(--accent);text-decoration:none}
+.app-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.app-bar h1{font-size:18px;font-weight:600;color:var(--text)}
+.app-bar .badge{background:var(--accent);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px}
+.app-bar .back-link{color:var(--muted);font-size:13px}
+.app-bar .status{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.app-bar .dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
+.tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.container{max-width:1440px;margin:0 auto;padding:20px 24px}
+.grid{display:grid;gap:16px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:1024px){.grid-4,.grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .2s}
+.card:hover{border-color:#475569}
+.card h3{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.card .value{font-size:28px;font-weight:700;color:var(--text)}
+.card .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.sev-critical{color:var(--red)}
+.sev-high{color:var(--orange)}
+.sev-medium{color:var(--yellow)}
+.sev-low{color:var(--green)}
+.badge-critical{background:rgba(239,68,68,.15);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-high{background:rgba(249,115,22,.15);color:var(--orange);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-safety{background:rgba(239,68,68,.15);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-agent{background:rgba(168,85,247,.15);color:var(--purple);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-compliance{background:rgba(6,182,212,.15);color:var(--cyan);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-fallback{background:rgba(234,179,8,.15);color:var(--yellow);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.badge-healthy{background:rgba(34,197,94,.15);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+td{padding:10px 12px;border-bottom:1px solid rgba(51,65,85,.5);vertical-align:top}
+tr:hover td{background:rgba(59,130,246,.04)}
+.section{margin-bottom:24px}
+.section-title{font-size:16px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.btn{padding:8px 16px;border-radius:6px;font-size:13px;font-weight:500;border:none;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#2563eb}
+.btn-sm{padding:4px 10px;font-size:11px}
+.reason-text{font-size:12px;color:var(--muted);line-height:1.6;max-width:500px}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:3px;transition:width .5s}
+.hidden{display:none}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.panel h2{font-size:15px;font-weight:600;margin-bottom:12px}
+.metric-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(51,65,85,.3)}
+.metric-row:last-child{border:none}
+.metric-label{color:var(--muted);font-size:13px}
+.metric-value{font-weight:600;font-size:13px}
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;padding-bottom:16px}
+.timeline-item::before{content:'';position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--accent);background:var(--bg)}
+.timeline-item.critical::before{border-color:var(--red);background:var(--red)}
+.timeline-item.safety::before{border-color:var(--orange);background:var(--orange)}
+.timeline-time{font-size:11px;color:var(--muted)}
+.timeline-msg{font-size:13px;margin-top:2px}
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-bar select,.filter-bar input{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:6px;font-size:13px}
+.guardrail-card{background:var(--surface);border-left:3px solid var(--cyan);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:8px}
+.guardrail-card .label{font-size:11px;color:var(--cyan);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.guardrail-card .value{font-size:14px;font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="app-bar">
+  <a href="/" class="back-link">&larr; Digital Twin</a>
+  <h1>Facility Maintenance</h1>
+  <span class="badge">AI Scheduler</span>
+  <div class="status">
+    <div class="dot"></div>
+    <span id="lastRun">Agent running...</span>
+  </div>
+</div>
+
+<div class="tabs" id="tabBar">
+  <div class="tab active" data-tab="summary">Daily Summary</div>
+  <div class="tab" data-tab="workorders">Work Orders</div>
+  <div class="tab" data-tab="technicians">Technician Schedules</div>
+  <div class="tab" data-tab="compliance">HSE / Compliance</div>
+  <div class="tab" data-tab="reliability">Reliability Metrics</div>
+  <div class="tab" data-tab="audit">Audit Trail</div>
+</div>
+
+<div class="container">
+<!-- ═══════════ TAB: DAILY SUMMARY ═══════════ -->
+<div id="tab-summary" class="tab-content">
+  <div class="grid grid-4 section" id="summaryKpis"></div>
+  <div class="grid grid-2 section">
+    <div class="panel" id="facilityBreakdown">
+      <h2>Changes by Facility</h2>
+      <div id="facilityList"></div>
+    </div>
+    <div class="panel">
+      <h2>Agent Activity Timeline</h2>
+      <div class="timeline" id="activityTimeline"></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Notifications Sent Today</div>
+    <div class="card"><table><thead><tr><th>Time</th><th>Target</th><th>Channel</th><th>Type</th><th>Message</th></tr></thead><tbody id="notifTable"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: WORK ORDERS ═══════════ -->
+<div id="tab-workorders" class="tab-content hidden">
+  <div class="filter-bar">
+    <select id="woFilterStatus"><option value="">All Statuses</option><option value="scheduled">Scheduled</option><option value="in_progress">In Progress</option><option value="completed">Completed</option></select>
+    <select id="woFilterFacility"><option value="">All Facilities</option><option value="FAC-COMP">CO2 Compression</option><option value="FAC-CPF">Delaware Basin CPF</option><option value="FAC-CO2R">CO2 Recycle Plant</option><option value="FAC-SWD">Salt Water Disposal</option></select>
+    <label style="display:flex;align-items:center;gap:4px;color:var(--muted);font-size:13px"><input type="checkbox" id="woFilterSafety"/> Safety only</label>
+    <button class="btn btn-primary btn-sm" onclick="loadWorkOrders()">Apply</button>
+    <button class="btn btn-primary" onclick="triggerAgent()" style="margin-left:auto">Run Agent Cycle</button>
+  </div>
+  <div class="card"><table><thead><tr><th>WO ID</th><th>Asset</th><th>Facility</th><th>Type</th><th>Priority</th><th>Due</th><th>Tech</th><th>Status</th><th>Flags</th><th>Reason</th></tr></thead><tbody id="woTable"></tbody></table></div>
+</div>
+
+<!-- ═══════════ TAB: TECHNICIAN SCHEDULES ═══════════ -->
+<div id="tab-technicians" class="tab-content hidden">
+  <div class="section-title">Daily Technician Schedules <span style="font-size:12px;color:var(--muted);font-weight:400">(Locked at 05:00 local)</span></div>
+  <div class="grid grid-2 section" id="techGrid"></div>
+</div>
+
+<!-- ═══════════ TAB: HSE / COMPLIANCE ═══════════ -->
+<div id="tab-compliance" class="tab-content hidden">
+  <div class="section-title">Supervisor Guardrails</div>
+  <div class="grid grid-4 section" id="guardrailCards"></div>
+  <div class="section-title">Regulatory Rules</div>
+  <div class="card section"><table><thead><tr><th>Code</th><th>Description</th><th>Asset Types</th><th>Interval</th><th>Tolerance</th><th>Authority</th><th>Penalty Risk</th></tr></thead><tbody id="regTable"></tbody></table></div>
+  <div class="grid grid-2 section">
+    <div class="panel">
+      <h2>Safety-Critical Work Orders</h2>
+      <table><thead><tr><th>WO</th><th>Asset</th><th>Due</th><th>Reason</th></tr></thead><tbody id="safetyWoTable"></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Compliance Exceptions</h2>
+      <table><thead><tr><th>Time</th><th>Asset</th><th>Action</th><th>Reason</th></tr></thead><tbody id="exceptionsTable"></tbody></table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: RELIABILITY METRICS ═══════════ -->
+<div id="tab-reliability" class="tab-content hidden">
+  <div class="grid grid-4 section" id="modelKpis"></div>
+  <div class="grid grid-2 section">
+    <div class="panel">
+      <h2>Prediction Quality</h2>
+      <div id="predictionMetrics"></div>
+    </div>
+    <div class="panel">
+      <h2>Failure Reduction</h2>
+      <div id="failureReduction"></div>
+    </div>
+  </div>
+  <div class="panel section">
+    <h2>Model Health Status</h2>
+    <div id="modelHealth"></div>
+  </div>
+</div>
+
+<!-- ═══════════ TAB: AUDIT TRAIL ═══════════ -->
+<div id="tab-audit" class="tab-content hidden">
+  <div class="section-title">Agent Decision Audit Log</div>
+  <div class="card"><table><thead><tr><th>Timestamp</th><th>Type</th><th>Asset</th><th>Action</th><th>Risk</th><th>Faults</th><th>Decision</th><th>Model</th><th>Reason</th></tr></thead><tbody id="auditTable"></tbody></table></div>
+</div>
+
+</div>
+
+<script>
+const API = '/api/scheduler';
+
+// ── Tab switching ───────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+    tab.classList.add('active');
+    document.getElementById('tab-' + tab.dataset.tab).classList.remove('hidden');
+    loadTab(tab.dataset.tab);
+  });
+});
+
+async function api(path) { return (await fetch(API + path)).json(); }
+async function apiPost(path, body) { return (await fetch(API + path, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body) })).json(); }
+
+function fmtDate(iso) { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('en-US', {month:'short',day:'numeric'}) + ' ' + d.toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'}); }
+function fmtDay(iso) { if (!iso) return '—'; return new Date(iso).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'}); }
+function sevBadge(sev) { const s = (sev||'').toLowerCase(); return `<span class="badge-${s}">${(sev||'').toUpperCase()}</span>`; }
+function flags(wo) {
+  let h = '';
+  if (wo.safetyFlag) h += '<span class="badge-safety">SAFETY</span> ';
+  if (wo.createdBy === 'agent') h += '<span class="badge-agent">AI</span> ';
+  if (wo.complianceFlag) h += '<span class="badge-compliance">REG</span> ';
+  if (wo.fallbackMode) h += '<span class="badge-fallback">FALLBACK</span> ';
+  return h || '—';
+}
+
+// ── Load tab data ───────────────────────────────────────────────────────
+async function loadTab(tab) {
+  if (tab === 'summary') await loadSummary();
+  else if (tab === 'workorders') await loadWorkOrders();
+  else if (tab === 'technicians') await loadTechnicians();
+  else if (tab === 'compliance') await loadCompliance();
+  else if (tab === 'reliability') await loadReliability();
+  else if (tab === 'audit') await loadAudit();
+}
+
+// ── DAILY SUMMARY ───────────────────────────────────────────────────────
+async function loadSummary() {
+  const s = await api('/agent/daily-summary');
+  document.getElementById('lastRun', s.lastAgentRun);
+  document.getElementById('lastRun').textContent = 'Last run: ' + fmtDate(s.lastAgentRun);
+
+  document.getElementById('summaryKpis').innerHTML = [
+    kpiCard('Total Work Orders', s.totalWorkOrders, 'Today'),
+    kpiCard('Agent-Created', s.agentCreatedWOs, 'AI-generated WOs', 'var(--purple)'),
+    kpiCard('Critical Actions', s.criticalActions, 'Priority 1', 'var(--red)'),
+    kpiCard('Safety Flagged', s.safetyFlagged, 'Safety-critical tasks', 'var(--orange)'),
+    kpiCard('Compliance Exceptions', s.complianceExceptions, 'Blocked by rules', 'var(--cyan)'),
+    kpiCard('Fallback Mode', s.fallbackModeCount, 'Data quality issues', 'var(--yellow)'),
+    kpiCard('Model Status', s.modelHealth.status === 'HEALTHY' ? 'Healthy' : 'Degraded', `P: ${s.modelHealth.precision} R: ${s.modelHealth.recall}`, s.modelHealth.degraded ? 'var(--red)' : 'var(--green)'),
+    kpiCard('Agent Runs', s.totalRunsToday, 'Cycles today', 'var(--accent)'),
+  ].join('');
+
+  // Facility breakdown
+  const fl = s.facilitySummary || [];
+  document.getElementById('facilityList').innerHTML = fl.length ? fl.map(f => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="font-weight:600">${f.facilityName}</div>
+      <div style="font-size:12px;color:var(--muted)">${f.workOrders.length} WOs &bull; ${f.created} AI-created</div>
+    </div>`).join('') : '<div style="color:var(--muted)">No changes today</div>';
+
+  // Timeline from audit
+  const logs = await api('/agent/audit-log?limit=10');
+  document.getElementById('activityTimeline').innerHTML = logs.map(l => `
+    <div class="timeline-item ${l.type === 'compliance_exception' ? 'critical' : ''}">
+      <div class="timeline-time">${fmtDate(l.timestamp)}</div>
+      <div class="timeline-msg">${l.agentDecision} — ${l.assetId}: ${l.reason?.substring(0, 120) || ''}...</div>
+    </div>`).join('') || '<div style="color:var(--muted)">No activity yet</div>';
+
+  // Notifications
+  const notifs = s.notifications || [];
+  document.getElementById('notifTable').innerHTML = notifs.map(n => `
+    <tr><td>${fmtDate(n.timestamp)}</td><td>${n.targetName}</td><td>${n.channel}</td>
+    <td>${n.type === 'safety_critical' ? '<span class="badge-safety">SAFETY</span>' : '<span class="badge-agent">URGENT</span>'}</td>
+    <td class="reason-text">${n.message}</td></tr>`).join('') || '<tr><td colspan="5" style="color:var(--muted)">No notifications sent</td></tr>';
+}
+
+function kpiCard(title, value, sub, color) {
+  return `<div class="card"><h3>${title}</h3><div class="value" style="color:${color||'var(--text)'}">${value}</div><div class="sub">${sub||''}</div></div>`;
+}
+
+// ── WORK ORDERS ─────────────────────────────────────────────────────────
+async function loadWorkOrders() {
+  const status = document.getElementById('woFilterStatus').value;
+  const fac = document.getElementById('woFilterFacility').value;
+  const safety = document.getElementById('woFilterSafety').checked;
+  let q = '/workorders?';
+  if (status) q += `status=${status}&`;
+  if (fac) q += `facility_id=${fac}&`;
+  if (safety) q += `safety=true&`;
+  const wos = await api(q);
+  document.getElementById('woTable').innerHTML = wos.map(wo => `
+    <tr>
+      <td style="font-family:monospace;font-size:12px">${wo.id}</td>
+      <td><strong>${wo.assetName}</strong><br><span style="font-size:11px;color:var(--muted)">${wo.assetId}</span></td>
+      <td style="font-size:12px">${wo.facilityName}</td>
+      <td>${wo.jobType}</td>
+      <td>${wo.priority === 1 ? '<span class="sev-critical">P1</span>' : wo.priority === 2 ? '<span class="sev-high">P2</span>' : 'P3'}</td>
+      <td style="font-size:12px">${fmtDay(wo.dueStart)}</td>
+      <td>${wo.assignedTechnicianName || '—'}</td>
+      <td>${wo.status}</td>
+      <td>${flags(wo)}</td>
+      <td class="reason-text">${wo.agentReasonUpdate || wo.reason || '—'}</td>
+    </tr>`).join('') || '<tr><td colspan="10" style="color:var(--muted)">No work orders found</td></tr>';
+}
+
+async function triggerAgent() {
+  const result = await apiPost('/agent/run', {});
+  alert(`Agent cycle complete: ${result.changesCount} changes made.`);
+  loadWorkOrders();
+}
+
+// ── TECHNICIAN SCHEDULES ────────────────────────────────────────────────
+async function loadTechnicians() {
+  const techs = await api('/technicians');
+  const grid = document.getElementById('techGrid');
+  let html = '';
+  for (const t of techs) {
+    const sched = await api(`/technicians/${t.id}/schedule`);
+    const util = t.maxDailyHours > 0 ? (t.bookedHours / t.maxDailyHours * 100).toFixed(0) : 0;
+    const barColor = util > 80 ? 'var(--red)' : util > 50 ? 'var(--yellow)' : 'var(--green)';
+    html += `<div class="panel">
+      <div style="display:flex;justify-content:space-between;align-items:start">
+        <div>
+          <h2>${t.name}</h2>
+          <div style="font-size:12px;color:var(--muted)">${t.role} &bull; ${t.zone} &bull; ${t.shift} shift</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Skills: ${t.skills.join(', ')}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:24px;font-weight:700">${t.bookedHours}/${t.maxDailyHours}h</div>
+          <div class="progress-bar" style="width:100px"><div class="progress-fill" style="width:${util}%;background:${barColor}"></div></div>
+        </div>
+      </div>
+      <table style="margin-top:12px"><thead><tr><th>#</th><th>WO</th><th>Asset</th><th>Hours</th><th>Priority</th></tr></thead><tbody>
+      ${(sched.jobs||[]).map((j,i) => `<tr><td>${i+1}</td><td style="font-family:monospace;font-size:11px">${j.woId}</td><td>${j.assetName}</td><td>${j.estimatedHours}h</td><td>${j.priority===1?'<span class="sev-critical">P1</span>':j.priority===2?'<span class="sev-high">P2</span>':'P3'}</td></tr>`).join('') || '<tr><td colspan="5" style="color:var(--muted)">No jobs scheduled</td></tr>'}
+      </tbody></table>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">Schedule locked at: ${sched.lockedAt ? fmtDate(sched.lockedAt) : '—'}</div>
+    </div>`;
+  }
+  grid.innerHTML = html;
+}
+
+// ── HSE / COMPLIANCE ────────────────────────────────────────────────────
+async function loadCompliance() {
+  const rules = await api('/constraints/rules');
+  const report = await api('/compliance/report');
+
+  // Guardrails
+  const g = rules.guardrails;
+  document.getElementById('guardrailCards').innerHTML = [
+    `<div class="guardrail-card"><div class="label">Max Schedule Move</div><div class="value">&pm;${g.maxMoveDays} days</div></div>`,
+    `<div class="guardrail-card"><div class="label">Min Lead Time</div><div class="value">${g.minLeadTimeHours} hours</div></div>`,
+    `<div class="guardrail-card"><div class="label">Critical Asset Threshold</div><div class="value">${(g.criticalAssetThreshold*100).toFixed(0)}% risk</div></div>`,
+    `<div class="guardrail-card"><div class="label">Urgent Insertion Threshold</div><div class="value">${(g.urgentInsertionThreshold*100).toFixed(0)}% risk</div></div>`,
+    `<div class="guardrail-card"><div class="label">No-Move Window</div><div class="value">${g.noMoveWindowMinutes} min before start</div></div>`,
+    `<div class="guardrail-card"><div class="label">Approval Required Beyond</div><div class="value">&pm;${g.approvalRequiredBeyondDays} days</div></div>`,
+  ].join('');
+
+  // Regulatory table
+  document.getElementById('regTable').innerHTML = rules.regulatory.map(r => `
+    <tr>
+      <td><strong>${r.code}</strong></td>
+      <td>${r.description}</td>
+      <td style="font-size:11px">${r.assetTypes.join(', ')}</td>
+      <td>${r.intervalDays}d</td>
+      <td>${r.maxToleranceDays}d</td>
+      <td style="font-size:11px">${r.authority}</td>
+      <td style="font-size:11px;color:var(--red)">${r.penaltyRisk}</td>
+    </tr>`).join('');
+
+  // Safety WOs
+  document.getElementById('safetyWoTable').innerHTML = (report.safetyCriticalTasks||[]).slice(0,10).map(wo => `
+    <tr><td style="font-family:monospace;font-size:11px">${wo.id}</td><td>${wo.assetName}</td><td>${fmtDay(wo.dueStart)}</td><td class="reason-text">${wo.reason?.substring(0,100)||'—'}</td></tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted)">No safety-critical tasks</td></tr>';
+
+  // Exceptions
+  document.getElementById('exceptionsTable').innerHTML = (report.complianceExceptions||[]).map(e => `
+    <tr><td>${fmtDate(e.timestamp)}</td><td>${e.assetId}</td><td>${e.agentDecision}</td><td class="reason-text">${e.reason?.substring(0,100)||'—'}</td></tr>`).join('') || '<tr><td colspan="4" style="color:var(--muted)">No compliance exceptions</td></tr>';
+}
+
+// ── RELIABILITY METRICS ─────────────────────────────────────────────────
+async function loadReliability() {
+  const m = await api('/agent/model-metrics');
+  document.getElementById('modelKpis').innerHTML = [
+    kpiCard('Precision', (m.precision*100).toFixed(0)+'%', 'True positive rate', 'var(--green)'),
+    kpiCard('Recall', (m.recall*100).toFixed(0)+'%', 'Catch rate', 'var(--accent)'),
+    kpiCard('F1 Score', (m.f1*100).toFixed(0)+'%', 'Harmonic mean', 'var(--purple)'),
+    kpiCard('False Positives', m.falsePositives, 'Unnecessary interventions', 'var(--yellow)'),
+    kpiCard('False Negatives', m.falseNegatives, 'Missed failures', 'var(--red)'),
+    kpiCard('Total Predictions', m.totalPredictions, `${m.correctPredictions} correct`, 'var(--text)'),
+    kpiCard('Failure Reduction', (m.unplannedFailureReduction*100).toFixed(0)+'%', `vs 6-month baseline`, 'var(--green)'),
+    kpiCard('Model Status', m.degraded ? 'DEGRADED' : 'HEALTHY', m.degraded ? 'Human review required' : 'All thresholds met', m.degraded ? 'var(--red)' : 'var(--green)'),
+  ].join('');
+
+  document.getElementById('predictionMetrics').innerHTML = `
+    <div class="metric-row"><span class="metric-label">Precision</span><span class="metric-value">${(m.precision*100).toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="metric-label">Recall</span><span class="metric-value">${(m.recall*100).toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="metric-label">F1 Score</span><span class="metric-value">${(m.f1*100).toFixed(1)}%</span></div>
+    <div class="metric-row"><span class="metric-label">True Positives</span><span class="metric-value">${m.correctPredictions}</span></div>
+    <div class="metric-row"><span class="metric-label">False Positives</span><span class="metric-value">${m.falsePositives}</span></div>
+    <div class="metric-row"><span class="metric-label">False Negatives</span><span class="metric-value">${m.falseNegatives}</span></div>
+    <div class="metric-row"><span class="metric-label">Last Evaluated</span><span class="metric-value">${fmtDate(m.lastEvaluated)}</span></div>`;
+
+  document.getElementById('failureReduction').innerHTML = `
+    <div class="metric-row"><span class="metric-label">Baseline Unplanned Failures (6mo)</span><span class="metric-value">${m.baselineUnplannedFailures}</span></div>
+    <div class="metric-row"><span class="metric-label">Current Unplanned Failures</span><span class="metric-value">${m.currentUnplannedFailures}</span></div>
+    <div class="metric-row"><span class="metric-label">Reduction</span><span class="metric-value sev-low">${(m.unplannedFailureReduction*100).toFixed(0)}%</span></div>
+    <div class="metric-row"><span class="metric-label">Target</span><span class="metric-value">20%</span></div>
+    <div class="metric-row"><span class="metric-label">Status</span><span class="metric-value ${m.unplannedFailureReduction >= 0.20 ? 'sev-low' : 'sev-critical'}">${m.unplannedFailureReduction >= 0.20 ? 'TARGET MET' : 'BELOW TARGET'}</span></div>`;
+
+  document.getElementById('modelHealth').innerHTML = `
+    <div style="padding:12px;background:${m.degraded ? 'rgba(239,68,68,.1)' : 'rgba(34,197,94,.1)'};border-radius:8px;border-left:4px solid ${m.degraded ? 'var(--red)' : 'var(--green)'}">
+      <div style="font-weight:600;font-size:16px;color:${m.degraded ? 'var(--red)' : 'var(--green)'}">${m.degraded ? 'MODEL DEGRADED — Human Review Required' : 'Model Health: GOOD'}</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:4px">${m.degraded ? 'Key metrics below configured thresholds. Agent operating in supervised mode only.' : 'All prediction metrics within acceptable thresholds. Agent operating in autonomous mode for non-critical assets.'}</div>
+    </div>`;
+}
+
+// ── AUDIT TRAIL ─────────────────────────────────────────────────────────
+async function loadAudit() {
+  const logs = await api('/agent/audit-log?limit=50');
+  document.getElementById('auditTable').innerHTML = logs.map(l => `
+    <tr>
+      <td style="font-size:11px">${fmtDate(l.timestamp)}</td>
+      <td>${l.type === 'compliance_exception' ? '<span class="badge-safety">COMPLIANCE</span>' : '<span class="badge-agent">ACTION</span>'}</td>
+      <td>${l.assetId}</td>
+      <td>${l.action}</td>
+      <td>${l.riskScore ? (l.riskScore*100).toFixed(0)+'%' : '—'}</td>
+      <td style="font-size:11px">${(l.faults||[]).join(', ') || '—'}</td>
+      <td><strong>${l.agentDecision}</strong></td>
+      <td style="font-size:11px;font-family:monospace">${l.modelVersion||'—'}</td>
+      <td class="reason-text">${l.reason?.substring(0,120)||'—'}</td>
+    </tr>`).join('') || '<tr><td colspan="9" style="color:var(--muted)">No audit entries</td></tr>';
+}
+
+// ── Initial load ────────────────────────────────────────────────────────
+loadSummary();
+
+// Auto-refresh every 60s
+setInterval(() => {
+  const active = document.querySelector('.tab.active')?.dataset.tab;
+  if (active) loadTab(active);
+}, 60000);
+</script>
+</body>
+</html>

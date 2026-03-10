@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CO₂-EOR Digital Twin</title>
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
+    <script type="module" crossorigin src="/assets/index-RLWdA51X.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-Cwpk9YGB.css">
+    <style>
+      .maplibregl-popup-content { background: rgba(15,23,39,0.95) !important; border: 1px solid #334155 !important; border-radius: 8px !important; padding: 10px 14px !important; box-shadow: 0 4px 20px rgba(0,0,0,0.5) !important; }
+      .maplibregl-popup-tip { border-top-color: rgba(15,23,39,0.95) !important; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // Inject Facility Maintenance tab into nav.tab-bar alongside existing tabs
+      (function() {
+        let tries = 0;
+        const inject = () => {
+          const tabBar = document.querySelector('nav.tab-bar');
+          if (tabBar && !document.getElementById('fm-tab-btn')) {
+            // Hide Shift Log tab
+            tabBar.querySelectorAll('.tab-btn').forEach(t => {
+              if (t.textContent.trim() === 'Shift Log') t.style.display = 'none';
+            });
+            // Add Facility Maintenance tab
+            const btn = document.createElement('button');
+            btn.id = 'fm-tab-btn';
+            btn.className = 'tab-btn';
+            btn.textContent = 'Facility Maintenance';
+            btn.addEventListener('click', () => {
+              window.location.href = '/facility-maintenance';
+            });
+            tabBar.appendChild(btn);
+          }
+          if (++tries < 30) setTimeout(inject, 500);
+        };
+        setTimeout(inject, 500);
+      })();
+    </script>
+  </body>
+</html>
