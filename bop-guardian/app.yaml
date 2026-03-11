@@ -10,3 +10,17 @@ command:
 env:
   - name: ENVIRONMENT
     value: "production"
+  - name: PGUSER
+    valueFrom: bop-guardian-lakebase
+  - name: PGPORT
+    valueFrom: bop-guardian-lakebase
+  - name: PGDATABASE_OVERRIDE
+    value: "bop_guardian_app"
+
+resources:
+  - name: bop-guardian-lakebase
+    description: "Lakebase PostgreSQL for BOP Guardian telemetry, anomalies, and work orders"
+    database:
+      instance_name: bop-guardian-db
+      database_name: bop_guardian_app
+      permission: CAN_CONNECT_AND_CREATE

@@ -11,4 +11,13 @@ if _root not in sys.path:
 
 from app.ui import render_app
 
+# Bootstrap Lakebase schema and seed data on first startup
+try:
+    from app.db import is_connected, bootstrap_schema, seed_if_empty
+    if is_connected():
+        bootstrap_schema()
+        seed_if_empty()
+except Exception:
+    pass  # App works fully in-memory when Lakebase is unavailable
+
 render_app()

@@ -236,7 +236,7 @@ def simulate_tick() -> dict[str, Any]:
                 "ts": now.isoformat(),
             })
 
-    # Store history
+    # Store history (in-memory)
     _telemetry_history.extend(readings)
     if len(_telemetry_history) > 5000:
         _telemetry_history[:] = _telemetry_history[-5000:]
@@ -246,6 +246,20 @@ def simulate_tick() -> dict[str, Any]:
     _anomalies.extend(tick_anomalies)
     if len(_anomalies) > 200:
         _anomalies[:] = _anomalies[-200:]
+
+    # Persist to Lakebase (non-blocking — falls back to in-memory if unavailable)
+    try:
+        from app.db import is_connected, save_telemetry_batch, save_anomaly, save_event
+        if is_connected():
+            save_telemetry_batch(readings)
+            for a in tick_anomalies:
+                save_anomaly(a["rig_id"], a["asset_id"], a["component_type"],
+                             a["anomaly_type"], a["severity"], a["ts"])
+            for e in tick_events:
+                save_event(e["rig_id"], e["asset_id"], e["event_type"],
+                           e["severity"], e["message"], e["ts"])
+    except Exception:
+        pass  # Lakebase write failure should never break the simulator
 
     # Current drilling operation
     op_idx = (_tick // 8) % len(DRILLING_OPS)
