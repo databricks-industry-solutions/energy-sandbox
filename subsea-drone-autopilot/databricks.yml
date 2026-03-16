@@ -1,0 +1,15 @@
+bundle:
+  name: subsea-drone-autopilot
+
+workspace:
+  profile: fe-vm-oil-pump-monitor
+
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+
+  prod:
+    workspace:
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com

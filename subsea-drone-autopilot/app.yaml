@@ -1,0 +1,28 @@
+command:
+  - uvicorn
+  - main:app
+  - --host=0.0.0.0
+  - --port=8000
+
+env:
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "87e069097741b56c"
+  - name: CLAUDE_MODEL
+    value: "databricks-claude-sonnet-4-6"
+  - name: VECTOR_SEARCH_ENDPOINT
+    value: "subsea-manuals-vs"
+  - name: VECTOR_SEARCH_INDEX
+    value: "subsea.manuals.chunk_index"
+
+resources:
+  - name: subsea-lakebase
+    lakebase:
+      instance: subsea-drone-db
+      database: subsea_ops
+      permission: CAN_CONNECT_AND_CREATE
+  - name: subsea-llm
+    serving_endpoint: databricks-claude-sonnet-4-6
+    permission: CAN_QUERY
+  - name: subsea-warehouse
+    sql_warehouse: 87e069097741b56c
+    permission: CAN_USE
