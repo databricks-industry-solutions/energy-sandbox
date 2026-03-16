@@ -1,0 +1,46 @@
+Databricks License
+Copyright (2025) Databricks, Inc.
+
+Definitions.
+
+Agreement: The agreement between Databricks, Inc., and you governing
+the use of the Databricks Services, as that term is defined in the
+Master Cloud Services Agreement (MCSA) between Databricks, Inc., and
+you or the Beta Services Terms between Databricks, Inc., and you, or
+the Databricks License Agreement between Databricks, Inc. and you
+(whichever applies).
+
+Software: The source code, object code, documentation, and any other
+work provided under this license.
+
+Licensed Work: The Software, its copies, derivative works, and any
+other material provided with this license.
+
+Purpose: Use of the Licensed Work is limited to the scope of the
+Agreement.
+
+Scope.
+
+Subject to the terms of this license, Databricks grants you a
+non-exclusive, non-transferable, limited license to use the Licensed
+Work solely for your internal business purposes and in connection with
+the Databricks Services as permitted under the Agreement.
+
+Limitations.
+
+You may not, directly or indirectly: (a) sublicense, resell, rent,
+lease, transfer, assign, or otherwise dispose of the Licensed Work;
+(b) modify or create derivative works of the Licensed Work; (c) use
+the Licensed Work for any purpose not expressly authorized in this
+license or the Agreement.
+
+Termination.
+
+This license will terminate automatically if you violate any of its
+terms or if the Agreement terminates.
+
+Disclaimer.
+
+THE LICENSED WORK IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND.
+DATABRICKS DISCLAIMS ALL WARRANTIES, WHETHER EXPRESS, IMPLIED,
+STATUTORY, OR OTHERWISE.
