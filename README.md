@@ -17,6 +17,7 @@ A collection of Databricks solution accelerators for the **upstream and midstrea
 | [**Pipeline Command Center**](pipeline-command-center/) | Midstream pipeline digital twin command center with 18 assets across the Eagle Ford Trunk. Six agentic AI sub-agents, skill-based crew dispatch, predictive maintenance, and SCADA/ERP integration. | Databricks Apps, Streamlit, Lakebase, Foundation Model API |
 | [**Reservoir Simulator**](reservoir-simulator/) | Interactive 3D reservoir simulation and production optimization platform calibrated to the Norne field (North Sea) benchmark. Scenario management, well performance, economic evaluation, and SAP ERP integration. | Databricks Apps, Streamlit, Three.js, Lakebase, Foundation Model API |
 | [**ROP Prediction**](rop-prediction/) | Real-time Rate of Penetration prediction and drilling optimization using MSEEL field data. XGBoost ML pipeline, Spark Structured Streaming inference, hazard detection, and SAP ERP integration. | Databricks Apps, Streamlit, Lakebase, XGBoost, Foundation Model API |
+| [**Subsea Drone Autopilot**](subsea-drone-autopilot/) | Autonomous subsea ROV/AUV fleet inspection platform with 5 drones, 4 Claude-powered AI agents (mission planning, inspection analysis, maintenance advisor, knowledge Q&A), real-time computer vision frame streaming, digital twin, and ocean operations map. | Databricks Apps, FastAPI, React, Lakebase, Claude Sonnet 4.6, Vector Search |
 
 ## Getting Started
 
