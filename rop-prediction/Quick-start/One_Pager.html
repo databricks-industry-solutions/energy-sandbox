@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROP Prediction — One Pager</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  @page { size: A4; margin: 0; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #0a0e17; color: #c8d6e5; width: 210mm; min-height: 297mm; margin: 0 auto; position: relative; overflow: hidden; }
+  body::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,255,170,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,170,0.03) 1px, transparent 1px); background-size: 20px 20px; pointer-events: none; }
+  .page { padding: 28px 32px 20px; position: relative; z-index: 1; }
+  .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #00ffaa30; padding-bottom: 14px; margin-bottom: 16px; }
+  .header-left { display: flex; align-items: center; gap: 14px; }
+  .logo-icon { width: 44px; height: 44px; background: linear-gradient(135deg, #00ffaa 0%, #0088ff 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #0a0e17; font-weight: 800; }
+  .header h1 { font-size: 22px; font-weight: 800; color: #ffffff; letter-spacing: 1.5px; }
+  .header h1 span { color: #00ffaa; }
+  .header-subtitle { font-size: 10px; color: #6b7c93; font-weight: 400; letter-spacing: 0.5px; margin-top: 2px; }
+  .header-right { text-align: right; }
+  .db-badge { background: linear-gradient(135deg, #ff3621 0%, #ff6b4a 100%); color: white; font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.8px; display: inline-block; }
+  .header-tag { font-size: 8.5px; color: #6b7c93; margin-top: 4px; letter-spacing: 0.3px; }
+  .hero { background: linear-gradient(135deg, #0d1a2a 0%, #0a1628 50%, #0d1117 100%); border: 1px solid #00ffaa20; border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; text-align: center; }
+  .hero h2 { font-size: 14px; font-weight: 700; color: #00ffaa; letter-spacing: 1px; margin-bottom: 6px; }
+  .hero p { font-size: 10.5px; color: #8fa3b8; line-height: 1.6; max-width: 620px; margin: 0 auto; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .card { background: #0f1923; border: 1px solid #1a2a3a; border-radius: 8px; padding: 14px 16px; }
+  .card-title { font-size: 10px; font-weight: 700; color: #00ffaa; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .card-title .icon { font-size: 13px; }
+  .card ul { list-style: none; padding: 0; }
+  .card ul li { font-size: 9.5px; color: #8fa3b8; line-height: 1.55; padding: 3px 0; padding-left: 14px; position: relative; }
+  .card ul li::before { content: '▸'; position: absolute; left: 0; color: #00ffaa; font-size: 10px; }
+  .card ul li strong { color: #d0dce8; font-weight: 600; }
+  .personas-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .persona { background: #0f1923; border: 1px solid #1a2a3a; border-radius: 8px; padding: 12px 10px; text-align: center; }
+  .persona .p-icon { font-size: 22px; margin-bottom: 5px; display: block; }
+  .persona .p-title { font-size: 9px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .persona .p-desc { font-size: 8px; color: #6b7c93; line-height: 1.4; }
+  .quickstart { background: linear-gradient(135deg, #0d1a2a 0%, #0a1628 100%); border: 1px solid #0088ff30; border-radius: 8px; padding: 14px 18px; margin-bottom: 14px; }
+  .quickstart .card-title { color: #0088ff; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .step { text-align: center; }
+  .step-num { width: 26px; height: 26px; background: linear-gradient(135deg, #0088ff 0%, #00ffaa 100%); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #0a0e17; margin-bottom: 5px; }
+  .step-title { font-size: 9px; font-weight: 700; color: #d0dce8; margin-bottom: 2px; }
+  .step-desc { font-size: 8px; color: #6b7c93; line-height: 1.35; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .metric { background: #0f1923; border: 1px solid #1a2a3a; border-radius: 8px; padding: 10px; text-align: center; }
+  .metric-value { font-size: 18px; font-weight: 800; color: #00ffaa; line-height: 1.1; }
+  .metric-label { font-size: 8px; color: #6b7c93; margin-top: 2px; letter-spacing: 0.3px; }
+  .disclaimer { background: #1a0a0a; border: 1px solid #ff362140; border-radius: 6px; padding: 10px 16px; text-align: center; margin-bottom: 12px; }
+  .disclaimer p { font-size: 8.5px; color: #ff6b4a; font-weight: 500; letter-spacing: 0.3px; line-height: 1.5; }
+  .disclaimer strong { font-weight: 700; color: #ff3621; text-transform: uppercase; letter-spacing: 1px; }
+  .footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1a2a3a; padding-top: 8px; }
+  .footer-left { font-size: 8px; color: #4a5b6e; }
+  .footer-right { font-size: 8px; color: #4a5b6e; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-icon">RP</div>
+      <div>
+        <h1>ROP <span>PREDICTION</span></h1>
+        <div class="header-subtitle">Real-Time Drilling Optimization with ML</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="db-badge">DATABRICKS SOLUTION ACCELERATOR</div>
+      <div class="header-tag">Powered by Databricks Apps &bull; Unity Catalog &bull; Serverless</div>
+    </div>
+  </div>
+  <div class="hero">
+    <h2>ML-POWERED RATE OF PENETRATION PREDICTION &amp; REAL-TIME DRILLING OPTIMIZATION</h2>
+    <p>ROP Prediction delivers an end-to-end ML pipeline — from MSEEL field data ingestion through XGBoost training, Spark Structured Streaming inference, and an operational dashboard — to optimize drilling and reduce well costs by up to $500K+ per well.</p>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="icon">&#9670;</span> Business Value</div>
+      <ul>
+        <li><strong>Save $500K+ per well</strong> by optimizing rate of penetration through real-time ML predictions</li>
+        <li><strong>Detect drilling hazards early</strong> — high MSE, stuck pipe risk, and inefficient drilling flagged automatically</li>
+        <li><strong>Track model performance</strong> with MLflow registry showing version history, RMSE, and R&#178; metrics</li>
+        <li><strong>Integrate with SAP ERP</strong> for work orders, equipment BOM, procurement tracking, and vendor contracts</li>
+        <li><strong>Enable real-time scoring</strong> with Spark Structured Streaming inference on live drilling telemetry</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="icon">&#9670;</span> Challenges Addressed</div>
+      <ul>
+        <li><strong>Suboptimal drilling parameters</strong> — no real-time guidance on weight-on-bit, RPM, and flow rate</li>
+        <li><strong>Delayed hazard detection</strong> — problems identified only after costly stuck pipe or bit damage</li>
+        <li><strong>No ML in the loop</strong> — drilling decisions based on experience alone without predictive models</li>
+        <li><strong>Disconnected data</strong> — MSEEL field data, model predictions, and work orders in separate systems</li>
+        <li><strong>Manual performance tracking</strong> — no automated comparison of actual vs. predicted ROP</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card-title" style="padding-left: 4px; margin-bottom: 8px;"><span class="icon">&#9670;</span> Who It&#39;s For</div>
+  <div class="personas-grid">
+    <div class="persona">
+      <span class="p-icon">&#128738;&#65039;</span>
+      <div class="p-title">Drilling Engineer</div>
+      <div class="p-desc">Real-time ROP predictions, MSE monitoring, and parameter optimization</div>
+    </div>
+    <div class="persona">
+      <span class="p-icon">&#129302;</span>
+      <div class="p-title">Data Scientist</div>
+      <div class="p-desc">End-to-end ML pipeline with XGBoost, feature engineering, and MLflow tracking</div>
+    </div>
+    <div class="persona">
+      <span class="p-icon">&#128202;</span>
+      <div class="p-title">Drilling Superintendent</div>
+      <div class="p-desc">Fleet-level KPIs, hazard alerts, and drilling efficiency across wells</div>
+    </div>
+    <div class="persona">
+      <span class="p-icon">&#128295;</span>
+      <div class="p-title">Rig Manager</div>
+      <div class="p-desc">SAP ERP integration for work orders, equipment BOM, and procurement</div>
+    </div>
+  </div>
+  <div class="metrics">
+    <div class="metric">
+      <div class="metric-value">2</div>
+      <div class="metric-label">MSEEL Wells</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">10</div>
+      <div class="metric-label">Drilling Parameters</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">7</div>
+      <div class="metric-label">Dashboard Tabs</div>
+    </div>
+    <div class="metric">
+      <div class="metric-value">4</div>
+      <div class="metric-label">Model Versions</div>
+    </div>
+  </div>
+  <div class="quickstart">
+    <div class="card-title"><span class="icon">&#9670;</span> Quick Start Guide</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Clone Repository</div>
+        <div class="step-desc">Clone the ROP Prediction repo to your local machine</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Run Infrastructure SQL</div>
+        <div class="step-desc">Create Delta tables and Lakebase PostgreSQL schema</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Deploy the App</div>
+        <div class="step-desc">Run databricks apps deploy to launch the dashboard</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-title">Run ML Pipeline</div>
+        <div class="step-desc">Ingest, train, and start the streaming scorer</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom: 14px;">
+    <div class="card-title"><span class="icon">&#9670;</span> Getting the Most Out of ROP Prediction</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+      <div style="text-align: center;">
+        <div style="font-size: 18px; margin-bottom: 4px;">&#128225;</div>
+        <div style="font-size: 9px; font-weight: 700; color: #d0dce8; margin-bottom: 2px;">Monitor Drilling Command</div>
+        <div style="font-size: 8px; color: #6b7c93; line-height: 1.35;">Track real-time ROP, MSE, WOB, and drilling efficiency with hazard detection</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 18px; margin-bottom: 4px;">&#128202;</div>
+        <div style="font-size: 9px; font-weight: 700; color: #d0dce8; margin-bottom: 2px;">Analyze Deep Analytics</div>
+        <div style="font-size: 8px; color: #6b7c93; line-height: 1.35;">Compare actual vs. predicted ROP and track MLflow model versions</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 18px; margin-bottom: 4px;">&#129302;</div>
+        <div style="font-size: 9px; font-weight: 700; color: #d0dce8; margin-bottom: 2px;">Ask Drilling Agent</div>
+        <div style="font-size: 8px; color: #6b7c93; line-height: 1.35;">Chat with the Claude-powered assistant for drilling optimization</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-size: 18px; margin-bottom: 4px;">&#9881;&#65039;</div>
+        <div style="font-size: 9px; font-weight: 700; color: #d0dce8; margin-bottom: 2px;">Review Live Alerts</div>
+        <div style="font-size: 8px; color: #6b7c93; line-height: 1.35;">Monitor streaming hazard feed with severity-based filtering</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom: 14px; text-align: center; padding: 10px;">
+    <div class="card-title" style="justify-content: center;"><span class="icon">&#9670;</span> Target Industry</div>
+    <p style="font-size: 9.5px; color: #8fa3b8; line-height: 1.5;"><strong style="color:#ffffff;">Upstream Oil &amp; Gas</strong> — Drilling operations in unconventional shale plays. Built with real MSEEL (Marcellus Shale Energy and Environment Laboratory) field data from West Virginia.</p>
+  </div>
+  <div class="disclaimer">
+    <p><strong>&#9888; Demo Only</strong> &mdash; This application is a demonstration and solution accelerator. Please refer to the included LICENSE file for full terms of use.</p>
+  </div>
+  <div class="footer">
+    <div class="footer-left">&copy; 2025 Databricks, Inc. All rights reserved. &bull; Databricks License</div>
+    <div class="footer-right">databricks.com</div>
+  </div>
+</div>
+</body>
+</html>
