@@ -40,3 +40,9 @@ targets:
     workspace:
       host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
+
+  demo:
+    mode: production
+    workspace:
+      host: https://e2-demo-west.cloud.databricks.com
+      profile: e2-demo-west
