@@ -1,4 +1,4 @@
-streamlit==1.41.0
+streamlit==1.54.0
 psycopg2-binary==2.9.9
 databricks-sdk==0.28.0
 pandas==2.2.2
