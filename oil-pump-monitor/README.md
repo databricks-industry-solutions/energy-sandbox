@@ -1,10 +1,10 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 [![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
 
 # Oil Pump Vibration Monitor
 
-A real-time oil pump vibration monitoring platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) with a React frontend and FastAPI backend. This solution accelerator demonstrates live vibration analysis, FFT spectrum visualization, anomaly detection, and an AI operations assistant for upstream oil & gas fracking operations in the North Dakota Bakken Formation.
+A real-time oil pump vibration monitoring platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) with a React frontend and FastAPI backend. This Databricks App demonstrates live vibration analysis, FFT spectrum visualization, anomaly detection, and an AI operations assistant for upstream oil & gas fracking operations in the North Dakota Bakken Formation.
 
 <img src="images/opm_dashboard.png" alt="Oil Pump Vibration Monitor — Dashboard" width="100%">
 

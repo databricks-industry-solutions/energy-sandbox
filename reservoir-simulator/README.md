@@ -1,10 +1,10 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 [![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
 
 # Reservoir Simulator
 
-A real-time reservoir simulation and production optimization platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This solution accelerator demonstrates an interactive 3D reservoir model — with scenario management, well performance analysis, economic evaluation, and SAP ERP integration — for upstream oil & gas reservoir engineering workflows. The simulator uses a simplified analytical engine calibrated to the [Norne field](https://opm-project.org/?page_id=559) (North Sea) benchmark dataset.
+A real-time reservoir simulation and production optimization platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This Databricks App demonstrates an interactive 3D reservoir model — with scenario management, well performance analysis, economic evaluation, and SAP ERP integration — for upstream oil & gas reservoir engineering workflows. The simulator uses a simplified analytical engine calibrated to the [Norne field](https://opm-project.org/?page_id=559) (North Sea) benchmark dataset.
 
 <img src="images/ressim_3d_reservoir.png" alt="Reservoir Simulator — 3D Reservoir Visualization" width="100%">
 

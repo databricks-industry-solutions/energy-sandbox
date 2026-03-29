@@ -1,10 +1,10 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 [![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
 
 # Subsea Drone Autopilot
 
-An autonomous subsea inspection platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This solution accelerator demonstrates an end-to-end AI-powered system for controlling a fleet of 5 underwater ROV/AUV drones — from mission planning and real-time computer vision inspection through AI-powered defect analysis and maintenance recommendations — for subsea oil & gas infrastructure integrity management.
+An autonomous subsea inspection platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This Databricks App demonstrates an end-to-end AI-powered system for controlling a fleet of 5 underwater ROV/AUV drones — from mission planning and real-time computer vision inspection through AI-powered defect analysis and maintenance recommendations — for subsea oil & gas infrastructure integrity management.
 
 <img src="images/command_dashboard.png" alt="Subsea Drone Autopilot — Fleet Command" width="100%">
 

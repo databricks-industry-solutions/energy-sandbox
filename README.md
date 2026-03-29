@@ -1,9 +1,9 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerators-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 
 # Energy Sandbox
 
-A collection of Databricks solution accelerators for the **upstream and midstream oil & gas** industry. Each project demonstrates end-to-end data engineering, real-time analytics, and AI capabilities on the Databricks Lakehouse Platform.
+A collection of Databricks Apps for the **upstream and midstream oil & gas** industry. Each project demonstrates end-to-end data engineering, real-time analytics, and AI capabilities on the Databricks Lakehouse Platform.
 
 ## Projects
 
