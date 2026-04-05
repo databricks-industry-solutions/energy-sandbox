@@ -9,7 +9,7 @@ the predictions, alerts, wells, and model_versions tables.
 
 Prerequisites:
   - asyncpg installed (pip install asyncpg)
-  - Databricks CLI configured with profile fevm-oil-pump-monitor
+  - Databricks CLI configured with profile YOUR-PROFILE
   - Lakebase instance 'drilling-demo-lakebase' in AVAILABLE state
 
 Usage:
@@ -29,7 +29,7 @@ import asyncpg
 import numpy as np
 
 # ── Configuration ────────────────────────────────────────────────
-LAKEBASE_HOST = "instance-f82f5f93-8ed2-4ebf-943c-64fca39d2970.database.cloud.databricks.com"
+LAKEBASE_HOST = "<your-lakebase-host>"
 LAKEBASE_PORT = 5432
 DATABASE_NAME = "drilling_demo_app"
 ADMIN_DATABASE = "databricks_postgres"  # Connect here first to create the app database
@@ -335,7 +335,7 @@ async def setup_database(token: str):
         host=LAKEBASE_HOST,
         port=LAKEBASE_PORT,
         database=ADMIN_DATABASE,
-        user="reishin.toolsi@databricks.com",
+        user="YOUR-EMAIL@databricks.com",
         password=token,
         ssl="require",
     )
@@ -609,7 +609,7 @@ async def main():
         host=LAKEBASE_HOST,
         port=LAKEBASE_PORT,
         database=DATABASE_NAME,
-        user="reishin.toolsi@databricks.com",
+        user="YOUR-EMAIL@databricks.com",
         password=token,
         ssl="require",
     )

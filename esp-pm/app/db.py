@@ -22,7 +22,7 @@ from config import config
 logger = logging.getLogger(__name__)
 
 LAKEBASE_INSTANCE = "esp-pm-db"
-LAKEBASE_HOST     = "instance-144fec57-c1ae-40a9-9d3a-ed74397cc232.database.cloud.databricks.com"
+LAKEBASE_HOST     = "<your-lakebase-host>"
 
 # ── Lakebase helpers ──────────────────────────────────────────────────────────
 

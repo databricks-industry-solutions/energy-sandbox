@@ -62,7 +62,7 @@ REPLAY_SOURCE      = os.getenv("REPLAY_SOURCE", "auto")          # auto | delta 
 LAKEBASE_HOST = (
     os.getenv("PGHOST") or
     os.getenv("LAKEBASE_HOST") or
-    "instance-f82f5f93-8ed2-4ebf-943c-64fca39d2970.database.cloud.databricks.com"
+    "<your-lakebase-host>"
 )
 LAKEBASE_PORT = int(os.getenv("PGPORT", "5432"))
 LAKEBASE_DB   = os.getenv("LAKEBASE_DB", "drilling_demo_app")
@@ -149,7 +149,7 @@ def _sdk_m2m_token() -> str:
         from databricks.sdk import WorkspaceClient
         from databricks.sdk.config import Config
 
-        host = os.getenv("DATABRICKS_HOST", "https://fevm-oil-pump-monitor.cloud.databricks.com")
+        host = os.getenv("DATABRICKS_HOST", "https://YOUR-WORKSPACE.cloud.databricks.com")
 
         # Temporarily remove DATABRICKS_TOKEN so the SDK uses M2M OAuth
         saved = os.environ.pop("DATABRICKS_TOKEN", None)
@@ -222,7 +222,7 @@ def get_credentials() -> tuple[str, str]:
                 user = getattr(me, "user_name", None) or ""
             except Exception:
                 pass
-        return user or _PGUSER_ENV or "reishin.toolsi@databricks.com"
+        return user or _PGUSER_ENV or "YOUR-EMAIL@databricks.com"
 
     # 1) App resource injection (App runtime injects PGPASSWORD as OAuth JWT)
     pw = os.getenv("PGPASSWORD", "")
@@ -258,7 +258,7 @@ def get_credentials() -> tuple[str, str]:
         best_opaque = best_opaque or db_tok
 
     # 5) Databricks CLI (may be available on serverless; returns OAuth JWT)
-    for prof in ["fe-vm-oil-pump-monitor", "fevm-oil-pump-monitor", ""]:
+    for prof in ["YOUR-PROFILE", "YOUR-PROFILE", ""]:
         try:
             cmd = ["databricks", "auth", "token"]
             if prof:

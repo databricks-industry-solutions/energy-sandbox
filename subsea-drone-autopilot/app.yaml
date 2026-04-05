@@ -6,7 +6,7 @@ command:
 
 env:
   - name: DATABRICKS_WAREHOUSE_ID
-    value: "87e069097741b56c"
+    value: "<your-warehouse-id>"
   - name: CLAUDE_MODEL
     value: "databricks-claude-sonnet-4-6"
   - name: VECTOR_SEARCH_ENDPOINT
@@ -24,5 +24,5 @@ resources:
     serving_endpoint: databricks-claude-sonnet-4-6
     permission: CAN_QUERY
   - name: subsea-warehouse
-    sql_warehouse: 87e069097741b56c
+    sql_warehouse: <your-warehouse-id>
     permission: CAN_USE

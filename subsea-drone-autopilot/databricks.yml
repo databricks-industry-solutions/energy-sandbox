@@ -8,11 +8,11 @@ targets:
   dev:
     default: true
     workspace:
-      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      host: https://YOUR-WORKSPACE.cloud.databricks.com
 
   prod:
     workspace:
-      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      host: https://YOUR-WORKSPACE.cloud.databricks.com
 
   demo:
     mode: production

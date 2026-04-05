@@ -12,7 +12,7 @@ resources:
         - name: sql-warehouse
           description: "SQL warehouse for reading sim results from Unity Catalog"
           sql_warehouse:
-            id: "87e069097741b56c"
+            id: "<your-warehouse-id>"
             permission: CAN_USE
 
       env:
@@ -24,13 +24,13 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      host: https://YOUR-WORKSPACE.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://fevm-oil-pump-monitor.cloud.databricks.com
+      host: https://YOUR-WORKSPACE.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   demo:

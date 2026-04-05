@@ -159,7 +159,7 @@ def log_autopilot_decision(
 
 # ── Lakebase (PostgreSQL) helpers ───────────────────────────
 
-_pg_host = "ep-bold-mode-d2m0j9ek.database.us-east-1.cloud.databricks.com"
+_pg_host = "<your-lakebase-host>"
 _pg_db = "subsea_ops"
 
 def pg_conn():

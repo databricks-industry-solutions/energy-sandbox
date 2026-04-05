@@ -6,7 +6,7 @@
       "task_key": "replay",
       "description": "Replay MSEEL sensor data into Lakebase — credentials via dbutils.secrets",
       "spark_python_task": {
-        "python_file": "/Workspace/Users/reishin.toolsi@databricks.com/rop-prediction/infra/lakebase_replay_producer.py",
+        "python_file": "/Workspace/Users/YOUR-EMAIL@databricks.com/rop-prediction/infra/lakebase_replay_producer.py",
         "parameters": ["--rate", "5", "--batch", "10", "--wells", "MIP_3H,MIP_4H", "--rows", "5000"]
       },
       "environment_key": "default"
