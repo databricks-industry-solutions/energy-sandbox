@@ -1,0 +1,81 @@
+# ╔══════════════════════════════════════════════════════════════════════════════╗
+# ║  ADME OSDU Connector — Runtime Configuration                               ║
+# ║                                                                            ║
+# ║  1. Copy this file to connector_runtime.yaml                               ║
+# ║  2. Fill in YOUR values below                                              ║
+# ║  3. For secrets, use Databricks Secret Scopes instead of plaintext         ║
+# ╚══════════════════════════════════════════════════════════════════════════════╝
+
+# ─── ADME Instance ───────────────────────────────────────────────────────────
+# Your ADME base URL (Azure portal → ADME resource → Overview → URI)
+base_url: "https://<YOUR-ADME-INSTANCE>.energy.azure.com"
+
+# Data partition ID (usually "opendes" for trial instances)
+data_partition_id: "opendes"
+
+# full = re-extract everything; incremental = only records newer than last watermark
+load_type: incremental
+
+# ─── Authentication ──────────────────────────────────────────────────────────
+auth:
+  # Options: managed_identity | service_principal | static_token
+  #
+  # managed_identity  — best for Databricks clusters in the SAME Azure tenant as ADME
+  # service_principal — required for CROSS-TENANT access (Databricks in tenant A, ADME in tenant B)
+  # static_token      — for quick testing only (paste a bearer token)
+  mode: managed_identity
+
+  # Your Azure tenant ID (Azure portal → Entra ID → Overview → Tenant ID)
+  tenant_id: "<YOUR-TENANT-ID>"
+
+  # The Application (client) ID of the ADME API app registration
+  # (Azure portal → ADME → Authentication → Application ID URI → the GUID after api://)
+  adme_api_client_id: "<YOUR-ADME-API-CLIENT-ID>"
+
+  # ── Managed Identity (mode: managed_identity) ──
+  # User-assigned MI client ID, or null for system-assigned
+  managed_identity_client_id: null
+
+  # ── Service Principal (mode: service_principal) ──
+  # Uncomment and fill these for cross-tenant access:
+  # service_principal_client_id: "<SP-CLIENT-ID>"
+  # service_principal_client_secret: "<SP-SECRET>"  # use dbutils.secrets.get() in production
+
+  # ── Static Token (mode: static_token) ──
+  # Uncomment for quick testing only:
+  # static_access_token: "<BEARER-TOKEN>"
+
+# ─── HTTP Settings ───────────────────────────────────────────────────────────
+http:
+  timeout_seconds: 60
+  max_connections: 32
+
+# ─── Delta / Unity Catalog ───────────────────────────────────────────────────
+delta:
+  # Table layout:
+  #   unified    — single bronze/silver/checkpoint table with a "domain" column
+  #   per_domain — separate tables per domain: bronze_wellbore, silver_reservoir, etc.
+  table_layout: per_domain
+
+  # Your Unity Catalog catalog and schema
+  catalog: "<YOUR-CATALOG>"
+  schema: "adme_osdu"
+
+  # Table names (only used when table_layout=unified)
+  bronze_table: "adme_osdu_bronze_records"
+  silver_table: "adme_osdu_silver_records"
+  checkpoint_table: "adme_osdu_ingest_checkpoint"
+
+  # Table prefixes (only used when table_layout=per_domain)
+  bronze_prefix: "bronze_"
+  silver_prefix: "silver_"
+  checkpoint_prefix: "checkpoint_"
+
+  # Governance tables
+  legal_tags_table: "gov_legal_tags"
+  entitlements_table: "gov_entitlements"
+  record_acl_mirror_table: "gov_record_acl_mirror"
+
+# ─── Checkpoint ──────────────────────────────────────────────────────────────
+checkpoint:
+  backend: delta  # delta | memory (memory for unit tests only)

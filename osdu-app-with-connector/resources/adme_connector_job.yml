@@ -1,0 +1,56 @@
+resources:
+  jobs:
+    adme_connector_pipeline:
+      name: "[${bundle.target}] ADME OSDU Connector Pipeline"
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: "UTC"
+      email_notifications:
+        on_failure:
+          - ${var.alert_email}
+      tasks:
+        - task_key: smoke_test
+          notebook_task:
+            notebook_path: ../notebooks/00_smoke_test.py
+            source: WORKSPACE
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 0
+            spark_conf:
+              spark.databricks.cluster.profile: singleNode
+              spark.master: "local[*]"
+            custom_tags:
+              ResourceClass: SingleNode
+
+        - task_key: run_all_domains
+          depends_on:
+            - task_key: smoke_test
+          notebook_task:
+            notebook_path: ../notebooks/02_run_all_domains.py
+            source: WORKSPACE
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 0
+            spark_conf:
+              spark.databricks.cluster.profile: singleNode
+              spark.master: "local[*]"
+            custom_tags:
+              ResourceClass: SingleNode
+
+        - task_key: governance_sync
+          depends_on:
+            - task_key: run_all_domains
+          notebook_task:
+            notebook_path: ../notebooks/03_governance_sync.py
+            source: WORKSPACE
+          new_cluster:
+            spark_version: "15.4.x-scala2.12"
+            node_type_id: "Standard_DS3_v2"
+            num_workers: 0
+            spark_conf:
+              spark.databricks.cluster.profile: singleNode
+              spark.master: "local[*]"
+            custom_tags:
+              ResourceClass: SingleNode

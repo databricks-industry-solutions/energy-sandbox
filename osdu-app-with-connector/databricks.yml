@@ -1,0 +1,40 @@
+# ADME OSDU Connector — Databricks Asset Bundle
+#
+# Setup:
+#   1. Edit targets below with your workspace host and profile
+#   2. Copy conf/connector_runtime.example.yaml → conf/connector_runtime.yaml
+#      and fill in your ADME details
+#   3. Run:
+#        databricks bundle validate -t dev
+#        databricks bundle deploy -t dev
+#        databricks bundle run adme_connector_pipeline -t dev
+
+bundle:
+  name: adme-osdu-connector
+
+include:
+  - resources/*.yml
+
+sync:
+  exclude:
+    - "**/__pycache__/**"
+    - "**/.git/**"
+    - "**/.DS_Store"
+    - "**/.venv/**"
+    - "**/.databricks/**"
+
+targets:
+  dev:
+    default: true
+    mode: development
+    workspace:
+      host: ${var.workspace_host}
+      root_path: ~/adme_osdu_connector
+
+variables:
+  workspace_host:
+    description: "Your Databricks workspace URL (e.g. https://adb-xxxx.xx.azuredatabricks.net)"
+    default: ""
+  alert_email:
+    description: "Email to notify on pipeline failure"
+    default: ""
