@@ -1,0 +1,29 @@
+name: wellbore
+description: "OSDU master-data Wellbore records via Search API (tune kind/query for your partition)."
+primary_key: id
+incremental_field: data.modifyTime
+phase: 1
+
+extraction:
+  method: POST
+  path: /api/search/v2/query
+  base_query:
+    kind: "osdu:wks:master-data--Wellbore:*"
+    # Optional OSDU query string — adjust for your ADME/OSDU version
+    query: ""
+  incremental_filter_template: 'data.modifyTime:>="{watermark}"'
+
+pagination:
+  style: cursor_body
+  records_path: results
+  cursor_path: cursor
+  cursor_request_field: cursor
+  page_size: 50
+
+normalization:
+  record_id_path: id
+  record_kind_path: kind
+  modify_time_path: data.modifyTime
+  field_map:
+    name: data.FacilityName
+    country: data.CountryID

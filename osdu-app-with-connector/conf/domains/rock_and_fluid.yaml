@@ -1,0 +1,28 @@
+name: rock_and_fluid
+description: "Rock / fluid sample style records (adjust kind to match your OSDU dataset)."
+primary_key: id
+incremental_field: data.modifyTime
+phase: 1
+
+extraction:
+  method: POST
+  path: /api/search/v2/query
+  base_query:
+    kind: "osdu:wks:work-product--RockSample:*"
+    query: ""
+  incremental_filter_template: 'data.modifyTime:>="{watermark}"'
+
+pagination:
+  style: cursor_body
+  records_path: results
+  cursor_path: cursor
+  cursor_request_field: cursor
+  page_size: 50
+
+normalization:
+  record_id_path: id
+  record_kind_path: kind
+  modify_time_path: data.modifyTime
+  field_map:
+    sample_type: data.SampleType
+    basin: data.Basin
