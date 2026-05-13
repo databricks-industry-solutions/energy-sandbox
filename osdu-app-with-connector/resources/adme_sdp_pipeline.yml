@@ -1,0 +1,33 @@
+resources:
+  pipelines:
+    adme_sdp_pipeline:
+      name: "[${bundle.target}] ADME OSDU Lakeflow Pipeline"
+      target: adme_osdu_sdp
+      libraries:
+        - notebook:
+            path: ../src/adme_sdp/bronze_ingestion.py
+        - notebook:
+            path: ../src/adme_sdp/silver_normalization.py
+        - notebook:
+            path: ../src/adme_sdp/gold_views.py
+        - notebook:
+            path: ../src/adme_sdp/governance_sync.py
+      configuration:
+        adme.connector.base_url: "https://admesbxscusins1.energy.azure.com"
+        adme.connector.data_partition_id: "opendes"
+        adme.connector.tenant_id: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+        adme.connector.adme_api_client_id: "e37a6c70-7cbc-4593-80fc-01c1f20203f7"
+        adme.connector.catalog: "adme_adb_sbx_scus_dbx_ws_1"
+        adme.connector.schema: "adme_osdu_sdp"
+      channel: "CURRENT"
+      development: true
+      clusters:
+        - label: "default"
+          num_workers: 0
+          node_type_id: "Standard_D4ads_v6"
+          spark_conf:
+            spark.master: "local[*, 4]"
+            spark.databricks.cluster.profile: "singleNode"
+          custom_tags:
+            ResourceClass: "SingleNode"
+            project: "adme-osdu-connector"

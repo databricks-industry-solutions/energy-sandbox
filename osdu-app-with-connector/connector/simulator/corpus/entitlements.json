@@ -1,0 +1,31 @@
+{
+  "groups": [
+    {
+      "name": "data.default.viewers@opendes.contoso.com",
+      "description": "Default data viewers — read access to all open data partitions",
+      "email": "data.default.viewers@opendes.contoso.com"
+    },
+    {
+      "name": "data.default.owners@opendes.contoso.com",
+      "description": "Default data owners — write and manage access to all open data partitions",
+      "email": "data.default.owners@opendes.contoso.com"
+    },
+    {
+      "name": "service.search.user@opendes.contoso.com",
+      "description": "OSDU Search service principal — allowed to query the Search API on behalf of users",
+      "email": "service.search.user@opendes.contoso.com"
+    },
+    {
+      "name": "service.legal.admin@opendes.contoso.com",
+      "description": "OSDU Legal service admin — manages legal tags and compliance records",
+      "email": "service.legal.admin@opendes.contoso.com"
+    },
+    {
+      "name": "users.datalake.editors@opendes.contoso.com",
+      "description": "Data lake editors — ingest and curate records across all OSDU domains",
+      "email": "users.datalake.editors@opendes.contoso.com"
+    }
+  ],
+  "desId": "service-account@opendes.contoso.com",
+  "memberEmail": "service-account@opendes.contoso.com"
+}

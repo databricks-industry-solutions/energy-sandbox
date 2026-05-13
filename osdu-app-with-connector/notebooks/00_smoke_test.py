@@ -7,7 +7,7 @@
 # MAGIC - Header `data-partition-id`
 # MAGIC - **This notebook:** token → ADME API → one-page domain extract (**no Unity Catalog, no Delta**)
 # MAGIC
-# MAGIC **Deploy** — Import this file into your Databricks workspace (Repos or Workspace), ensure repo root contains `connector/` and `conf/`, attach a cluster with **managed identity** and outbound access to ADME.
+# MAGIC **Deploy** — Import this file into workspace [adb-4173618801742158](https://adb-4173618801742158.18.azuredatabricks.net) (Repos or Workspace), ensure repo root contains `connector/` and `conf/`, attach cluster with **managed identity** and outbound access to ADME.
 # MAGIC
 # MAGIC **Security** — Do not print full JWTs in shared dashboards; this notebook prints **decoded claim summaries** only for demos.
 # MAGIC
@@ -15,7 +15,7 @@
 # MAGIC
 # MAGIC **Materialization** — Only ``connector/`` and ``conf/`` are copied to ``/tmp`` (not the whole repo), with short FUSE retries then Workspace Export API if needed. Run **%restart_python** after **%pip**, then run all.
 # MAGIC
-# MAGIC **“Failed to store the result” / 403 DBFS upload** — Defaults: **``adme.connector.notebook.minimal_output`` = ``true``** redirects most stdout/stderr to **``/tmp/adme_connector_notebook.log``**. The **config summary** and **screenshot summary** block still print to the **notebook UI** (via the saved stream). Set ``minimal_output`` = ``false`` for full verbose output everywhere.
+# MAGIC **“Failed to store the result” / 403 DBFS upload** — Defaults: **``adme.connector.notebook.minimal_output`` = ``true``** redirects most stdout/stderr to **``/tmp/adme_connector_notebook.log``**. The **config summary** and **Teams** block still print to the **notebook UI** (via the saved stream). Set ``minimal_output`` = ``false`` for full verbose output everywhere.
 
 # COMMAND ----------
 
@@ -312,7 +312,7 @@ def _adme_notebook_ui_print(*args, **kwargs) -> None:
     """
     Print to the real notebook stream while ``minimal_output`` has redirected ``sys.stdout``.
 
-    Config summary and the screenshot summary block use this so they still appear in the cell UI; other cells
+    Config summary and the Teams block use this so they still appear in the cell UI; other cells
     mostly write to ``/tmp/adme_connector_notebook.log`` until you set
     ``adme.connector.notebook.minimal_output=false``.
     """
@@ -632,7 +632,7 @@ else:
 
 # MAGIC %md
 # MAGIC ## 5) Final validation summary
-# MAGIC At the end of this cell, a bordered **screenshot summary** block is printed on the notebook stream (works even when ``minimal_output=true`` redirects other stdout).
+# MAGIC At the end of this cell, a bordered **screenshot / Teams** block is printed on the notebook stream (works even when ``minimal_output=true`` redirects other stdout).
 
 # COMMAND ----------
 
@@ -654,7 +654,7 @@ else:
         print(f"{name}: {'PASS' if ok else 'FAIL'}")
     print("\nOVERALL:", "PASS" if overall else "FAIL (see cells above)")
 
-# Screenshot summary: always on the real notebook stream (works with minimal_output=true).
+# Screenshot / Teams: always on the real notebook stream (works with minimal_output=true).
 _TS_SHARE = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 _LABELS = {
     "auth": "Authentication (token)",
@@ -665,7 +665,7 @@ _SEP72 = "=" * 72
 _SUB72 = "-" * 72
 _adme_notebook_ui_print("")
 _adme_notebook_ui_print(_SEP72)
-_adme_notebook_ui_print("  ADME / OSDU connector — smoke result (screenshot summary)")
+_adme_notebook_ui_print("  ADME / OSDU connector — smoke result (screenshot for Teams)")
 _adme_notebook_ui_print(_SEP72)
 _adme_notebook_ui_print(f"  When:      {_TS_SHARE}")
 _adme_notebook_ui_print(f"  Mode:      connector (auth + API + extract)")

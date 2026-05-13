@@ -1,81 +1,40 @@
-# ╔══════════════════════════════════════════════════════════════════════════════╗
-# ║  ADME OSDU Connector — Runtime Configuration                               ║
-# ║                                                                            ║
-# ║  1. Copy this file to connector_runtime.yaml                               ║
-# ║  2. Fill in YOUR values below                                              ║
-# ║  3. For secrets, use Databricks Secret Scopes instead of plaintext         ║
-# ╚══════════════════════════════════════════════════════════════════════════════╝
+# Copy to connector_runtime.yaml (or pass path from notebook) and fill secrets via Databricks secrets / env.
+# Deploy: sync this repo to Databricks Repos (e.g. workspace adb-4173618801742158) and set paths below.
+# Notebook ``00_smoke_test`` is connector-only (auth + API + extract); Delta uses this YAML elsewhere.
 
-# ─── ADME Instance ───────────────────────────────────────────────────────────
-# Your ADME base URL (Azure portal → ADME resource → Overview → URI)
-base_url: "https://<YOUR-ADME-INSTANCE>.energy.azure.com"
-
-# Data partition ID (usually "opendes" for trial instances)
+base_url: "https://admesbxscusins1.energy.azure.com"
 data_partition_id: "opendes"
 
-# full = re-extract everything; incremental = only records newer than last watermark
-load_type: incremental
+load_type: incremental  # full | incremental
 
-# ─── Authentication ──────────────────────────────────────────────────────────
 auth:
-  # Options: managed_identity | service_principal | static_token
-  #
-  # managed_identity  — best for Databricks clusters in the SAME Azure tenant as ADME
-  # service_principal — required for CROSS-TENANT access (Databricks in tenant A, ADME in tenant B)
-  # static_token      — for quick testing only (paste a bearer token)
-  mode: managed_identity
+  mode: managed_identity  # managed_identity | service_principal | static_token
+  tenant_id: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+  adme_api_client_id: "e37a6c70-7cbc-4593-80fc-01c1f20203f7"
+  managed_identity_client_id: null  # user-assigned MI client id, or null for system-assigned
+  # service_principal_client_id: null
+  # service_principal_client_secret: null
+  # static_access_token: null
 
-  # Your Azure tenant ID (Azure portal → Entra ID → Overview → Tenant ID)
-  tenant_id: "<YOUR-TENANT-ID>"
-
-  # The Application (client) ID of the ADME API app registration
-  # (Azure portal → ADME → Authentication → Application ID URI → the GUID after api://)
-  adme_api_client_id: "<YOUR-ADME-API-CLIENT-ID>"
-
-  # ── Managed Identity (mode: managed_identity) ──
-  # User-assigned MI client ID, or null for system-assigned
-  managed_identity_client_id: null
-
-  # ── Service Principal (mode: service_principal) ──
-  # Uncomment and fill these for cross-tenant access:
-  # service_principal_client_id: "<SP-CLIENT-ID>"
-  # service_principal_client_secret: "<SP-SECRET>"  # use dbutils.secrets.get() in production
-
-  # ── Static Token (mode: static_token) ──
-  # Uncomment for quick testing only:
-  # static_access_token: "<BEARER-TOKEN>"
-
-# ─── HTTP Settings ───────────────────────────────────────────────────────────
 http:
   timeout_seconds: 60
   max_connections: 32
 
-# ─── Delta / Unity Catalog ───────────────────────────────────────────────────
 delta:
-  # Table layout:
-  #   unified    — single bronze/silver/checkpoint table with a "domain" column
-  #   per_domain — separate tables per domain: bronze_wellbore, silver_reservoir, etc.
-  table_layout: per_domain
-
-  # Your Unity Catalog catalog and schema
-  catalog: "<YOUR-CATALOG>"
+  # Unity Catalog + tables for pipelines / other notebooks (not used by ``00`` connector smoke).
+  # Grants: ``USE CATALOG`` + ``CREATE SCHEMA`` on the catalog; Spark conf ``adme.connector.catalog`` if needed.
+  # table_layout: unified — single bronze/silver/checkpoint tables (domain column on rows).
+  # table_layout: per_domain — ``bronze_<domain>``, ``silver_<domain>``, ``checkpoint_<domain>`` (recommended for scale).
+  table_layout: unified  # unified | per_domain
+  catalog: "adme_adb_sbx_scus_dbx_ws_1"
   schema: "adme_osdu"
-
-  # Table names (only used when table_layout=unified)
   bronze_table: "adme_osdu_bronze_records"
   silver_table: "adme_osdu_silver_records"
   checkpoint_table: "adme_osdu_ingest_checkpoint"
-
-  # Table prefixes (only used when table_layout=per_domain)
-  bronze_prefix: "bronze_"
-  silver_prefix: "silver_"
-  checkpoint_prefix: "checkpoint_"
-
-  # Governance tables
+  # Governance mirror (Phase A) — legal tags, entitlements groups, ACL-style metadata
   legal_tags_table: "gov_legal_tags"
   entitlements_table: "gov_entitlements"
   record_acl_mirror_table: "gov_record_acl_mirror"
 
-# ─── Checkpoint ──────────────────────────────────────────────────────────────
 checkpoint:
-  backend: delta  # delta | memory (memory for unit tests only)
+  backend: delta  # delta | memory (memory for local unit tests only)

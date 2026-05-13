@@ -24,6 +24,22 @@ normalization:
   record_id_path: id
   record_kind_path: kind
   modify_time_path: data.modifyTime
+
+  # Bronze structuring
+  flatten_mode: hybrid          # auto | hybrid | explicit
+  max_flatten_depth: 3
+  array_handling: array_type    # array_type | stringify
+  include_variant: true
+  include_structured_columns: true
+
+  # field_map: clean aliases for key business columns (hybrid mode uses these
+  # plus auto-flattens the rest into data__* columns)
   field_map:
     name: data.FacilityName
     country: data.CountryID
+
+  # Force specific Spark SQL types for known numeric fields
+  type_overrides:
+    data.TotalDepth: DOUBLE
+    data.WaterDepth: DOUBLE
+    data.Elevation: DOUBLE

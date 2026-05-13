@@ -1,0 +1,50 @@
+{
+  "legalTags": [
+    {
+      "name": "opendes-adme-demo-tag",
+      "description": "Default legal tag for ADME demonstration data — public domain oil and gas records",
+      "isValid": true,
+      "properties": {
+        "countryOfOrigin": ["US"],
+        "contractId": "ADME-DEMO-CONTRACT-2024",
+        "expirationDate": "2099-12-31",
+        "dataType": "Public Domain Data",
+        "originator": "Databricks",
+        "securityClassification": "Public",
+        "personalData": "No Personal Data",
+        "exportClassification": "EAR99"
+      }
+    },
+    {
+      "name": "opendes-north-sea-tag",
+      "description": "Legal tag for Norwegian North Sea exploration and production data governed under NPD regulations",
+      "isValid": true,
+      "properties": {
+        "countryOfOrigin": ["NO", "GB"],
+        "contractId": "NPD-DATA-SHARING-2022-0087",
+        "expirationDate": "2030-06-30",
+        "dataType": "Third Party Data",
+        "originator": "Norwegian Petroleum Directorate",
+        "securityClassification": "Restricted",
+        "personalData": "No Personal Data",
+        "exportClassification": "EAR99"
+      }
+    },
+    {
+      "name": "opendes-gulf-mexico-tag",
+      "description": "Legal tag for US Gulf of Mexico OCS data submitted under BOEM reporting requirements",
+      "isValid": true,
+      "properties": {
+        "countryOfOrigin": ["US"],
+        "contractId": "BOEM-OCS-DATA-LICENSE-2021-0441",
+        "expirationDate": "2040-12-31",
+        "dataType": "Public Domain Data",
+        "originator": "Bureau of Ocean Energy Management",
+        "securityClassification": "Public",
+        "personalData": "No Personal Data",
+        "exportClassification": "EAR99"
+      }
+    }
+  ],
+  "totalCount": 3
+}

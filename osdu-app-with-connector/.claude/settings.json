@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(.claude/**)",
+      "Read(connector/**)",
+      "Read(tests/**)",
+      "Write(connector/simulator/**)",
+      "Edit(connector/simulator/**)",
+      "Write(tests/unit/**)",
+      "Edit(tests/unit/**)",
+      "Bash(mkdir:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(pip:*)",
+      "Bash(pytest:*)",
+      "Bash(cat:*)",
+      "Bash(source:*)"
+    ],
+    "deny": []
+  }
+}

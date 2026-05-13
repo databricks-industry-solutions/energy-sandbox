@@ -1,0 +1,122 @@
+[
+  {
+    "id": "opendes:work-product-component--ReservoirRecord:RES-001:",
+    "kind": "osdu:wks:work-product-component--ReservoirRecord:1.0.0",
+    "version": 1710590400000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag"],
+      "otherRelevantDataCountries": ["US"],
+      "status": "compliant"
+    },
+    "createTime": "2023-09-12T09:00:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-16T09:00:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "ReservoirName": "Wolfcamp A Upper",
+      "ReservoirTypeID": "Shale",
+      "FluidTypeID": "Oil",
+      "DepthToTopSubsea": "-2340.5",
+      "DepthToBaseSubsea": "-2580.0",
+      "AverageThickness": "239.5",
+      "PorosityPercent": "7.8",
+      "PermeabilityMd": "0.0012",
+      "InitialReservoirPressurePsi": "4820",
+      "ReservoirTemperatureF": "185",
+      "GasOilRatio": "1250",
+      "APIGravity": "42.5",
+      "WaterSaturationPercent": "28.0",
+      "NetPayThickness": "180.0",
+      "DriveTypeID": "Solution Gas Drive",
+      "FieldName": "Midland Basin West",
+      "BasinName": "Permian Basin",
+      "FormationName": "Wolfcamp",
+      "ReservoirID": "opendes:master-data--ReservoirZone:WCAMP-A-UPPER:",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-001:"
+    }
+  },
+  {
+    "id": "opendes:work-product-component--ReservoirRecord:RES-002:",
+    "kind": "osdu:wks:work-product-component--ReservoirRecord:1.0.0",
+    "version": 1710676800000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag", "opendes-north-sea-tag"],
+      "otherRelevantDataCountries": ["NO"],
+      "status": "compliant"
+    },
+    "createTime": "2022-06-18T11:30:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-16T14:30:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "ReservoirName": "Hugin Sandstone Main",
+      "ReservoirTypeID": "Sandstone",
+      "FluidTypeID": "Gas-condensate",
+      "DepthToTopSubsea": "-2105.0",
+      "DepthToBaseSubsea": "-2290.0",
+      "AverageThickness": "185.0",
+      "PorosityPercent": "22.4",
+      "PermeabilityMd": "145.0",
+      "InitialReservoirPressurePsi": "3640",
+      "ReservoirTemperatureF": "156",
+      "GasOilRatio": "18500",
+      "APIGravity": "54.2",
+      "WaterSaturationPercent": "18.5",
+      "NetPayThickness": "140.0",
+      "DriveTypeID": "Water Drive",
+      "FieldName": "Sleipner East",
+      "BasinName": "North Sea",
+      "FormationName": "Hugin Formation",
+      "ReservoirID": "opendes:master-data--ReservoirZone:HUGIN-MAIN:",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-002:"
+    }
+  },
+  {
+    "id": "opendes:work-product-component--ReservoirRecord:RES-003:",
+    "kind": "osdu:wks:work-product-component--ReservoirRecord:1.0.0",
+    "version": 1710763200000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag", "opendes-gulf-mexico-tag"],
+      "otherRelevantDataCountries": ["US"],
+      "status": "compliant"
+    },
+    "createTime": "2022-02-28T07:00:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-17T07:45:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "ReservoirName": "Lower Miocene Wilcox Sand A",
+      "ReservoirTypeID": "Sandstone",
+      "FluidTypeID": "Oil",
+      "DepthToTopSubsea": "-4820.0",
+      "DepthToBaseSubsea": "-5050.0",
+      "AverageThickness": "230.0",
+      "PorosityPercent": "28.6",
+      "PermeabilityMd": "520.0",
+      "InitialReservoirPressurePsi": "11800",
+      "ReservoirTemperatureF": "280",
+      "GasOilRatio": "840",
+      "APIGravity": "38.1",
+      "WaterSaturationPercent": "21.0",
+      "NetPayThickness": "195.0",
+      "DriveTypeID": "Natural Water Drive",
+      "FieldName": "Thunder Horse",
+      "BasinName": "Gulf of Mexico Deepwater",
+      "FormationName": "Lower Miocene Wilcox",
+      "ReservoirID": "opendes:master-data--ReservoirZone:WILCOX-A-GOM:",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-003:"
+    }
+  }
+]

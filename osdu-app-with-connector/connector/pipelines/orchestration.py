@@ -1,4 +1,4 @@
-"""End-to-end domain ingestion: extract -> bronze -> silver -> checkpoint, with DLQ and metrics."""
+"""End-to-end domain ingestion: extract -> structured bronze -> silver -> checkpoint, with DLQ and metrics."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 from connector.auth.auth_provider import AuthProvider
 from connector.clients.adme_api import ADMEApiClient
 from connector.domains.normalize import max_watermark_from_records
-from connector.models.config import ConnectorRuntimeConfig, DomainConfig, LoadType, TableLayout
+from connector.models.config import ArrayHandling, ConnectorRuntimeConfig, DomainConfig, LoadType, TableLayout
 from connector.storage.checkpoint import CheckpointStore, DeltaCheckpointStore
 from connector.storage.delta_writer import BronzeWriter, SilverWriter
 
@@ -19,10 +19,16 @@ logger = logging.getLogger(__name__)
 
 class DomainIngestionRunner:
     """
-    Orchestrates one domain run with error handling, DLQ, and metrics.
+    Orchestrates one domain run with error handling, DLQ, metrics, and Bronze schema evolution.
 
-    Lakeflow Connect / DLT: replace this class with pipeline nodes that call the same
-    stages (auth refresh, HTTP extract, Delta merge) inside ``@dlt.table`` or Auto Loader flows.
+    The Bronze layer now includes:
+    - raw_json STRING (backward compat)
+    - raw_variant VARIANT (8x faster path queries)
+    - Auto-exploded typed columns from schema inference
+    - _extra STRING (overflow for unmapped fields)
+    - Schema registry tracking version history
+
+    Silver layer is unchanged — merge/dedup fed from Bronze.
     """
 
     def __init__(
@@ -42,6 +48,10 @@ class DomainIngestionRunner:
         self._silver: Optional[SilverWriter] = None
         self._dlq = None
         self._metrics = None
+        self._schema_registry = None
+        self._schema_inferrer = None
+        self._current_flattener = None
+        self._current_inferred_schema = None
 
     def _ensure_delta(self, domain: DomainConfig) -> None:
         if self._spark is None:
@@ -68,6 +78,63 @@ class DomainIngestionRunner:
         if self._metrics is None:
             from connector.storage.metrics_writer import MetricsWriter
             self._metrics = MetricsWriter(self._spark, self._runtime)
+
+    def _ensure_schema_infra(self, domain: DomainConfig) -> None:
+        """Initialise schema inferrer and registry (lazy, once per runner)."""
+        if self._spark is None:
+            return
+        norm = domain.normalization
+        if not norm.include_structured_columns:
+            return
+
+        if self._schema_registry is None:
+            from connector.schema.registry import SchemaRegistry
+            registry_fqn = self._runtime.delta.schema_registry_fqn()
+            self._schema_registry = SchemaRegistry(self._spark, registry_fqn)
+            self._schema_registry.ensure_table()
+
+        if self._schema_inferrer is None:
+            from connector.schema.inferrer import SchemaInferrer
+            self._schema_inferrer = SchemaInferrer(
+                max_depth=norm.max_flatten_depth,
+                type_overrides=norm.type_overrides or None,
+                exclude_paths=norm.exclude_paths or None,
+            )
+
+    def _infer_and_evolve(self, domain: DomainConfig, records: list[dict[str, Any]]) -> None:
+        """Run schema inference on a batch, register changes, and evolve the Bronze table."""
+        if not self._schema_inferrer or not self._schema_registry:
+            return
+
+        inferred = self._schema_inferrer.infer(records)
+        diff = self._schema_registry.compare(domain.name, inferred)
+
+        if diff.has_changes:
+            fqn = self._bronze._fqn(domain) if self._bronze else None
+            if fqn:
+                self._schema_registry.evolve_table(fqn, diff)
+            self._schema_registry.register(domain.name, inferred, diff)
+            logger.info(
+                "schema evolution: %s — %s (%d fields)",
+                domain.name, diff.summary(), len(inferred.leaf_fields()),
+            )
+
+        self._current_inferred_schema = inferred
+        self._rebuild_flattener(domain, inferred)
+
+    def _rebuild_flattener(self, domain: DomainConfig, schema) -> None:
+        """Create a RecordFlattener for the current schema."""
+        from connector.schema.flattener import RecordFlattener
+
+        norm = domain.normalization
+        self._current_flattener = RecordFlattener(
+            schema,
+            flatten_mode=norm.flatten_mode.value,
+            field_map=norm.field_map or None,
+            max_depth=norm.max_flatten_depth,
+            array_stringify=(norm.array_handling == ArrayHandling.stringify),
+            exclude_paths=set(norm.exclude_paths) if norm.exclude_paths else None,
+        )
 
     def run(
         self,
@@ -100,6 +167,9 @@ class DomainIngestionRunner:
 
         self._ensure_dlq()
         self._ensure_metrics()
+        self._ensure_schema_infra(domain)
+
+        schema_inferred_for_run = False
 
         try:
             with ADMEApiClient(self._runtime, self._auth) as client:
@@ -129,6 +199,18 @@ class DomainIngestionRunner:
 
                     if self._spark is not None and good_records:
                         self._ensure_delta(domain)
+
+                        if not schema_inferred_for_run and self._schema_inferrer:
+                            try:
+                                self._infer_and_evolve(domain, good_records)
+                                schema_inferred_for_run = True
+                            except Exception as schema_err:
+                                logger.warning(
+                                    "Schema inference failed for %s: %s",
+                                    domain.name, schema_err,
+                                    exc_info=True,
+                                )
+
                         assert self._bronze is not None
                         b_count = self._bronze.write_batch(
                             domain,
@@ -137,6 +219,8 @@ class DomainIngestionRunner:
                             request_method=domain.extraction.method,
                             http_status=200,
                             source_cursor=page.next_cursor,
+                            inferred_schema=self._current_inferred_schema,
+                            flattener=self._current_flattener,
                         )
                         rows_bronze += b_count
 
