@@ -13,9 +13,9 @@ import respx
 CORPUS_DIR = Path(__file__).parent / "corpus"
 
 _KIND_CORPUS = [
-    (re.compile(r"Wellbore", re.IGNORECASE),          "wellbore.json"),
-    (re.compile(r"Reservoir", re.IGNORECASE),          "reservoir.json"),
-    (re.compile(r"Rock|Fluid|RockAndFluid", re.IGNORECASE), "rock_and_fluid.json"),
+    (re.compile(r"Wellbore",           re.IGNORECASE), "wellbore.json"),
+    (re.compile(r"ReservoirZone",      re.IGNORECASE), "reservoir.json"),
+    (re.compile(r"Rock|RockAndFluidSample", re.IGNORECASE), "rock_and_fluid.json"),
 ]
 
 

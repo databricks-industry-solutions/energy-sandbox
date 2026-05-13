@@ -85,7 +85,7 @@ def _build_runtime(options: dict[str, str]) -> ConnectorRuntimeConfig:
 def _default_domain_config(table_name: str) -> DomainConfig:
     kind_map = {
         "wellbore":       "osdu:wks:master-data--Wellbore:*",
-        "reservoir":      "osdu:wks:work-product-component--ReservoirRecord:*",
+        "reservoir":      "osdu:wks:work-product-component--ReservoirZone:*",
         "rock_and_fluid": "osdu:wks:work-product-component--RockAndFluidSample:*",
     }
     return DomainConfig(
