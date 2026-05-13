@@ -21,6 +21,8 @@ class Route:
         self._pattern = re.compile(url_pattern)
         self._side_effect: Optional[Callable] = None
         self._return_value: Optional[httpx.Response] = None
+        self.called: bool = False
+        self.call_count: int = 0
 
     def mock(
         self,
@@ -38,6 +40,8 @@ class Route:
         return bool(self._pattern.search(str(request.url)))
 
     def handle(self, request: httpx.Request) -> httpx.Response:
+        self.called = True
+        self.call_count += 1
         if self._side_effect is not None:
             return self._side_effect(request)
         if self._return_value is not None:
@@ -92,3 +96,11 @@ def mock(assert_all_called: bool = True) -> Generator[Router, None, None]:
 
     with patch.object(httpx.Client, "send", _fake_send):
         yield router
+
+    if assert_all_called:
+        uncalled = [r for r in router._routes if not r.called]
+        if uncalled:
+            patterns = ", ".join(f"{r._method} {r._pattern.pattern}" for r in uncalled)
+            raise AssertionError(
+                f"respx stub: {len(uncalled)} route(s) were never called: {patterns}"
+            )
