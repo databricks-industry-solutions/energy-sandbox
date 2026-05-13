@@ -1,10 +1,12 @@
 from connector.models.config import (
+    ArrayHandling,
     AuthConfig,
     CheckpointConfig,
     ConnectorRuntimeConfig,
     DeltaTargetsConfig,
     DomainConfig,
     ExtractionConfig,
+    FlattenMode,
     HttpClientConfig,
     LoadType,
     NormalizationConfig,
@@ -12,12 +14,14 @@ from connector.models.config import (
 )
 
 __all__ = [
+    "ArrayHandling",
     "AuthConfig",
     "CheckpointConfig",
     "ConnectorRuntimeConfig",
     "DeltaTargetsConfig",
     "DomainConfig",
     "ExtractionConfig",
+    "FlattenMode",
     "HttpClientConfig",
     "LoadType",
     "NormalizationConfig",

@@ -1,0 +1,122 @@
+[
+  {
+    "id": "opendes:work-product-component--RockAndFluidSample:RAF-001:",
+    "kind": "osdu:wks:work-product-component--RockAndFluidSample:1.0.0",
+    "version": 1710676800000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag"],
+      "otherRelevantDataCountries": ["US"],
+      "status": "compliant"
+    },
+    "createTime": "2023-10-05T13:00:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-17T10:00:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "SampleName": "PBE-1 Wolfcamp A Core Plug CP-047",
+      "SampleTypeID": "CorePlug",
+      "SampleDepthMD": "2418.5",
+      "SampleDepthUOM": "m",
+      "SampleDepthTVD": "2225.0",
+      "PorosityFraction": "0.078",
+      "PermeabilityMd": "0.0009",
+      "WaterSaturationFraction": "0.285",
+      "GrainDensityGCm3": "2.71",
+      "BulkDensityGCm3": "2.50",
+      "FormationName": "Wolfcamp A",
+      "SampleConditionID": "Restored State",
+      "ConfiningPressurePsi": "3500",
+      "PorePressurePsi": "1200",
+      "MeasurementTemperatureF": "75",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-001:",
+      "LaboratoryName": "CoreLab Houston",
+      "AnalysisDate": "2023-11-12",
+      "CoreRunNumber": "3",
+      "PlugOrientationID": "Horizontal"
+    }
+  },
+  {
+    "id": "opendes:work-product-component--RockAndFluidSample:RAF-002:",
+    "kind": "osdu:wks:work-product-component--RockAndFluidSample:1.0.0",
+    "version": 1710763200000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag", "opendes-north-sea-tag"],
+      "otherRelevantDataCountries": ["NO"],
+      "status": "compliant"
+    },
+    "createTime": "2022-09-22T10:00:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-17T15:30:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "SampleName": "SLA-A23 Hugin Sidewall Core SWC-012",
+      "SampleTypeID": "SidewallCore",
+      "SampleDepthMD": "2187.3",
+      "SampleDepthUOM": "m",
+      "SampleDepthTVD": "2089.5",
+      "PorosityFraction": "0.224",
+      "PermeabilityMd": "138.5",
+      "WaterSaturationFraction": "0.192",
+      "GrainDensityGCm3": "2.65",
+      "BulkDensityGCm3": "2.06",
+      "FormationName": "Hugin Formation",
+      "SampleConditionID": "As Received",
+      "ConfiningPressurePsi": "2800",
+      "PorePressurePsi": "950",
+      "MeasurementTemperatureF": "68",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-002:",
+      "LaboratoryName": "Equinor Research Centre Trondheim",
+      "AnalysisDate": "2022-10-30",
+      "CoreRunNumber": "2",
+      "PlugOrientationID": "Vertical"
+    }
+  },
+  {
+    "id": "opendes:work-product-component--RockAndFluidSample:RAF-003:",
+    "kind": "osdu:wks:work-product-component--RockAndFluidSample:1.0.0",
+    "version": 1710849600000,
+    "acl": {
+      "viewers": ["data.default.viewers@opendes.contoso.com"],
+      "owners": ["data.default.owners@opendes.contoso.com"]
+    },
+    "legal": {
+      "legaltags": ["opendes-adme-demo-tag", "opendes-gulf-mexico-tag"],
+      "otherRelevantDataCountries": ["US"],
+      "status": "compliant"
+    },
+    "createTime": "2022-04-14T08:30:00.000Z",
+    "createUser": "ingestion-service@opendes.contoso.com",
+    "modifyTime": "2024-03-18T08:00:00.000Z",
+    "modifyUser": "data-steward@opendes.contoso.com",
+    "data": {
+      "SampleName": "THS-ST1BP1 Wilcox Cuttings Sample CUT-022",
+      "SampleTypeID": "CuttingsSample",
+      "SampleDepthMD": "5140.0",
+      "SampleDepthUOM": "m",
+      "SampleDepthTVD": "4925.0",
+      "PorosityFraction": "0.286",
+      "PermeabilityMd": "498.0",
+      "WaterSaturationFraction": "0.210",
+      "GrainDensityGCm3": "2.67",
+      "BulkDensityGCm3": "1.90",
+      "FormationName": "Lower Miocene Wilcox",
+      "SampleConditionID": "Washed and Dried",
+      "ConfiningPressurePsi": "9500",
+      "PorePressurePsi": "4800",
+      "MeasurementTemperatureF": "250",
+      "WellboreID": "opendes:master-data--Wellbore:WELL-003:",
+      "LaboratoryName": "Intertek Westport",
+      "AnalysisDate": "2022-06-05",
+      "CoreRunNumber": "N/A",
+      "PlugOrientationID": "N/A"
+    }
+  }
+]

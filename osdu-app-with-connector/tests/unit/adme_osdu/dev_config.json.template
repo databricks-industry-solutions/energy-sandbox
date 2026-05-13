@@ -1,0 +1,7 @@
+{
+  "base_url": "https://admesbxscusins1.energy.azure.com",
+  "data_partition_id": "opendes",
+  "tenant_id": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "adme_api_client_id": "e37a6c70-7cbc-4593-80fc-01c1f20203f7",
+  "access_token": "<bearer-token>"
+}

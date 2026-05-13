@@ -1,0 +1,46 @@
+# =============================================================================
+# CI Configuration: Federated Identity Authentication
+# =============================================================================
+# Use this config when running the connector in CI with Workload Identity Federation.
+#
+# Two approaches:
+#
+# APPROACH 1 (mode: static_token) — Zero code changes, works TODAY:
+#   CI pre-step does: az login --federated-token && az account get-access-token
+#   Then passes the bearer token as static_access_token below.
+#
+# APPROACH 2 (mode: federated_identity) — Native support, added in this branch:
+#   CI injects the OIDC assertion token (file or inline), and the connector
+#   uses ClientAssertionCredential to exchange it for an access token directly.
+# =============================================================================
+
+# --- APPROACH 1: Static token (pre-minted bearer from az cli) ---
+# auth:
+#   mode: static_token
+#   tenant_id: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+#   adme_api_client_id: "e37a6c70-7cbc-4593-80fc-01c1f20203f7"
+#   static_access_token: "${ADME_BEARER_TOKEN}"  # injected by CI pre-step
+
+# --- APPROACH 2: Federated identity (native OIDC exchange) ---
+auth:
+  mode: federated_identity
+  tenant_id: "72f988bf-86f1-41af-91ab-2d7cd011db47"
+  adme_api_client_id: "e37a6c70-7cbc-4593-80fc-01c1f20203f7"
+  service_principal_client_id: "your-sp-client-id-here"
+
+  # Option A: token file path (injected by CI platform, e.g. GitHub Actions, AKS)
+  federated_token_file: "${AZURE_FEDERATED_TOKEN_FILE}"
+
+  # Option B: inline token (from CI secret / environment variable)
+  # federated_token: "${OIDC_ASSERTION_TOKEN}"
+
+base_url: "https://your-adme-instance.energy.azure.com"
+data_partition_id: "your-partition"
+
+delta:
+  catalog: "main"
+  schema: "adme_bronze"
+
+checkpoint:
+  backend: delta
+  path: "/tmp/checkpoints"

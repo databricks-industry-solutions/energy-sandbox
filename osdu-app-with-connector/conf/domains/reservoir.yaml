@@ -23,6 +23,13 @@ normalization:
   record_id_path: id
   record_kind_path: kind
   modify_time_path: data.modifyTime
+
+  flatten_mode: hybrid
+  max_flatten_depth: 3
+  array_handling: array_type
+  include_variant: true
+  include_structured_columns: true
+
   field_map:
     reservoir_name: data.ReservoirName
     field_name: data.FieldName

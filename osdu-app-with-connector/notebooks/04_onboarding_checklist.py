@@ -62,7 +62,7 @@ ADME_BASE_URL = ""  # e.g. "https://admesbxscusins1.energy.azure.com"
 # MAGIC
 # MAGIC ### Option B — Service Principal (client_id + secret)
 # MAGIC
-# MAGIC Use when the cluster does not have a managed identity or for cross-tenant access.
+# MAGIC Use when the cluster does not have a managed identity.
 # MAGIC
 # MAGIC | Field | Where to find it |
 # MAGIC |-------|-----------------|
@@ -97,74 +97,6 @@ SP_CLIENT_SECRET     = ""  # dbutils.secrets.get(scope="adme", key="sp-secret")
 
 # Option C field
 STATIC_TOKEN         = ""
-
-# COMMAND ----------
-
-# MAGIC %md
-# MAGIC ---
-# MAGIC ## Cross-Tenant Setup (Databricks in Tenant A, ADME in Tenant B)
-# MAGIC
-# MAGIC **This is the most common production scenario.** Your Databricks workspace lives in one Azure tenant
-# MAGIC (e.g. your company's "Databricks Dev" tenant) and the ADME instance lives in another tenant
-# MAGIC (e.g. customer's or a shared "Energy" tenant). Managed identity **will not work** across tenants —
-# MAGIC you'll get `AADSTS500011: The resource principal was not found in the tenant`.
-# MAGIC
-# MAGIC ### What you need: a Service Principal in the ADME tenant
-# MAGIC
-# MAGIC **Step 1 — Create the SP in the ADME tenant (done by ADME admin)**
-# MAGIC
-# MAGIC | Action | Where |
-# MAGIC |--------|-------|
-# MAGIC | Go to **Azure Portal → Entra ID** (in the ADME tenant) → **App Registrations** → **New registration** | |
-# MAGIC | Name it something like `databricks-adme-connector` | |
-# MAGIC | Under **Certificates & secrets** → **New client secret** → copy the **Value** immediately | |
-# MAGIC | Copy the **Application (client) ID** from the Overview page | |
-# MAGIC | The **Tenant ID** is on the same Overview page (this is the ADME tenant ID) | |
-# MAGIC
-# MAGIC **Step 2 — Grant ADME entitlements to the SP (done by ADME admin)**
-# MAGIC
-# MAGIC The SP needs to be added to ADME's entitlement groups. Use the Entitlements API or ask the ADME admin:
-# MAGIC
-# MAGIC ```
-# MAGIC POST {ADME_BASE_URL}/api/entitlements/v2/groups/users.datalake.viewers@{partition}.dataservices.energy/members
-# MAGIC Headers: Authorization: Bearer <admin-token>, data-partition-id: <partition>
-# MAGIC Body: { "email": "<SP_CLIENT_ID>", "role": "MEMBER" }
-# MAGIC ```
-# MAGIC
-# MAGIC Repeat for these groups (minimum for read + governance):
-# MAGIC - `users.datalake.viewers@{partition}.dataservices.energy`
-# MAGIC - `service.search.user@{partition}.dataservices.energy`
-# MAGIC - `service.legal.user@{partition}.dataservices.energy`
-# MAGIC - `service.entitlements.user@{partition}.dataservices.energy`
-# MAGIC
-# MAGIC **Step 3 — Collect these 3 values from the ADME admin**
-# MAGIC
-# MAGIC | Value | Example | You fill in |
-# MAGIC |-------|---------|-------------|
-# MAGIC | `SP_CLIENT_ID` | `a1b2c3d4-e5f6-7890-abcd-ef1234567890` | __________ |
-# MAGIC | `SP_CLIENT_SECRET` | `xYz...secret...` (store in Databricks Secret Scope!) | __________ |
-# MAGIC | `TENANT_ID` (ADME tenant) | `72f988bf-86f1-41af-91ab-2d7cd011db47` | __________ |
-# MAGIC
-# MAGIC **Step 4 — Configure the connector**
-# MAGIC
-# MAGIC Set `AUTH_MODE = "service_principal"` in the cell above and fill in `SP_CLIENT_ID`, `SP_CLIENT_SECRET`,
-# MAGIC and `TENANT_ID` (must be the ADME tenant ID, not your Databricks tenant).
-# MAGIC
-# MAGIC **Step 5 — Store the secret securely (production)**
-# MAGIC
-# MAGIC ```python
-# MAGIC # Create a secret scope (one-time, from a notebook or CLI):
-# MAGIC # databricks secrets create-scope adme
-# MAGIC # databricks secrets put-secret adme sp-secret --string-value "<YOUR-SECRET>"
-# MAGIC
-# MAGIC # Then in the config cell above, replace the plaintext with:
-# MAGIC SP_CLIENT_SECRET = dbutils.secrets.get(scope="adme", key="sp-secret")
-# MAGIC ```
-# MAGIC
-# MAGIC > **Why managed identity fails cross-tenant:** Azure MI tokens are scoped to the local tenant.
-# MAGIC > When Databricks is in Tenant A and ADME's API app registration is in Tenant B,
-# MAGIC > Tenant A's MI cannot request a token for `api://<app-in-tenant-B>/.default`.
-# MAGIC > A service principal registered in Tenant B solves this.
 
 # COMMAND ----------
 

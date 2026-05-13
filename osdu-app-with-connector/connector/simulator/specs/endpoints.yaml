@@ -1,0 +1,45 @@
+# ADME OSDU API — endpoint specifications for the simulator
+# One entry per HTTP endpoint the connector uses.
+# Drives corpus routing, pagination assertions, and live-vs-simulate validation.
+
+- path: /api/search/v2/query
+  method: POST
+  description: "OSDU Search API — paginated domain record extraction"
+  params:
+    kind:
+      role: filter
+      field: kind
+    cursor:
+      role: page
+    limit:
+      role: per_page
+    query:
+      role: filter
+      field: query
+  response:
+    wrapper:
+      records_key: results
+    pagination_style: cursor_body
+    extras:
+      - cursor
+      - totalCount
+
+- path: /api/legal/v1/legaltags
+  method: GET
+  description: "Legal tags governance mirror"
+  params:
+    valid:
+      role: filter
+      field: isValid
+  response:
+    wrapper:
+      records_key: legalTags
+    pagination_style: none
+
+- path: /api/entitlements/v2/groups
+  method: GET
+  description: "Entitlements groups governance mirror"
+  response:
+    wrapper:
+      records_key: groups
+    pagination_style: none

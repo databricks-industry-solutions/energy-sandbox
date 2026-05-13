@@ -7,21 +7,13 @@ resources:
         timezone_id: "UTC"
       email_notifications:
         on_failure:
-          - ${var.alert_email}
+          - gokul.pillai@databricks.com
       tasks:
         - task_key: smoke_test
           notebook_task:
             notebook_path: ../notebooks/00_smoke_test.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              spark.databricks.cluster.profile: singleNode
-              spark.master: "local[*]"
-            custom_tags:
-              ResourceClass: SingleNode
+          existing_cluster_id: "0416-111252-i9szh29f"
 
         - task_key: run_all_domains
           depends_on:
@@ -29,15 +21,7 @@ resources:
           notebook_task:
             notebook_path: ../notebooks/02_run_all_domains.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              spark.databricks.cluster.profile: singleNode
-              spark.master: "local[*]"
-            custom_tags:
-              ResourceClass: SingleNode
+          existing_cluster_id: "0416-111252-i9szh29f"
 
         - task_key: governance_sync
           depends_on:
@@ -45,12 +29,4 @@ resources:
           notebook_task:
             notebook_path: ../notebooks/03_governance_sync.py
             source: WORKSPACE
-          new_cluster:
-            spark_version: "15.4.x-scala2.12"
-            node_type_id: "Standard_DS3_v2"
-            num_workers: 0
-            spark_conf:
-              spark.databricks.cluster.profile: singleNode
-              spark.master: "local[*]"
-            custom_tags:
-              ResourceClass: SingleNode
+          existing_cluster_id: "0416-111252-i9szh29f"

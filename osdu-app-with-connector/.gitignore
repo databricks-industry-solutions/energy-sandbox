@@ -1,6 +1,16 @@
 __pycache__/
 *.pyc
 .venv/
+.env
 .databricks/
 .DS_Store
 conf/connector_runtime.yaml
+*.tfstate
+*.tfstate.backup
+
+# Live test credentials — never commit
+tests/unit/adme_osdu/dev_config.json
+
+# Test cache
+.pytest_cache/
+tests/stubs/**/__pycache__/
