@@ -10,7 +10,11 @@ import time
 from typing import Any, Optional
 
 from azure.core.credentials import AccessToken, TokenCredential
-from azure.identity import ClientSecretCredential, ManagedIdentityCredential
+from azure.identity import (
+    ClientAssertionCredential,
+    ClientSecretCredential,
+    ManagedIdentityCredential,
+)
 
 __all__ = ["AuthProvider", "StaticBearerTokenCredential", "build_credential"]
 
@@ -26,6 +30,20 @@ class StaticBearerTokenCredential(TokenCredential):
 
     def get_token(self, *scopes: str, **kwargs: object) -> AccessToken:
         return AccessToken(self._token, self._expires_on)
+
+
+def _read_federated_token(auth: Any) -> str:
+    """Read federated assertion from inline field or token file."""
+    if auth.federated_token and auth.federated_token.strip():
+        return auth.federated_token.strip()
+    if auth.federated_token_file:
+        import os
+        path = os.path.expandvars(os.path.expanduser(auth.federated_token_file))
+        with open(path, "r", encoding="utf-8") as f:
+            return f.read().strip()
+    raise ValueError(
+        "federated_identity mode requires either federated_token or federated_token_file"
+    )
 
 
 def build_credential(auth: Any) -> TokenCredential:
@@ -47,6 +65,20 @@ def build_credential(auth: Any) -> TokenCredential:
             tenant_id=auth.tenant_id,
             client_id=auth.service_principal_client_id,
             client_secret=auth.service_principal_client_secret,
+        )
+    if mode == AuthMode.federated_identity:
+        if not auth.service_principal_client_id:
+            raise ValueError("federated_identity mode requires service_principal_client_id")
+        # Validate token source exists eagerly so misconfigs fail fast
+        _read_federated_token(auth)
+
+        def _get_assertion() -> str:
+            return _read_federated_token(auth)
+
+        return ClientAssertionCredential(
+            tenant_id=auth.tenant_id,
+            client_id=auth.service_principal_client_id,
+            func=_get_assertion,
         )
     if auth.managed_identity_client_id:
         return ManagedIdentityCredential(client_id=auth.managed_identity_client_id)

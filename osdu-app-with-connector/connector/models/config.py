@@ -18,6 +18,7 @@ class AuthMode(str, Enum):
     managed_identity = "managed_identity"
     service_principal = "service_principal"
     static_token = "static_token"
+    federated_identity = "federated_identity"
 
 
 class TableLayout(str, Enum):
@@ -42,6 +43,14 @@ class AuthConfig(BaseModel):
     )
     service_principal_client_id: Optional[str] = None
     service_principal_client_secret: Optional[str] = None
+    federated_token_file: Optional[str] = Field(
+        default=None,
+        description="Path to a file containing the federated assertion token (OIDC/workload identity).",
+    )
+    federated_token: Optional[str] = Field(
+        default=None,
+        description="Inline federated assertion token (alternative to file path).",
+    )
     static_access_token: Optional[str] = None
     static_token_expires_on: Optional[int] = Field(
         default=None,
@@ -86,6 +95,26 @@ class ExtractionConfig(BaseModel):
     )
 
 
+class FlattenMode(str, Enum):
+    """How the Bronze layer explodes raw JSON into typed columns."""
+
+    auto = "auto"
+    """Recursively flatten all JSON keys into columns — no field_map needed."""
+    hybrid = "hybrid"
+    """field_map paths get clean names; remaining keys auto-flatten with prefix."""
+    explicit = "explicit"
+    """Only field_map paths become columns; everything else goes to _extra VARIANT."""
+
+
+class ArrayHandling(str, Enum):
+    """How array-valued JSON fields are stored in Bronze."""
+
+    array_type = "array_type"
+    """Native ARRAY<STRUCT<...>> or ARRAY<scalar> column."""
+    stringify = "stringify"
+    """JSON-serialised STRING column."""
+
+
 class NormalizationConfig(BaseModel):
     """Map flattened silver columns from raw OSDU-style records (dot paths)."""
 
@@ -95,6 +124,31 @@ class NormalizationConfig(BaseModel):
     field_map: dict[str, str] = Field(
         default_factory=dict,
         description="silver_column -> dotted path in raw record",
+    )
+
+    flatten_mode: FlattenMode = FlattenMode.hybrid
+    max_flatten_depth: int = Field(
+        default=3,
+        ge=1,
+        le=10,
+        description="Max nesting depth for auto/hybrid flattening.",
+    )
+    array_handling: ArrayHandling = ArrayHandling.array_type
+    type_overrides: dict[str, str] = Field(
+        default_factory=dict,
+        description="Force Spark SQL type for a dot-path, e.g. {'data.TotalDepth': 'DOUBLE'}.",
+    )
+    exclude_paths: list[str] = Field(
+        default_factory=list,
+        description="Dot-paths to skip during auto-flatten (still in raw_variant).",
+    )
+    include_variant: bool = Field(
+        default=True,
+        description="Add raw_variant VARIANT column to Bronze for path queries.",
+    )
+    include_structured_columns: bool = Field(
+        default=True,
+        description="Auto-explode JSON into typed columns in Bronze.",
     )
 
 
@@ -132,6 +186,7 @@ class DeltaTargetsConfig(BaseModel):
         description="Entitlements / groups mirror (legacy YAML key: entitlements_groups_table).",
     )
     record_acl_mirror_table: str = "gov_record_acl_mirror"
+    schema_registry_table: str = "schema_registry"
 
     model_config = {"populate_by_name": True}
 
@@ -181,6 +236,9 @@ class DeltaTargetsConfig(BaseModel):
 
     def record_acl_mirror_fqn(self) -> str:
         return f"{self.catalog}.{self.schema_name}.{self.record_acl_mirror_table}"
+
+    def schema_registry_fqn(self) -> str:
+        return f"{self.catalog}.{self.schema_name}.{self.schema_registry_table}"
 
 
 class CheckpointConfig(BaseModel):

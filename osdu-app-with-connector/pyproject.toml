@@ -1,0 +1,18 @@
+[project]
+name = "osdu-adme-connector"
+version = "1.2.0"
+description = "Azure Data Manager for Energy (ADME) OSDU Connector for Databricks Unity Catalog"
+requires-python = ">=3.9"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["connector"]
+omit = ["tests/*", "notebooks/*"]
+
+[tool.coverage.report]
+show_missing = true
+skip_empty = true
