@@ -1,0 +1,37 @@
+command:
+  - "python"
+  - "-m"
+  - "uvicorn"
+  - "app:app"
+  - "--host"
+  - "0.0.0.0"
+  - "--port"
+  - "8000"
+
+resources:
+  - name: drilling-cc-lakebase
+    description: "Lakebase Postgres for drilling journal, AI advisor history, and alerts"
+    database:
+      instance_name: drilling-cc-db
+      database_name: drilling_cc
+      permission: CAN_CONNECT_AND_CREATE
+
+env:
+  # OSDU / ADME Unity Catalog target (override for your workspace)
+  - name: ADME_CATALOG
+    value: "your_adme_catalog"
+  - name: ADME_SCHEMA
+    value: "adme_osdu"
+  # SQL warehouse for ADME queries from the app
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: ""
+  # Genie space ID for the floating chat panel (cross-domain OSDU questions)
+  - name: GENIE_SPACE_ID
+    value: ""
+  # Lakebase instance reference
+  - name: LAKEBASE_INSTANCE
+    value: "drilling-cc-db"
+
+user_api_scopes:
+  - sql
+  - dashboards.genie

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Frontend
+node_modules/
+dist/
+*.local
+.vite/
+
+# Build / deploy artifacts
+_deploy/
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
