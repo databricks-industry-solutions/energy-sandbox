@@ -11,7 +11,7 @@ This solution accelerator demonstrates how upstream operators and oilfield servi
 
 <img src="images/drilling_digital_twin.png" alt="Drilling Command Center — 3D Subsurface Model with OSDU wells and reservoir layers" width="100%">
 
-<img src="images/architecture.png" alt="Drilling Command Center — Architecture" width="100%">
+<img src="images/architecture.png" alt="Drilling Command Center — Data & AI Flow: ADME / OSDU sources, Marketplace catalogs (FRED WTI, World Bank CO2), Bronze / Silver / Gold medallion in Unity Catalog, gov_* legal + entitlements tables, Vector Search, UC Functions, Genie Space, Claude Sonnet 4.5 via Foundation Model API, Subsurface Supervisor multi-agent, FastAPI + DuckDB + Lakebase, React UI" width="100%">
 
 ## Disclaimer
 
@@ -33,20 +33,25 @@ The Drilling Command Center brings subsurface, drilling, completions, economics,
 
 | Layer | Component | Purpose |
 |---|---|---|
-| Sources | **Azure Data Manager for Energy (ADME)** | OSDU master + work-product data via Search v2 API |
-| Sources | **WTI Spot Prices** (external) | Live oil price feed for economics module |
+| Sources | **Azure Data Manager for Energy (ADME)** | OSDU master + work-product data via Search v2 API (opendes partition) |
+| Sources | **FRED WTI** (Databricks Marketplace, Delta Sharing) | Live oil price feed for economics module |
+| Sources | **World Bank CO2** (Databricks Marketplace, Delta Sharing) | CO2 reference data for ESG / Governance tab |
 | Ingestion | **Auto Loader + DLT** | Bronze → Silver → Gold OSDU normalization (de-dup on `modifyTime`) |
-| Storage | **Delta tables in Unity Catalog** | `Wellbore`, `Reservoir`, `Rock_and_Fluid`, governance metadata |
+| Storage | **Bronze (raw ingest)** | Unfiltered ADME page payloads with audit trail |
+| Storage | **Silver (cleaned)** | Normalized OSDU records, schema flattened, dedup applied |
+| Storage | **Silver (`gov_*` tables)** | Legal tags + entitlements mirrored from ADME |
+| Storage | **Gold (app-ready)** | `wellbore`, `reservoir`, `rock_and_fluid` curated tables |
 | Compute | **Databricks SQL Warehouse** | App-time queries against the curated OSDU tables |
+| AI | **Vector Search** (`subsurface-vs` + `gte-large`) | Subsurface Analog Retriever over global ADME analogs |
+| AI | **UC Functions** (Python in catalog) | Economics Evaluator (`calculate_npv10`, `calculate_break_even`) |
+| AI | **Genie Space** | Cross-domain natural-language interface over the OSDU + gov_* tables |
 | AI | **Foundation Model API** (Claude Sonnet 4.5) | Petrophysics Interpreter agent grounded in the analog well |
-| AI | **Vector Search** | Subsurface Analog Retriever (`subsurface-vs`, `gte-large` embeddings) over global ADME analogs |
-| AI | **UC Functions** | Economics Evaluator (`calculate_npv10`, `calculate_break_even`) |
-| AI | **Multi-Agent Supervisor** | Orchestrates the five specialists and synthesises the drill-or-hold verdict |
-| AI | **Genie Space** | Cross-domain natural-language interface over the OSDU tables |
+| AI | **Multi-Agent Supervisor (MAS)** | Orchestrates the five specialists and synthesises the drill-or-hold verdict |
 | App backend | **FastAPI + asyncpg** | REST + SSE endpoints, connection pool to Lakebase |
-| App storage | **Lakebase PostgreSQL 16** | Drilling journal, AI advisor history, alert state, cache |
-| App frontend | **React + TypeScript + Vite** | Ten tabs + floating Genie panel |
-| Governance | **Unity Catalog** | Permissions, lineage, audit across every layer |
+| App cache | **DuckDB (in-app, OLAP cache)** | Local materialised projections for hot tabs |
+| App storage | **Lakebase PostgreSQL 16** (`drilling_cc`) | Drilling journal, supervisor history, alert state |
+| App frontend | **React + TypeScript + Vite** | Eight tabs + floating Genie panel |
+| Governance | **Unity Catalog** (dashed boundary in the diagram) | Permissions, lineage, audit, tags, row filters, masks across every layer |
 
 ## Dashboard Tabs
 
