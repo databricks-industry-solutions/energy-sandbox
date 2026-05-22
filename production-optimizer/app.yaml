@@ -1,0 +1,19 @@
+command:
+  - node
+  - dist/index.js
+
+env:
+  - name: PORT
+    value: "8000"
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "87e069097741b56c"
+  - name: UC_SCHEMA
+    value: "oil_pump_monitor_catalog.production_optimizer"
+  - name: GENIE_SPACE_ID
+    value: "01f1559bf0731e529a700d5509784968"
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "production_optimizer"

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Production Optimizer — One-Pager</title>
+<style>
+  @page { size: Letter; margin: 0.4in 0.5in 0.5in 0.5in; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: #0d1117; color: #e6edf3;
+    padding: 18px 22px; max-width: 8.5in; margin: 0 auto; font-size: 11px;
+    line-height: 1.4;
+  }
+  .hdr {
+    display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+    border-bottom: 2px solid #00d4aa; padding-bottom: 12px;
+  }
+  .logo {
+    width: 48px; height: 48px; border-radius: 8px;
+    background: linear-gradient(135deg, #00d4aa, #06b6d4);
+    color: #0d1117; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px;
+  }
+  .title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+  .subtitle { font-size: 12px; color: #8b949e; margin-top: 2px; }
+  .badge {
+    background: #00d4aa; color: #0d1117; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; border-radius: 12px; margin-left: auto;
+  }
+  .powered { font-size: 10px; color: #8b949e; margin-left: auto; }
+  .hero {
+    background: #161b22; border: 1px solid #30363d; border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 14px; text-align: center;
+  }
+  .hero-title { color: #00d4aa; font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .hero-desc { color: #c9d1d9; font-size: 11px; line-height: 1.5; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .panel {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .section-title {
+    color: #00d4aa; font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  ul { list-style: none; }
+  li { margin-bottom: 6px; padding-left: 14px; position: relative; color: #c9d1d9; font-size: 10.5px; line-height: 1.45; }
+  li::before { content: "▸"; position: absolute; left: 0; color: #00d4aa; font-size: 10px; }
+  li strong { color: #e6edf3; }
+  .audiences { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .audience {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 10px 8px; text-align: center;
+  }
+  .audience-icon { font-size: 18px; margin-bottom: 4px; }
+  .audience-title { font-size: 10px; font-weight: 700; color: #e6edf3; margin-bottom: 2px; }
+  .audience-desc { font-size: 9px; color: #8b949e; line-height: 1.3; }
+  .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .kpi {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 10px 8px; text-align: center;
+  }
+  .kpi-num { font-size: 22px; font-weight: 800; color: #00d4aa; line-height: 1; }
+  .kpi-lbl { font-size: 9px; color: #8b949e; margin-top: 3px; }
+  .quickstart {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 12px 14px; margin-bottom: 12px;
+  }
+  .qs-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 6px; }
+  .qs-step { text-align: center; }
+  .qs-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: #00d4aa; color: #0d1117; font-weight: 800; font-size: 11px;
+    display: inline-flex; align-items: center; justify-content: center; margin-bottom: 4px;
+  }
+  .qs-title { font-size: 10px; font-weight: 700; color: #e6edf3; margin-bottom: 2px; }
+  .qs-desc { font-size: 9px; color: #8b949e; line-height: 1.3; }
+  .industry {
+    background: #161b22; border: 1px solid #30363d; border-radius: 8px;
+    padding: 12px 14px; margin-bottom: 8px; text-align: center;
+  }
+  .industry strong { color: #e6edf3; }
+  .industry-text { color: #c9d1d9; font-size: 10.5px; line-height: 1.5; }
+  .footer { text-align: center; color: #6e7681; font-size: 9px; margin-top: 6px; }
+  .warn {
+    background: #1f000066; border: 1px solid #ef4444; color: #fca5a5;
+    border-radius: 6px; padding: 6px 12px; font-size: 9.5px; text-align: center; margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="logo">PO</div>
+  <div>
+    <div class="title">PRODUCTION <span style="color:#00d4aa">OPTIMIZER</span></div>
+    <div class="subtitle">Well Decline + Recommendation Approval Supervisor</div>
+  </div>
+  <div class="powered">Powered by Databricks Apps · Unity Catalog · AI/BI Genie · Mosaic AI</div>
+</div>
+
+<div class="hero">
+  <div class="hero-title">DIGITAL TWIN + GENIE + MULTI-AGENT APPROVAL SUPERVISOR FOR MATURE-FIELD PRODUCTION</div>
+  <div class="hero-desc">
+    Production Optimizer combines a 3D digital twin, governed natural-language access via AI/BI Genie, and a
+    five-specialist Recommendation Approval Supervisor that fans out across Foundation Model API, UC SQL,
+    and Vector Search to synthesise APPROVE / APPROVE-WITH-MODS / DEFER / REJECT for any optimization recommendation.
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="section-title">◆ Business Value</div>
+    <ul>
+      <li><strong>Catch decline early</strong> with Arps fits + EUR + remaining-reserves per well</li>
+      <li><strong>Approve high-impact recs faster</strong> — five specialists run in parallel; verdict in seconds</li>
+      <li><strong>Audit every decision</strong> — every supervisor verdict logged with cited evidence</li>
+      <li><strong>Self-service insight</strong> — engineers ask Genie in plain English, not SQL</li>
+      <li><strong>One governance plane</strong> — Unity Catalog covers tables, models, queries, and audit</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">◆ Challenges Addressed</div>
+    <ul>
+      <li><strong>Decision drift</strong> — engineers stitch 5+ tools per recommendation; nothing tied together</li>
+      <li><strong>Manual interpretation</strong> — decline curves and rec impact reviewed by hand</li>
+      <li><strong>Slow approval cycles</strong> — sign-off chains stretch days; capex bleeds</li>
+      <li><strong>No precedent context</strong> — past recommendations live in spreadsheets, not the workflow</li>
+      <li><strong>Genie + Supervisor in one app</strong> — chat and verdict surfaces unified, not two products</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section-title">◆ Who It's For</div>
+<div class="audiences">
+  <div class="audience">
+    <div class="audience-icon">🛢️</div>
+    <div class="audience-title">Production Engineer</div>
+    <div class="audience-desc">Approves daily recs; chats Genie about per-well rates and history</div>
+  </div>
+  <div class="audience">
+    <div class="audience-icon">📈</div>
+    <div class="audience-title">Reservoir Engineer</div>
+    <div class="audience-desc">Reviews decline curves + EUR + analog references via Supervisor</div>
+  </div>
+  <div class="audience">
+    <div class="audience-icon">💰</div>
+    <div class="audience-title">Asset Manager</div>
+    <div class="audience-desc">Audits supervisor verdicts; defers high-risk recs to next maintenance window</div>
+  </div>
+  <div class="audience">
+    <div class="audience-icon">🤖</div>
+    <div class="audience-title">Operations Team</div>
+    <div class="audience-desc">Operates the digital twin; uses Genie for ad-hoc field questions</div>
+  </div>
+</div>
+
+<div class="kpis">
+  <div class="kpi"><div class="kpi-num">5</div><div class="kpi-lbl">AI Specialists</div></div>
+  <div class="kpi"><div class="kpi-num">6</div><div class="kpi-lbl">Dashboard Tabs</div></div>
+  <div class="kpi"><div class="kpi-num">8</div><div class="kpi-lbl">UC Tables</div></div>
+  <div class="kpi"><div class="kpi-num">0</div><div class="kpi-lbl">Python Sidecars</div></div>
+</div>
+
+<div class="quickstart">
+  <div class="section-title">◆ Quick Start Guide</div>
+  <div class="qs-steps">
+    <div class="qs-step">
+      <div class="qs-num">1</div>
+      <div class="qs-title">Clone Repository</div>
+      <div class="qs-desc">Clone <code>databricks-industry-solutions/energy-sandbox</code> and cd into <code>production-optimizer/</code></div>
+    </div>
+    <div class="qs-step">
+      <div class="qs-num">2</div>
+      <div class="qs-title">Build Frontend + Backend</div>
+      <div class="qs-desc">Run <code>npx tsc</code> + <code>cd ui && npm install && npx vite build</code></div>
+    </div>
+    <div class="qs-step">
+      <div class="qs-num">3</div>
+      <div class="qs-title">Create Genie Space</div>
+      <div class="qs-desc">Scope a Genie Space to the 8 gold tables and paste the Space ID into <code>app.yaml</code></div>
+    </div>
+    <div class="qs-step">
+      <div class="qs-num">4</div>
+      <div class="qs-title">Deploy via DAB</div>
+      <div class="qs-desc"><code>databricks bundle deploy -t prod</code> — Genie + Supervisor are live</div>
+    </div>
+  </div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <div class="section-title">◆ What's Unique to Databricks</div>
+    <ul>
+      <li><strong>AI/BI Genie</strong> over governed UC tables — NL → SQL with audit trail</li>
+      <li><strong>Foundation Model API</strong> for the decline analyst specialist + verdict synthesis</li>
+      <li><strong>UC SQL</strong> via the Statement Execution API for 3 of 5 specialists</li>
+      <li><strong>Unity Catalog</strong> tags, lineage, and grants on every artefact</li>
+      <li><strong>Databricks Apps</strong> — one container, Node-native, no Python sidecar required</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <div class="section-title">◆ Try in the App</div>
+    <ul>
+      <li><strong>Ask Genie</strong> "Top 5 recommendations by annual_revenue" — see governed SQL execute</li>
+      <li><strong>Approve a recommendation</strong> via Supervisor — watch 5 specialists stream a verdict</li>
+      <li><strong>Browse decline curves</strong> in the Production Optimizer tab</li>
+      <li><strong>Walk the architecture</strong> in the Data & AI Flow tab</li>
+      <li><strong>Inspect the field</strong> in 3D in the Digital Twin tab</li>
+    </ul>
+  </div>
+</div>
+
+<div class="industry">
+  <div class="section-title">◆ Target Industry</div>
+  <div class="industry-text">
+    <strong>Upstream Oil & Gas</strong> — Production engineering and field development on conventional, unconventional, and EOR-flooded assets. Decline-curve analysis, recommendation approval, and self-service field insight built on the Databricks Lakehouse.
+  </div>
+</div>
+
+<div class="warn">⚠ DEMO ONLY — This is a Databricks solution accelerator. See LICENSE for full terms of use.</div>
+
+<div class="footer">© 2026 Databricks, Inc. · databricks.com · Databricks Industry Solutions</div>
+
+</body>
+</html>

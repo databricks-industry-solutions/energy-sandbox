@@ -1,0 +1,58 @@
+bundle:
+  name: production-optimizer
+
+variables:
+  warehouse_id:
+    description: "SQL warehouse used by the app + UC bootstrap"
+    default: "<your-warehouse-id>"
+  demo_catalog:
+    description: "Unity Catalog target (per MFG Rules of the Road)"
+    default: "energy_utilities"
+  demo_schema:
+    description: "Schema under the demo catalog"
+    default: "production_optimizer"
+  genie_space_id:
+    description: "Genie Space ID scoped to the production_optimizer gold tables"
+    default: ""
+  agent_model:
+    description: "Foundation Model API endpoint for the supervisor synthesis"
+    default: "databricks-claude-sonnet-4-5"
+
+resources:
+  schemas:
+    production_optimizer_schema:
+      catalog_name: ${var.demo_catalog}
+      name: ${var.demo_schema}
+      comment: "Production Optimizer demo — decline curves + recommendations + field economics with 5-specialist Approval Supervisor."
+
+  apps:
+    production-optimizer:
+      name: production-optimizer
+      description: "Production Optimizer — Node-native Genie + Recommendation Approval Supervisor"
+      source_code_path: .
+
+      resources:
+        - name: sql-warehouse
+          description: "SQL warehouse for UC tables + Genie + Supervisor specialists"
+          sql_warehouse:
+            id: ${var.warehouse_id}
+            permission: CAN_USE
+      # Runtime env (catalog, schema, Genie Space, model) is set in app.yaml.
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://YOUR-WORKSPACE.cloud.databricks.com
+    variables:
+      demo_catalog: oil_pump_monitor_catalog
+      demo_schema: production_optimizer
+
+  prod:
+    mode: production
+    workspace:
+      host: https://fevm-mfg-industry-prod.cloud.databricks.com
+    variables:
+      demo_catalog: energy_utilities
+      demo_schema: production_optimizer

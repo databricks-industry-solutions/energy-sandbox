@@ -1,0 +1,32 @@
+Databricks License
+Copyright (2025) Databricks, Inc.
+
+Definitions.
+
+"Agreement" shall mean this Databricks License.
+
+"Software" shall mean the copyrightable portions of the software provided under this Agreement, if any.
+
+"You" (or "Your") shall mean the individual or Legal Entity exercising permissions granted by this Agreement.
+
+"Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
+
+Notice; License Grant.
+
+This Agreement is between You and Databricks, Inc. ("Databricks"). The Software is provided to You on an "AS IS" basis, and Databricks hereby grants You a non-exclusive, non-transferable, non-sublicensable, limited license to copy, modify, and redistribute the Software; provided that all copies and redistributions must include the following text in all code, file headers, and any documentation or materials accompanying the redistribution:
+
+"This software includes code from Databricks, Inc., and is provided under the Databricks License. A copy of the license can be found at https://github.com/databricks/databricks-license/blob/main/LICENSE."
+
+Additionally, if You make any modifications to the Software, you must include a prominent notice stating that You have modified the Software.
+
+Redistribution Conditions.
+
+In addition to the above, any redistribution of the Software must comply with the following conditions:
+
+a. You may not use Databricks' trademarks, service marks, or trade names in connection with the Software without prior written consent.
+
+b. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Software constitutes direct or contributory patent infringement, then any licenses granted to You under this Agreement for the Software shall terminate as of the date such litigation is filed.
+
+Disclaimer; Limitation of Liability.
+
+THE SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. DATABRICKS DISCLAIMS ALL LIABILITY FOR DAMAGES, INCLUDING DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OF ANY KIND ARISING FROM THE USE OF THE SOFTWARE.
