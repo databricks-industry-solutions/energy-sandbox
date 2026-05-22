@@ -204,7 +204,7 @@ function WellheadSVG({
 
       {/* Well ID label */}
       <text x={x} y={y + 20 + casingH + 18} textAnchor="middle"
-        fill={isSelected ? C.text : C.muted} fontSize="7" fontWeight="600"
+        fill={isSelected ? C.text : C.muted} fontSize="10.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {well.id}
       </text>
@@ -212,28 +212,28 @@ function WellheadSVG({
       {/* Rate readout */}
       {well.type === 'producer' && (
         <text x={x} y={y + 20 + casingH + 28} textAnchor="middle"
-          fill={C.green} fontSize="7" fontWeight="700"
+          fill={C.green} fontSize="10.5" fontWeight="700"
           style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
           {well.oilRate}b/d
         </text>
       )}
       {(well.type === 'injector' || well.type === 'WAG') && (
         <text x={x} y={y + 20 + casingH + 28} textAnchor="middle"
-          fill={C.cyan} fontSize="7" fontWeight="700"
+          fill={C.cyan} fontSize="10.5" fontWeight="700"
           style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
           {well.co2InjRate}M/d
         </text>
       )}
       {well.type === 'disposal' && (
         <text x={x} y={y + 20 + casingH + 28} textAnchor="middle"
-          fill={C.orange} fontSize="7" fontWeight="700"
+          fill={C.orange} fontSize="10.5" fontWeight="700"
           style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
           {well.waterInjRate}b/d
         </text>
       )}
       {well.type === 'monitor' && (
         <text x={x} y={y + 20 + casingH + 28} textAnchor="middle"
-          fill={C.muted} fontSize="7" fontWeight="700"
+          fill={C.muted} fontSize="10.5" fontWeight="700"
           style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
           {well.bottomholePressure}psi
         </text>
@@ -241,7 +241,7 @@ function WellheadSVG({
 
       {/* Pressure readout (right side) */}
       <text x={x + casingW/2 + wingLen + 4} y={y + 18} textAnchor="start"
-        fill={C.cyan} fontSize="7" fontWeight="700"
+        fill={C.cyan} fontSize="10.5" fontWeight="700"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {well.tubingPressure}psi
       </text>
@@ -285,13 +285,13 @@ function SeparatorSVG({
 
       {/* Zone labels inside */}
       <text x={x + W * 0.17} y={y + H/2 + 3} textAnchor="middle"
-        fill={C.green} fontSize="9" fontWeight="600" opacity={0.6}
+        fill={C.green} fontSize="13.5" fontWeight="600" opacity={0.6}
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>OIL</text>
       <text x={x + W * 0.5} y={y + H/2 + 3} textAnchor="middle"
-        fill={C.blue} fontSize="9" fontWeight="600" opacity={0.6}
+        fill={C.blue} fontSize="13.5" fontWeight="600" opacity={0.6}
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>WATER</text>
       <text x={x + W * 0.83} y={y + H/2 + 3} textAnchor="middle"
-        fill={C.red} fontSize="9" fontWeight="600" opacity={0.6}
+        fill={C.red} fontSize="13.5" fontWeight="600" opacity={0.6}
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>GAS</text>
 
       {/* Level indicator (left side) — shows utilization */}
@@ -319,25 +319,25 @@ function SeparatorSVG({
 
       {/* Name and data */}
       <text x={x + W/2} y={y - 20} textAnchor="middle"
-        fill={C.text} fontSize="12" fontWeight="700"
+        fill={C.text} fontSize="18" fontWeight="700"
         style={{ fontFamily: '-apple-system, sans-serif', pointerEvents: 'none' }}>
         {fac.name}
       </text>
 
       {/* Readouts below */}
-      <text x={x + 4} y={y + H + 24} fill={C.green} fontSize="9" fontWeight="600"
+      <text x={x + 4} y={y + H + 24} fill={C.green} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         Oil:{fac.currentOilRate}/{fac.oilCapacity}
       </text>
-      <text x={x + 110} y={y + H + 24} fill={C.red} fontSize="9" fontWeight="600"
+      <text x={x + 110} y={y + H + 24} fill={C.red} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         Gas:{fac.currentGasRate}/{fac.gasCapacity}
       </text>
-      <text x={x + 4} y={y + H + 36} fill={C.blue} fontSize="9" fontWeight="600"
+      <text x={x + 4} y={y + H + 36} fill={C.blue} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         Water:{fac.currentWaterRate}/{fac.waterCapacity}
       </text>
-      <text x={x + 110} y={y + H + 36} fill={C.muted} fontSize="9"
+      <text x={x + 110} y={y + H + 36} fill={C.muted} fontSize="13.5"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {Math.round(fac.utilization * 100)}% util | {fac.emissions}tCO&#x2082;e
       </text>
@@ -367,7 +367,7 @@ function CompressorSVG({
       <circle cx={x + 30} cy={y + 30} r={10} fill="none" stroke={hc}
         strokeWidth={0.6} opacity={0.2} />
       <text x={x + 30} y={y + 34} textAnchor="middle" fill={hc}
-        fontSize="10" fontWeight="700" opacity={0.5}
+        fontSize="15" fontWeight="700" opacity={0.5}
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>M</text>
 
       {/* Shaft coupling */}
@@ -400,17 +400,17 @@ function CompressorSVG({
 
       {/* Name */}
       <text x={x + 90} y={y - 14} textAnchor="middle"
-        fill={C.text} fontSize="12" fontWeight="700"
+        fill={C.text} fontSize="18" fontWeight="700"
         style={{ fontFamily: '-apple-system, sans-serif', pointerEvents: 'none' }}>
         {fac.name}
       </text>
 
       {/* Readouts */}
-      <text x={x} y={y + 76} fill={C.cyan} fontSize="9" fontWeight="600"
+      <text x={x} y={y + 76} fill={C.cyan} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         CO&#x2082;:{fac.currentCO2Rate}/{fac.co2Capacity} Mcf/d
       </text>
-      <text x={x} y={y + 88} fill={C.muted} fontSize="9"
+      <text x={x} y={y + 88} fill={C.muted} fontSize="13.5"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {Math.round(fac.utilization * 100)}% util | {fac.emissions}tCO&#x2082;e
       </text>
@@ -471,25 +471,25 @@ function RecycleTowerSVG({
 
       {/* Name */}
       <text x={x + W/2} y={y - 30} textAnchor="middle"
-        fill={C.text} fontSize="11" fontWeight="700"
+        fill={C.text} fontSize="16.5" fontWeight="700"
         style={{ fontFamily: '-apple-system, sans-serif', pointerEvents: 'none' }}>
         {fac.name}
       </text>
 
       {/* Readouts to the right */}
-      <text x={x + W + 16} y={y + 40} fill={C.cyan} fontSize="9" fontWeight="600"
+      <text x={x + W + 16} y={y + 40} fill={C.cyan} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {fac.currentCO2Rate}
       </text>
-      <text x={x + W + 16} y={y + 52} fill={C.muted} fontSize="8"
+      <text x={x + W + 16} y={y + 52} fill={C.muted} fontSize="12"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         /{fac.co2Capacity}
       </text>
-      <text x={x + W + 16} y={y + 64} fill={C.muted} fontSize="8"
+      <text x={x + W + 16} y={y + 64} fill={C.muted} fontSize="12"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         Mcf/d
       </text>
-      <text x={x + W + 16} y={y + 82} fill={C.muted} fontSize="9"
+      <text x={x + W + 16} y={y + 82} fill={C.muted} fontSize="13.5"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {Math.round(fac.utilization * 100)}%
       </text>
@@ -521,7 +521,7 @@ function SWDSVG({
       <line x1={x + 24} y1={y + 25} x2={x + 56} y2={y + 25}
         stroke={hc} strokeWidth={1} opacity={0.2} />
       <text x={x + 40} y={y + 29} textAnchor="middle" fill={hc}
-        fontSize="10" fontWeight="700" opacity={0.5}
+        fontSize="15" fontWeight="700" opacity={0.5}
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>P</text>
 
       {/* Suction nozzle (left) */}
@@ -553,17 +553,17 @@ function SWDSVG({
 
       {/* Name */}
       <text x={x + 64} y={y - 10} textAnchor="middle"
-        fill={C.text} fontSize="11" fontWeight="700"
+        fill={C.text} fontSize="16.5" fontWeight="700"
         style={{ fontFamily: '-apple-system, sans-serif', pointerEvents: 'none' }}>
         {fac.name}
       </text>
 
       {/* Readouts */}
-      <text x={x} y={y + 68} fill={C.blue} fontSize="9" fontWeight="600"
+      <text x={x} y={y + 68} fill={C.blue} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         Water:{fac.currentWaterRate}/{fac.waterCapacity} bbl/d
       </text>
-      <text x={x} y={y + 80} fill={C.muted} fontSize="9"
+      <text x={x} y={y + 80} fill={C.muted} fontSize="13.5"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {Math.round(fac.utilization * 100)}% util
       </text>
@@ -628,13 +628,13 @@ function FlareStackSVG({
 
       {/* Label */}
       <text x={x} y={y + 78} textAnchor="middle"
-        fill={isSelected ? C.text : C.muted} fontSize="8" fontWeight="600"
+        fill={isSelected ? C.text : C.muted} fontSize="12" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {flare.id}
       </text>
       {isActive && (
         <text x={x} y={y + 88} textAnchor="middle"
-          fill={C.orange} fontSize="7" fontWeight="700"
+          fill={C.orange} fontSize="10.5" fontWeight="700"
           style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
           {flare.currentRate}Mcf/d
         </text>
@@ -705,17 +705,17 @@ function CO2SourceSVG({
 
       {/* Name */}
       <text x={x + 50} y={y + 76} textAnchor="middle"
-        fill={C.text} fontSize="10" fontWeight="700"
+        fill={C.text} fontSize="15" fontWeight="700"
         style={{ fontFamily: '-apple-system, sans-serif', pointerEvents: 'none' }}>
         {src.name}
       </text>
       <text x={x + 50} y={y + 88} textAnchor="middle"
-        fill={c} fontSize="9" fontWeight="600"
+        fill={c} fontSize="13.5" fontWeight="600"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         {src.deliveryRate.toLocaleString()} Mcf/d
       </text>
       <text x={x + 50} y={y + 100} textAnchor="middle"
-        fill={C.muted} fontSize="8"
+        fill={C.muted} fontSize="12"
         style={{ fontFamily: 'monospace', pointerEvents: 'none' }}>
         ${src.cost}/Mcf | {(src.purity * 100).toFixed(0)}%
       </text>
@@ -874,24 +874,24 @@ export default function DigitalTwinTab() {
 
           {/* Title */}
           <text x={VW / 2} y={28} textAnchor="middle" fill={C.text}
-            fontSize="16" fontWeight="700" style={sans}>
+            fontSize="24" fontWeight="700" style={sans}>
             CO&#x2082;-EOR Field P&amp;ID — Digital Twin
           </text>
           <text x={VW / 2} y={44} textAnchor="middle" fill={C.muted}
-            fontSize="10" style={mono}>
+            fontSize="15" style={mono}>
             Live SCADA telemetry — click any equipment for details
           </text>
 
           {/* === SECTION LABELS === */}
-          <text x={20} y={68} fill={C.muted} fontSize="9" fontWeight="700"
+          <text x={20} y={68} fill={C.muted} fontSize="13.5" fontWeight="700"
             style={{ ...mono, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>
             CO&#x2082; SUPPLY
           </text>
-          <text x={375} y={68} fill={C.muted} fontSize="9" fontWeight="700"
+          <text x={375} y={68} fill={C.muted} fontSize="13.5" fontWeight="700"
             style={{ ...mono, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>
             INJECTION PATTERNS
           </text>
-          <text x={1510} y={68} fill={C.muted} fontSize="9" fontWeight="700"
+          <text x={1510} y={68} fill={C.muted} fontSize="13.5" fontWeight="700"
             style={{ ...mono, textTransform: 'uppercase' as const, letterSpacing: '0.1em' }}>
             PROCESSING &amp; EXPORT
           </text>
@@ -903,7 +903,7 @@ export default function DigitalTwinTab() {
             stroke={C.cyan} strokeWidth={4} opacity={0.15} />
           <line x1={358} y1={88} x2={1460} y2={88}
             className="twin-edge-anim" stroke={C.cyan} strokeWidth={4} />
-          <text x={362} y={82} fill={C.cyan} fontSize="7" fontWeight="600" style={mono}>
+          <text x={362} y={82} fill={C.cyan} fontSize="10.5" fontWeight="600" style={mono}>
             CO&#x2082; INJECTION HEADER
           </text>
 
@@ -914,10 +914,10 @@ export default function DigitalTwinTab() {
             stroke={C.green} strokeWidth={4} opacity={0.15} />
           <line x1={390} y1={340} x2={1460} y2={340}
             className="twin-edge-anim" stroke={C.green} strokeWidth={4} />
-          {/* Gathering header → CPF inlet */}
-          <path d="M 1460 340 H 1564 V 366" className="twin-edge-track" stroke={C.green} />
-          <path d="M 1460 340 H 1564 V 366" className="twin-edge-anim" stroke={C.green} />
-          <text x={394} y={334} fill={C.green} fontSize="7" fontWeight="600" style={mono}>
+          {/* Gathering header → CPF inlet (CPF moved below patterns) */}
+          <path d="M 774 340 V 408" className="twin-edge-track" stroke={C.green} />
+          <path d="M 774 340 V 408" className="twin-edge-anim" stroke={C.green} />
+          <text x={394} y={334} fill={C.green} fontSize="10.5" fontWeight="600" style={mono}>
             PRODUCTION GATHERING HEADER
           </text>
 
@@ -969,7 +969,7 @@ export default function DigitalTwinTab() {
           <path d="M 355 524 H 358 V 88" className="twin-edge-track" stroke={C.cyan} />
           <path d="M 355 524 H 358 V 88" className="twin-edge-anim" stroke={C.cyan} />
           <GateValveSVG x={358} y={306} color={C.cyan} />
-          <text x={362} y={302} fill={C.cyan} fontSize="7" style={mono}>CO&#x2082; INJ TRUNK</text>
+          <text x={362} y={302} fill={C.cyan} fontSize="10.5" style={mono}>CO&#x2082; INJ TRUNK</text>
 
           {/* ============================================================ */}
           {/*  PATTERN BOXES — single horizontal row                       */}
@@ -1002,11 +1002,11 @@ export default function DigitalTwinTab() {
 
                 {/* Pattern header */}
                 <text x={box.x + 8} y={box.y + 16} fill={C.text}
-                  fontSize="10" fontWeight="700" style={sans}>
+                  fontSize="15" fontWeight="700" style={sans}>
                   {pat.name}
                 </text>
                 <text x={box.x + 8} y={box.y + 28} fill={C.muted}
-                  fontSize="7.5" style={mono}>
+                  fontSize="11.25" style={mono}>
                   {pat.type} | Cycle {pat.cycleNumber} | P:{pat.currentPressure}/{pat.targetPressure}
                 </text>
 
@@ -1014,7 +1014,7 @@ export default function DigitalTwinTab() {
                 <rect x={box.x + box.w - 100} y={box.y + 4} width={92} height={16} rx={4}
                   fill={phaseColor + '22'} stroke={phaseColor + '66'} strokeWidth={1} />
                 <text x={box.x + box.w - 54} y={box.y + 16} textAnchor="middle"
-                  fill={phaseColor} fontSize="7" fontWeight="600" style={mono}>
+                  fill={phaseColor} fontSize="10.5" fontWeight="600" style={mono}>
                   {pat.currentPhase.replace(/_/g, ' ')}
                 </text>
               </g>
@@ -1062,12 +1062,12 @@ export default function DigitalTwinTab() {
           })}
 
           {/* ============================================================ */}
-          {/*  CPF SEPARATOR                                               */}
+          {/*  CPF SEPARATOR — below producer wells (center)               */}
           {/* ============================================================ */}
           {cpf && (
             <SeparatorSVG
-              x={1510}
-              y={380}
+              x={720}
+              y={420}
               fac={cpf}
               isSelected={selected?.kind === 'facility' && selected.data.id === cpf.id}
               onClick={() => setSelected(
@@ -1083,8 +1083,8 @@ export default function DigitalTwinTab() {
           {/* FLR-01: connected to CPF gas nozzle */}
           {data.flares.filter((f) => f.id === 'FLR-01').map((flr) => (
             <g key={flr.id}>
-              <path d="M 1738 366 H 1810 V 361" className="twin-edge-track" stroke={C.red} />
-              <path d="M 1738 366 H 1810 V 361" className="twin-edge-anim" stroke={C.red} />
+              <path d="M 948 408 V 366 H 1810 V 361" className="twin-edge-track" stroke={C.red} />
+              <path d="M 948 408 V 366 H 1810 V 361" className="twin-edge-anim" stroke={C.red} />
               <FlareStackSVG
                 x={1810} y={295}
                 flare={flr}
@@ -1130,10 +1130,10 @@ export default function DigitalTwinTab() {
           )}
 
           {/* CPF → CO₂ Recycle Tower (orthogonal: gas nozzle → tower inlet) */}
-          <path d="M 1738 366 V 430 H 1642 V 583" className="twin-edge-track" stroke={C.cyan} />
-          <path d="M 1738 366 V 430 H 1642 V 583" className="twin-edge-anim" stroke={C.cyan} />
-          <GateValveSVG x={1690} y={430} color={C.cyan} />
-          <text x={1694} y={426} fill={C.cyan} fontSize="7" style={mono}>TO CO&#x2082; RECYCLE</text>
+          <path d="M 948 408 V 430 H 1642 V 583" className="twin-edge-track" stroke={C.cyan} />
+          <path d="M 948 408 V 430 H 1642 V 583" className="twin-edge-anim" stroke={C.cyan} />
+          <GateValveSVG x={1295} y={430} color={C.cyan} />
+          <text x={1299} y={426} fill={C.cyan} fontSize="10.5" style={mono}>TO CO&#x2082; RECYCLE</text>
 
           {/* CO₂ Recycle → Compressor (recycle loop along bottom) */}
           <path d="M 1605 665 V 700 H 358 V 520"
@@ -1141,7 +1141,7 @@ export default function DigitalTwinTab() {
           <path d="M 1605 665 V 700 H 358 V 520"
             className="twin-edge-anim" stroke={C.cyan} />
           <GateValveSVG x={952} y={700} color={C.cyan} />
-          <text x={780} y={692} fill={C.cyan} fontSize="9" fontWeight="600" opacity={0.7} style={mono}>
+          <text x={780} y={692} fill={C.cyan} fontSize="13.5" fontWeight="600" opacity={0.7} style={mono}>
             CO&#x2082; RECYCLE LOOP
           </text>
 
@@ -1162,10 +1162,10 @@ export default function DigitalTwinTab() {
           )}
 
           {/* CPF → SWD water line (orthogonal) */}
-          <path d="M 1608 480 V 715 H 1670" className="twin-edge-track" stroke={C.blue} />
-          <path d="M 1608 480 V 715 H 1670" className="twin-edge-anim" stroke={C.blue} />
-          <GateValveSVG x={1608} y={597} color={C.blue} />
-          <text x={1612} y={593} fill={C.blue} fontSize="7" style={mono}>WATER TO SWD</text>
+          <path d="M 902 510 V 715 H 1670" className="twin-edge-track" stroke={C.blue} />
+          <path d="M 902 510 V 715 H 1670" className="twin-edge-anim" stroke={C.blue} />
+          <GateValveSVG x={902} y={612} color={C.blue} />
+          <text x={906} y={608} fill={C.blue} fontSize="10.5" style={mono}>WATER TO SWD</text>
 
           {/* W-SWD01 — standalone disposal wellhead near SWD */}
           {swdWell && (() => {
@@ -1187,13 +1187,13 @@ export default function DigitalTwinTab() {
             return (
               <g key={pl.id} onClick={() => setSelected(isSel ? null : { kind: 'pipeline', data: pl })}
                 style={{ cursor: 'pointer' }}>
-                <path d="M 1692 480 H 1890" className="twin-edge-track" stroke={C.green}
+                <path d="M 818 510 V 480 H 1890" className="twin-edge-track" stroke={C.green}
                   strokeWidth={isSel ? 3 : 2} opacity={isSel ? 0.4 : 0.15} />
-                <path d="M 1692 480 H 1890" className="twin-edge-anim" stroke={C.green}
+                <path d="M 818 510 V 480 H 1890" className="twin-edge-anim" stroke={C.green}
                   strokeWidth={isSel ? 3.5 : 2.5} opacity={isSel ? 1 : 0.7} />
-                <GateValveSVG x={1791} y={480} color={C.green} />
+                <GateValveSVG x={1450} y={480} color={C.green} />
                 <polygon points="1882,475 1890,480 1882,485" fill={C.green} opacity={0.6} />
-                <text x={1780} y={474} textAnchor="middle" fill={C.green} fontSize="7" fontWeight="600" style={mono}>
+                <text x={1700} y={474} textAnchor="middle" fill={C.green} fontSize="10.5" fontWeight="600" style={mono}>
                   OIL {pl.currentFlow.toLocaleString()}/{pl.capacity.toLocaleString()}
                 </text>
               </g>
@@ -1206,13 +1206,13 @@ export default function DigitalTwinTab() {
             return (
               <g key={pl.id} onClick={() => setSelected(isSel ? null : { kind: 'pipeline', data: pl })}
                 style={{ cursor: 'pointer' }}>
-                <path d="M 1738 366 V 340 H 1890" className="twin-edge-track" stroke={C.red}
+                <path d="M 948 408 H 1500 V 340 H 1890" className="twin-edge-track" stroke={C.red}
                   strokeWidth={isSel ? 3 : 2} opacity={isSel ? 0.4 : 0.15} />
-                <path d="M 1738 366 V 340 H 1890" className="twin-edge-anim" stroke={C.red}
+                <path d="M 948 408 H 1500 V 340 H 1890" className="twin-edge-anim" stroke={C.red}
                   strokeWidth={isSel ? 3.5 : 2.5} opacity={isSel ? 1 : 0.7} />
-                <GateValveSVG x={1814} y={340} color={C.red} />
+                <GateValveSVG x={1700} y={340} color={C.red} />
                 <polygon points="1882,335 1890,340 1882,345" fill={C.red} opacity={0.6} />
-                <text x={1800} y={334} textAnchor="middle" fill={C.red} fontSize="7" fontWeight="600" style={mono}>
+                <text x={1800} y={334} textAnchor="middle" fill={C.red} fontSize="10.5" fontWeight="600" style={mono}>
                   GAS {pl.currentFlow.toLocaleString()}/{pl.capacity.toLocaleString()}
                 </text>
               </g>
@@ -1240,10 +1240,10 @@ export default function DigitalTwinTab() {
                     <animate attributeName="opacity" values="1;0.3;1" dur="0.8s" repeatCount="indefinite" />
                   )}
                 </circle>
-                <text x={pos.x + 18} y={pos.y + 13} fill={C.text} fontSize="7" fontWeight="600" style={mono}>
+                <text x={pos.x + 18} y={pos.y + 13} fill={C.text} fontSize="10.5" fontWeight="600" style={mono}>
                   {mp.id}
                 </text>
-                <text x={pos.x + 6} y={pos.y + 24} fill={statusColor} fontSize="8" fontWeight="700" style={mono}>
+                <text x={pos.x + 6} y={pos.y + 24} fill={statusColor} fontSize="12" fontWeight="700" style={mono}>
                   {mp.value}/{mp.threshold}
                 </text>
               </g>
@@ -1256,64 +1256,64 @@ export default function DigitalTwinTab() {
           <g transform={`translate(20, 820)`}>
             <rect x={0} y={0} width={1860} height={64} rx={6}
               fill={C.panel} stroke={C.border} strokeWidth={0.8} />
-            <text x={12} y={16} fill={C.muted} fontSize="8" fontWeight="700" style={mono}>
+            <text x={12} y={16} fill={C.muted} fontSize="12" fontWeight="700" style={mono}>
               WELL TYPES
             </text>
 
             {/* Producer */}
             <rect x={12} y={24} width={8} height={16} rx={1} fill="none" stroke={C.green} strokeWidth={1} />
             <line x1={6} y1={32} x2={26} y2={32} stroke={C.green} strokeWidth={1} />
-            <text x={30} y={36} fill={C.muted} fontSize="8" style={mono}>Producer</text>
+            <text x={30} y={36} fill={C.muted} fontSize="12" style={mono}>Producer</text>
 
             {/* Injector */}
             <rect x={100} y={24} width={8} height={16} rx={1} fill="none" stroke={C.cyan} strokeWidth={1} />
             <line x1={94} y1={32} x2={114} y2={32} stroke={C.cyan} strokeWidth={1} />
-            <text x={118} y={36} fill={C.muted} fontSize="8" style={mono}>Injector</text>
+            <text x={118} y={36} fill={C.muted} fontSize="12" style={mono}>Injector</text>
 
             {/* WAG */}
             <rect x={186} y={24} width={8} height={16} rx={1} fill="none" stroke={C.purple} strokeWidth={1} />
             <line x1={180} y1={32} x2={200} y2={32} stroke={C.purple} strokeWidth={1} />
-            <text x={204} y={36} fill={C.muted} fontSize="8" style={mono}>WAG</text>
+            <text x={204} y={36} fill={C.muted} fontSize="12" style={mono}>WAG</text>
 
             {/* Monitor */}
             <rect x={250} y={24} width={8} height={16} rx={1} fill="none" stroke={C.muted} strokeWidth={1} />
-            <text x={264} y={36} fill={C.muted} fontSize="8" style={mono}>Monitor</text>
+            <text x={264} y={36} fill={C.muted} fontSize="12" style={mono}>Monitor</text>
 
             {/* Disposal */}
             <rect x={326} y={24} width={8} height={16} rx={1} fill="none" stroke={C.orange} strokeWidth={1} />
-            <text x={340} y={36} fill={C.muted} fontSize="8" style={mono}>Disposal</text>
+            <text x={340} y={36} fill={C.muted} fontSize="12" style={mono}>Disposal</text>
 
             {/* Pipeline legend */}
-            <text x={440} y={16} fill={C.muted} fontSize="8" fontWeight="700" style={mono}>PIPELINES</text>
+            <text x={440} y={16} fill={C.muted} fontSize="12" fontWeight="700" style={mono}>PIPELINES</text>
             <line x1={440} y1={32} x2={470} y2={32} stroke={C.cyan} strokeWidth={2.5} />
-            <text x={476} y={36} fill={C.muted} fontSize="8" style={mono}>CO&#x2082;</text>
+            <text x={476} y={36} fill={C.muted} fontSize="12" style={mono}>CO&#x2082;</text>
             <line x1={510} y1={32} x2={540} y2={32} stroke={C.green} strokeWidth={2.5} />
-            <text x={546} y={36} fill={C.muted} fontSize="8" style={mono}>Oil</text>
+            <text x={546} y={36} fill={C.muted} fontSize="12" style={mono}>Oil</text>
             <line x1={572} y1={32} x2={602} y2={32} stroke={C.red} strokeWidth={2.5} />
-            <text x={608} y={36} fill={C.muted} fontSize="8" style={mono}>Gas</text>
+            <text x={608} y={36} fill={C.muted} fontSize="12" style={mono}>Gas</text>
             <line x1={638} y1={32} x2={668} y2={32} stroke={C.blue} strokeWidth={2.5} />
-            <text x={674} y={36} fill={C.muted} fontSize="8" style={mono}>Water</text>
+            <text x={674} y={36} fill={C.muted} fontSize="12" style={mono}>Water</text>
 
             {/* Header legend */}
-            <text x={750} y={16} fill={C.muted} fontSize="8" fontWeight="700" style={mono}>HEADERS</text>
+            <text x={750} y={16} fill={C.muted} fontSize="12" fontWeight="700" style={mono}>HEADERS</text>
             <line x1={750} y1={32} x2={810} y2={32} stroke={C.cyan} strokeWidth={4} opacity={0.4} />
-            <text x={816} y={36} fill={C.muted} fontSize="8" style={mono}>CO&#x2082; Injection</text>
+            <text x={816} y={36} fill={C.muted} fontSize="12" style={mono}>CO&#x2082; Injection</text>
             <line x1={920} y1={32} x2={980} y2={32} stroke={C.green} strokeWidth={4} opacity={0.4} />
-            <text x={986} y={36} fill={C.muted} fontSize="8" style={mono}>Gathering</text>
+            <text x={986} y={36} fill={C.muted} fontSize="12" style={mono}>Gathering</text>
 
             {/* Sensor legend */}
-            <text x={1080} y={16} fill={C.muted} fontSize="8" fontWeight="700" style={mono}>SENSORS</text>
+            <text x={1080} y={16} fill={C.muted} fontSize="12" fontWeight="700" style={mono}>SENSORS</text>
             <circle cx={1086} cy={32} r={3.5} fill={C.green} />
-            <text x={1094} y={36} fill={C.muted} fontSize="8" style={mono}>Normal</text>
+            <text x={1094} y={36} fill={C.muted} fontSize="12" style={mono}>Normal</text>
             <circle cx={1150} cy={32} r={3.5} fill={C.yellow} />
-            <text x={1158} y={36} fill={C.muted} fontSize="8" style={mono}>Warning</text>
+            <text x={1158} y={36} fill={C.muted} fontSize="12" style={mono}>Warning</text>
             <circle cx={1216} cy={32} r={3.5} fill={C.red} />
-            <text x={1224} y={36} fill={C.muted} fontSize="8" style={mono}>Alarm</text>
+            <text x={1224} y={36} fill={C.muted} fontSize="12" style={mono}>Alarm</text>
 
             {/* Dashed line = recycle */}
-            <text x={1300} y={16} fill={C.muted} fontSize="8" fontWeight="700" style={mono}>OTHER</text>
+            <text x={1300} y={16} fill={C.muted} fontSize="12" fontWeight="700" style={mono}>OTHER</text>
             <line x1={1300} y1={32} x2={1340} y2={32} stroke={C.cyan} strokeWidth={2} strokeDasharray="6 3" />
-            <text x={1346} y={36} fill={C.muted} fontSize="8" style={mono}>CO&#x2082; Recycle</text>
+            <text x={1346} y={36} fill={C.muted} fontSize="12" style={mono}>CO&#x2082; Recycle</text>
           </g>
         </svg>
       </div>
