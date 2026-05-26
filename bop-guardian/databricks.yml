@@ -1,11 +1,22 @@
 bundle:
   name: bop-guardian
 
+variables:
+  lakebase_instance:
+    description: "Lakebase PostgreSQL instance name"
+    default: bop-guardian-db
+  lakebase_database:
+    description: "Lakebase database name"
+    default: bop_guardian_app
+  llm_model:
+    description: "Foundation Model API endpoint name"
+    default: databricks-meta-llama-3-3-70b-instruct
+
 resources:
   apps:
     bop-guardian:
       name: bop-guardian
-      description: BOP Guardian
+      description: "BOP Guardian — Offshore BOP Monitoring Command Center"
 
       source_code_path: .
 
@@ -13,9 +24,12 @@ resources:
         - name: bop-guardian-lakebase
           description: "Lakebase PostgreSQL for BOP Guardian telemetry, anomalies, and work orders"
           database:
-            instance_name: bop-guardian-db
-            database_name: bop_guardian_app
+            instance_name: ${var.lakebase_instance}
+            database_name: ${var.lakebase_database}
             permission: CAN_CONNECT_AND_CREATE
+        - name: bop-guardian-llm
+          description: "Foundation Model API for Guardian Advisor AI chat"
+          serving_endpoint: ${var.llm_model}
 
       env:
         - name: ENVIRONMENT
@@ -25,24 +39,22 @@ resources:
         - name: PGPORT
           valueFrom: bop-guardian-lakebase
         - name: PGDATABASE_OVERRIDE
-          value: "bop_guardian_app"
+          value: ${var.lakebase_database}
 
+# ── Targets ──────────────────────────────────────────────────────────────────
+# To deploy to your own workspace, add a new target or override the host below.
+# Example:
+#   databricks bundle deploy -t dev --profile my-profile
 targets:
   dev:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west

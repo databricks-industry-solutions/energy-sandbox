@@ -1,4 +1,4 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 [![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
 
@@ -13,7 +13,7 @@ A real-time digital twin and agentic AI command center for monitoring offshore B
 Offshore drilling operations depend on the BOP stack as the last line of defense against uncontrolled well events. BOP Guardian brings together real-time telemetry simulation, predictive maintenance, SAP ERP integration, crew management, and multi-agent AI into a single command center:
 
 - **Digital Twin Visualization** — Live P&ID schematic of the BOP stack with traffic-light health indicators, pressure readings, and fill-level bars for all components (annular, pipe rams, blind shear ram, control pods, pumps, accumulator, PLC)
-- **Agentic AI Engine** — Five rule-based sub-agents (Health, Maintenance, Supply Chain, Crew, Drilling) analyze every simulator tick and produce severity-ranked recommendations with automatic crew assignment
+- **Agentic AI Engine** — Five sub-agents (Health, Maintenance, Supply Chain, Crew, Drilling) analyze every simulator tick and produce severity-ranked recommendations with automatic crew assignment. The Guardian Advisor chat is powered by Databricks Foundation Model API (Llama 3.3 70B) with full BOP context injection for natural-language situational awareness
 - **Predictive Maintenance** — Remaining Useful Life (RUL) predictions, failure probability forecasting, and failure pattern matching per component
 - **SAP ERP Integration** — Work order tracking, spare parts inventory with min-stock alerts, and emergency ordering workflows
 - **Crew & Ops Management** — Certification-aware crew assignment, intervention ETA calculation, human-in-the-loop task dispatching
@@ -75,7 +75,7 @@ Offshore drilling operations depend on the BOP stack as the last line of defense
 | **SAP ERP** | Work orders, spare parts inventory, maintenance KPIs |
 | **Crew & Ops** | Crew roster, certification matrix, AI-driven task assignment |
 | **Data & AI Flow** | Interactive architecture diagram with medallion pipeline |
-| **Guardian Advisor** | Natural-language chat interface to the agentic AI engine |
+| **Guardian Advisor** | LLM-powered chat interface (Foundation Model API) with full BOP context |
 
 <img src="images/crew_ops.png" alt="Crew & Ops — AI-driven task assignment" width="100%">
 
@@ -84,16 +84,10 @@ Offshore drilling operations depend on the BOP stack as the last line of defense
 ### Prerequisites
 
 - A Databricks workspace with [Databricks Apps](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) enabled
+- [Foundation Model APIs](https://docs.databricks.com/en/machine-learning/foundation-models/index.html) enabled (pay-per-token, for Guardian Advisor LLM chat)
 - Databricks CLI installed and configured
 
-### Deploy with Databricks Asset Bundles (recommended)
-
-```bash
-databricks bundle deploy -t dev
-databricks bundle run -t dev
-```
-
-### Deploy manually
+### Deploy as a Databricks App
 
 1. Clone this repository into your Databricks workspace:
    ```bash
@@ -108,6 +102,13 @@ databricks bundle run -t dev
    ```
 
 3. Open the app URL printed by the deploy command.
+
+### Run Locally
+
+```bash
+pip install -r app/requirements.txt
+streamlit run app/main.py --server.port=8000
+```
 
 ## Simulated Event Cycle
 
@@ -129,29 +130,14 @@ Please note the code in this project is provided for your exploration only, and 
 
 Any issues discovered through the use of this project should be filed as GitHub Issues on this repository. They will be reviewed on a best-effort basis but no formal SLA or support is guaranteed.
 
+## Third-Party Library Licenses
 
+(c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
 
-## License
-
-**Definitions.**
-
-**Agreement:** The agreement between Databricks, Inc., and you governing the use of the Databricks Services, as that term is defined in the Master Cloud Services Agreement (MCSA) located at www.databricks.com/legal/mcsa.
-
-**Licensed Materials:** The source code, object code, data, and/or other works to which this license applies.
-
-**Scope of Use.** You may not use the Licensed Materials except in connection with your use of the Databricks Services pursuant to the Agreement. Your use of the Licensed Materials must comply at all times with any restrictions applicable to the Databricks Services, generally, and must be used in accordance with any applicable documentation. You may view, use, copy, modify, publish, and/or distribute the Licensed Materials solely for the purposes of using the Licensed Materials within or connecting to the Databricks Services. If you do not agree to these terms, you may not view, use, copy, modify, publish, and/or distribute the Licensed Materials.
-
-**Redistribution.** You may redistribute and sublicense the Licensed Materials so long as all use is in compliance with these terms. In addition:
-
-- You must give any other recipients a copy of this License;
-- You must cause any modified files to carry prominent notices stating that you changed the files;
-- You must retain, in any derivative works that you distribute, all copyright, patent, trademark, and attribution notices, excluding those notices that do not pertain to any part of the derivative works; and
-- If a "NOTICE" text file is provided as part of its distribution, then any derivative works that you distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the derivative works.
-
-You may add your own copyright statement to your modifications and may provide additional license terms and conditions for use, reproduction, or distribution of your modifications, or for any such derivative works as a whole, provided your use, reproduction, and distribution of the Licensed Materials otherwise complies with the conditions stated in this License.
-
-**Termination.** This license terminates automatically upon your breach of these terms or upon the termination of your Agreement. Additionally, Databricks may terminate this license at any time on notice. Upon termination, you must permanently delete the Licensed Materials and all copies thereof.
-
-**DISCLAIMER; LIMITATION OF LIABILITY.**
-
-THE LICENSED MATERIALS ARE PROVIDED "AS-IS" AND WITH ALL FAULTS. DATABRICKS, ON BEHALF OF ITSELF AND ITS LICENSORS, SPECIFICALLY DISCLAIMS ALL WARRANTIES RELATING TO THE LICENSED MATERIALS, EXPRESS AND IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES, CONDITIONS AND OTHER TERMS OF MERCHANTABILITY, SATISFACTORY QUALITY OR FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. DATABRICKS AND ITS LICENSORS TOTAL AGGREGATE LIABILITY RELATING TO OR ARISING OUT OF YOUR USE OF OR DATABRICKS' PROVISIONING OF THE LICENSED MATERIALS SHALL BE LIMITED TO ONE THOUSAND ($1,000) DOLLARS. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE LICENSED MATERIALS OR THE USE OR OTHER DEALINGS IN THE LICENSED MATERIALS.
+| Library | Version | License | Source |
+|---------|---------|---------|--------|
+| streamlit | >=1.35.0 | Apache 2.0 | https://github.com/streamlit/streamlit |
+| pandas | >=2.1.0 | BSD 3-Clause | https://github.com/pandas-dev/pandas |
+| plotly | >=5.20.0 | MIT | https://github.com/plotly/plotly.py |
+| numpy | >=1.26.0 | BSD 3-Clause | https://github.com/numpy/numpy |
+| databricks-sdk | >=0.38.0 | Databricks License | https://github.com/databricks/databricks-sdk-py |

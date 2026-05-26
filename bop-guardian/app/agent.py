@@ -341,6 +341,29 @@ class GuardianAgent:
     # ── Chat query handling ──────────────────────────────────
 
     def handle_query(self, query: str, sim: dict) -> str:
+        """
+        Handle a natural-language query. Tries Foundation Model API first
+        for rich, contextual responses; falls back to rule-based matching.
+        """
+        # Try LLM-powered response via Databricks Foundation Model API
+        try:
+            from app.llm import chat as llm_chat
+            llm_response = llm_chat(
+                query=query,
+                sim=sim,
+                agent_state=self.state,
+                chat_history=self.state.chat_history,
+            )
+            if llm_response:
+                return llm_response
+        except Exception:
+            pass  # Fall through to rule-based
+
+        # Fallback: rule-based keyword matching
+        return self._rule_based_query(query, sim)
+
+    def _rule_based_query(self, query: str, sim: dict) -> str:
+        """Rule-based fallback when Foundation Model API is unavailable."""
         q = query.lower().strip()
         intent = self._match_intent(q)
         comp = self._match_component(q)

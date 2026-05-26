@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: 8.5in 11in;
+    margin: 0;
+  }
+
+  html, body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0e1a;
+    color: #e0e4ef;
+    width: 8.5in;
+    height: 11in;
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page {
+    width: 8.5in;
+    height: 11in;
+    background: linear-gradient(180deg, #0d1220 0%, #0a0e1a 35%, #0f1628 100%);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- TOP BAR ---- */
+  .top-bar {
+    background: linear-gradient(90deg, #ff3621 0%, #ff6a33 100%);
+    height: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ---- HEADER ---- */
+  .header {
+    padding: 10px 44px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .header .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header .logo-icon {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #ff3621, #ff6a33);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; color: white;
+  }
+  .header .brand {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .header .tag {
+    font-size: 9px;
+    color: #ff6a33;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(255,106,51,0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,106,51,0.25);
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    padding: 8px 44px 0;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .hero .eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: #ff6a33;
+    margin-bottom: 4px;
+  }
+  .hero h1 {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 5px;
+  }
+  .hero h1 span {
+    background: linear-gradient(90deg, #ff3621, #ff6a33);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero .subtitle {
+    font-size: 11px;
+    color: #8b92a8;
+    line-height: 1.4;
+    max-width: 480px;
+    margin: 0 auto 8px;
+  }
+
+  /* ---- SCREENSHOT ---- */
+  .screenshot-wrap {
+    padding: 0 100px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .screenshot-frame {
+    background: #151c2e;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5), 0 0 24px rgba(255,54,33,0.06);
+  }
+  .screenshot-frame img {
+    width: 100%;
+    border-radius: 7px;
+    display: block;
+  }
+
+  /* ---- PAIN + STATS INLINE ---- */
+  .pain-stats-row {
+    margin: 0 44px 8px;
+    display: flex;
+    gap: 10px;
+    align-items: stretch;
+    flex-shrink: 0;
+  }
+  .pain-banner {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(255,54,33,0.08) 0%, rgba(255,106,51,0.04) 100%);
+    border: 1px solid rgba(255,54,33,0.15);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .pain-banner .stat {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ff5533;
+    margin-bottom: 2px;
+  }
+  .pain-banner .stat-label {
+    font-size: 9px;
+    color: #8b92a8;
+    line-height: 1.35;
+  }
+  .tech-strip {
+    flex: 1.3;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .tech-item { text-align: center; }
+  .tech-item .tech-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .tech-item .tech-label {
+    font-size: 7.5px;
+    color: #5a6178;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-top: 1px;
+  }
+  .tech-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* ---- VALUE PROPS ---- */
+  .value-section {
+    padding: 0 44px 8px;
+    flex-shrink: 0;
+  }
+  .value-section .section-title {
+    font-size: 8.5px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #ff6a33;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .value-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .value-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .value-card .card-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .value-card-text h3 {
+    font-size: 11px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2px;
+  }
+  .value-card-text p {
+    font-size: 9.5px;
+    color: #7a829a;
+    line-height: 1.4;
+  }
+
+  /* ---- POWERED BY ---- */
+  .powered {
+    margin: 0 44px 8px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .powered .pw-label {
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #5a6178;
+    margin-bottom: 6px;
+  }
+  .powered .pw-items {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .powered .pw-chip {
+    font-size: 8.5px;
+    font-weight: 600;
+    color: #a0a8c0;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+
+  /* ---- CTA ---- */
+  .cta-section {
+    margin: 0 44px;
+    background: linear-gradient(135deg, #1a1230 0%, #1a1035 50%, #1a1230 100%);
+    border: 1px solid rgba(255,106,51,0.2);
+    border-radius: 10px;
+    padding: 12px 24px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .cta-section h2 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 3px;
+  }
+  .cta-section .cta-sub {
+    font-size: 9.5px;
+    color: #8b92a8;
+    margin-bottom: 8px;
+  }
+  .cta-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff3621, #ff6a33);
+    color: #ffffff;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 9px 28px;
+    border-radius: 7px;
+    text-decoration: none;
+    letter-spacing: 0.4px;
+    box-shadow: 0 4px 16px rgba(255,54,33,0.3);
+  }
+  .cta-note {
+    font-size: 8.5px;
+    color: #5a6178;
+    margin-top: 6px;
+  }
+
+  /* ---- FOOTER ---- */
+  .footer {
+    padding: 10px 44px 14px;
+    text-align: center;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+  .footer .footer-divider {
+    width: 30px;
+    height: 2px;
+    background: rgba(255,106,51,0.3);
+    margin: 0 auto 6px;
+  }
+  .footer .footer-brand {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+  }
+  .footer .footer-text {
+    font-size: 8px;
+    color: #3e4560;
+    line-height: 1.4;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top-bar"></div>
+
+  <div class="header">
+    <div class="logo-area">
+      <div class="logo-icon">D</div>
+      <span class="brand">Databricks</span>
+    </div>
+    <span class="tag">Solution Accelerator</span>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow">Upstream Oil &amp; Gas &bull; Offshore Safety</div>
+    <h1>What If Your BOP Stack Could <span>Think for Itself?</span></h1>
+    <p class="subtitle">Meet BOP Guardian — the AI-powered command center that monitors your Blowout Preventer 24/7 with five autonomous agents, so your crew can focus on drilling.</p>
+  </div>
+
+  <div class="screenshot-wrap">
+    <div class="screenshot-frame">
+      <img src="file:///Users/reishin.toolsi/bop-guardian/images/bop_status.png" alt="BOP Guardian Dashboard">
+    </div>
+  </div>
+
+  <div class="pain-stats-row">
+    <div class="pain-banner">
+      <div class="stat">$12.8M</div>
+      <div class="stat-label">Avg. cost of a single unplanned<br>deepwater BOP failure</div>
+    </div>
+    <div class="tech-strip">
+      <div class="tech-item">
+        <div class="tech-val">10</div>
+        <div class="tech-label">Components</div>
+      </div>
+      <div class="tech-divider"></div>
+      <div class="tech-item">
+        <div class="tech-val">5</div>
+        <div class="tech-label">AI Agents</div>
+      </div>
+      <div class="tech-divider"></div>
+      <div class="tech-item">
+        <div class="tech-val">&lt;2s</div>
+        <div class="tech-label">Detection</div>
+      </div>
+      <div class="tech-divider"></div>
+      <div class="tech-item">
+        <div class="tech-val">24/7</div>
+        <div class="tech-label">Autonomous</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="value-section">
+    <div class="section-title">One Screen &bull; Five AI Agents &bull; Zero Blind Spots</div>
+    <div class="value-grid">
+      <div class="value-card">
+        <div class="card-icon">&#x1F6E1;</div>
+        <div class="value-card-text">
+          <h3>Real-Time Digital Twin</h3>
+          <p>Live P&amp;ID schematic with traffic-light health across all 10 BOP components.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="card-icon">&#x1F9E0;</div>
+        <div class="value-card-text">
+          <h3>Predictive AI Agents</h3>
+          <p>Detect pressure leaks, comm failures, and bearing wear <em>before</em> they escalate.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="card-icon">&#x1F477;</div>
+        <div class="value-card-text">
+          <h3>Smart Crew Dispatch</h3>
+          <p>Certification-aware assignment with real-time ETA. The right person, already moving.</p>
+        </div>
+      </div>
+      <div class="value-card">
+        <div class="card-icon">&#x1F4E6;</div>
+        <div class="value-card-text">
+          <h3>SAP ERP Connected</h3>
+          <p>Work orders, spare parts, and emergency ordering in a single operational view.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="powered">
+    <div class="pw-label">Powered by the Databricks Data Intelligence Platform</div>
+    <div class="pw-items">
+      <span class="pw-chip">Lakehouse Architecture</span>
+      <span class="pw-chip">Real-Time Streaming</span>
+      <span class="pw-chip">Agentic AI</span>
+      <span class="pw-chip">Unity Catalog</span>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>See It Running on Your Data</h2>
+    <p class="cta-sub">We'll customize a live demo for your rig operations — no commitment required.</p>
+    <a href="https://www.databricks.com/company/contact" class="cta-btn">Contact Your Sales Representative</a>
+    <p class="cta-note">Or reply directly to this email — your Databricks team is ready to help.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-divider"></div>
+    <div class="footer-brand">DATABRICKS</div>
+    <div class="footer-text">BOP Guardian is a Databricks Solution Accelerator for upstream oil &amp; gas. &copy; 2026 Databricks, Inc.</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -9,6 +9,7 @@ Includes live agentic AI monitoring and chat interface.
 from __future__ import annotations
 
 import html as _html
+import os
 import re
 import time
 from datetime import datetime, timezone
@@ -30,6 +31,29 @@ from app.mock_data import (
     INTERVENTION_ETA,
 )
 from app.agent import GuardianAgent, SEV_LABEL
+from app.genie_panel import ask_genie
+
+
+def _genie_space_url() -> str:
+    space_id = os.getenv("GENIE_SPACE_ID", "")
+    host = os.getenv("DATABRICKS_HOST", "fevm-oil-pump-monitor.cloud.databricks.com").rstrip("/")
+    if host and not host.startswith("http"):
+        host = "https://" + host
+    return f"{host}/genie/rooms/{space_id}" if space_id else "#"
+
+
+def _ask_via_genie(query: str, state: dict, agent: GuardianAgent) -> str:
+    """Route the question to Databricks Genie first (NL→SQL over UC). Fall back
+    to the local Guardian agent if Genie can't answer or hits an error."""
+    conv_id = st.session_state.get("guardian_genie_conv")
+    shaped = ask_genie(question=query, conversation_id=conv_id)
+    if shaped.get("error"):
+        return agent.handle_query(query, state)
+    st.session_state.guardian_genie_conv = shaped.get("conversation_id")
+    text = (shaped.get("text") or "").strip()
+    if not text or "Genie didn't" in text or "no usable answer" in text.lower():
+        return agent.handle_query(query, state)
+    return text
 
 # ── Color palette (ESP PM) ──────────────────────────────────────────────────
 BG = "#0B0F1A"; PANEL = "#0f172a"; CARD = "#1C2333"; BORDER = "#1e293b"
@@ -1378,7 +1402,7 @@ _FLOW_SVG = r"""<!DOCTYPE html>
 <html><head><meta charset="UTF-8"><style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#0f172a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
-  padding:6px 4px;margin:0 auto}
+  padding:6px 4px;margin:0 auto;max-width:950px}
 html{background:#0f172a}
 @keyframes fd{from{stroke-dashoffset:18}to{stroke-dashoffset:0}}
 .fd{animation:fd 1.6s linear infinite}
@@ -1508,7 +1532,7 @@ def render_dataflow():
     sc3.markdown(_kpi("ML Inference", "4.8 s", "p95 latency", PURPLE), unsafe_allow_html=True)
     sc4.markdown(_kpi("Agent Layer", "5 agents", "Agentic AI", TEAL), unsafe_allow_html=True)
 
-    _components.html(_FLOW_SVG, height=500, scrolling=False)
+    _components.html(_FLOW_SVG, height=500, scrolling=True)
 
     # How It Works cards
     st.markdown(_section("How It Works"), unsafe_allow_html=True)
@@ -1688,11 +1712,12 @@ def render_advisor(state: dict, agent: GuardianAgent):
     # Process quick action before rendering chat
     if quick:
         agent.state.chat_history.append({"role": "user", "content": quick})
-        resp = agent.handle_query(quick, state)
+        resp = _ask_via_genie(quick, state, agent)
         agent.state.chat_history.append({"role": "assistant", "content": resp})
 
     with right:
         # ── CHAT HEADER ──
+        _genie_url = _genie_space_url()
         st.markdown(
             f"<div style='background:{PANEL};border:1px solid {BORDER};"
             f"border-radius:10px 10px 0 0;padding:11px 16px;"
@@ -1702,9 +1727,14 @@ def render_advisor(state: dict, agent: GuardianAgent):
             f"font-size:24px'>&#x1f916;</div>"
             f"<div>"
             f"<div style='font-weight:700;font-size:21px;color:{TEXT}'>Guardian AI</div>"
-            f"<div style='font-size:15px;color:{CYAN}'>{RIG_NAME} &middot; 5 agents active</div>"
+            f"<div style='font-size:15px;color:{CYAN}'>"
+            f"{RIG_NAME} &middot; <span style='color:#94a3b8'>Powered by</span> "
+            f"<a href='{_genie_url}' target='_blank' rel='noopener' "
+            f"style='color:#67e8f9;text-decoration:none;font-weight:600;'>"
+            f"&#x2728; Databricks Genie &#8599;</a>"
             f"</div>"
-            f"<div style='margin-left:auto'>{_badge('LIVE', GREEN)}</div>"
+            f"</div>"
+            f"<div style='margin-left:auto'>{_badge('GENIE', CYAN)}{_badge('UC', PURPLE)}{_badge('LIVE', GREEN)}</div>"
             f"</div>", unsafe_allow_html=True)
 
         # ── CHAT MESSAGES (fixed-height scrollable) ──
@@ -1720,9 +1750,12 @@ def render_advisor(state: dict, agent: GuardianAgent):
                     f"<div style='font-size:14px;color:{CYAN};margin-bottom:5px;font-weight:700'>"
                     f"GUARDIAN AI</div>"
                     f"<div style='font-size:20px;line-height:1.7;color:{TEXT}'>"
-                    f"Hello! I'm your BOP Guardian AI &mdash; monitoring all 10 BOP stack "
-                    f"components, crew readiness, spare parts, and maintenance schedules "
-                    f"in real-time. Ask me anything about the current rig status.</div>"
+                    f"Hello! I'm your BOP Guardian AI, powered by "
+                    f"<b style='color:#67e8f9'>Databricks Genie</b> for governed NL-to-SQL "
+                    f"over Unity Catalog &mdash; monitoring all 10 BOP stack components, crew "
+                    f"readiness, spare parts, and maintenance schedules in real-time. Ask me "
+                    f"anything about the current rig status, and Genie will translate it to "
+                    f"SQL against the live data plane.</div>"
                     f"</div></div>", unsafe_allow_html=True)
 
             for msg in agent.state.chat_history:
@@ -1749,9 +1782,10 @@ def render_advisor(state: dict, agent: GuardianAgent):
                         f"</div></div>", unsafe_allow_html=True)
 
         # ── CHAT INPUT ──
-        if prompt := st.chat_input("Ask about BOP systems, crew, parts, RUL...", key="advisor_chat"):
+        if prompt := st.chat_input("Ask Genie about BOP systems, crew, parts, RUL...", key="advisor_chat"):
             agent.state.chat_history.append({"role": "user", "content": prompt})
-            resp = agent.handle_query(prompt, state)
+            with st.spinner("Genie is reasoning over the BOP data plane…"):
+                resp = _ask_via_genie(prompt, state, agent)
             agent.state.chat_history.append({"role": "assistant", "content": resp})
             st.rerun()
 
@@ -1855,8 +1889,8 @@ def render_app():
         ("\U0001f6a8  Events & Anomalies", "Events"),
         ("\U0001f527  SAP ERP", "SAP ERP"),
         ("\U0001f477  Crew & Ops", "Crew & Ops"),
-        ("\U0001f5fa\ufe0f  Data & AI Flow", "Data Flow"),
         ("\U0001f916  Guardian Advisor", "Advisor"),
+        ("\U0001f5fa\ufe0f  Data & AI Flow", "Data Flow"),
     ]
     with st.sidebar:
         st.markdown(

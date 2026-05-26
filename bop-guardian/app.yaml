@@ -16,6 +16,17 @@ env:
     valueFrom: bop-guardian-lakebase
   - name: PGDATABASE_OVERRIDE
     value: "bop_guardian_app"
+  # ── Ask Genie ──
+  - name: GENIE_SPACE_ID
+    value: "01f1558c15131d4b95c1c7585f3a98e9"
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "bop_guardian"
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "87e069097741b56c"
 
 resources:
   - name: bop-guardian-lakebase
