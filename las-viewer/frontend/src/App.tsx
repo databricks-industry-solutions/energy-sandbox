@@ -11,7 +11,7 @@ const TABS = [
   { id: 'viewer',   label: '📊 Log Viewer' },
   { id: 'qc',       label: '🔍 QC & Corrections' },
   { id: 'recipes',  label: '⚙️ Recipes' },
-  { id: 'advisor',  label: '🤖 Petrophysics AI' },
+  { id: 'advisor',  label: '✨ Petrophysics AI · Genie' },
   { id: 'dataflow', label: '🔀 Data & AI Flow' },
 ]
 

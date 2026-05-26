@@ -46,15 +46,55 @@ export default function AdvisorTab({ wellId, onWellChange }: Props) {
   const send = async (text: string) => {
     if (!text.trim() || loading) return
     const userMsg: Msg = { role: 'user', content: text.trim(), ts: Date.now() }
-    const history = msgs.map(m => ({ role: m.role, content: m.content }))
     setMsgs(p => [...p, userMsg]); setInput(''); setLoading(true)
     try {
-      const res = await fetch('/api/advisor/chat', {
+      // Try Genie first (NL-to-SQL over UC); fall back to Claude advisor on error.
+      const conv = (window as any).__lasGenieConv || null
+      const gResp = await fetch('/api/genie/ask_stream', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: text.trim(), well_id: wellId, history }),
+        body: JSON.stringify({ question: text.trim(), conversation_id: conv }),
       })
-      const d = await res.json()
-      setMsgs(p => [...p, { role: 'assistant', content: d.answer || 'No response.', status: d.status, ts: Date.now() }])
+      let genieAnswer: any = null
+      if (gResp.body) {
+        const reader = gResp.body.getReader()
+        const decoder = new TextDecoder()
+        let buf = ''
+        while (true) {
+          const { value, done } = await reader.read()
+          if (done) break
+          buf += decoder.decode(value, { stream: true })
+          const events = buf.split('\n\n')
+          buf = events.pop() || ''
+          for (const ev of events) {
+            const eL = ev.split('\n').find(l => l.startsWith('event: '))?.slice(7)
+            const dL = ev.split('\n').find(l => l.startsWith('data: '))?.slice(6)
+            if (eL === 'answer' && dL) genieAnswer = JSON.parse(dL)
+          }
+        }
+      }
+
+      if (genieAnswer && !genieAnswer.error && genieAnswer.text && genieAnswer.text !== '(Genie returned no text)') {
+        (window as any).__lasGenieConv = genieAnswer.conversation_id || conv
+        let content = genieAnswer.text
+        if (genieAnswer.rows && genieAnswer.columns && genieAnswer.rows.length > 0) {
+          const cols = genieAnswer.columns as string[]
+          const rows = (genieAnswer.rows as any[][]).slice(0, 20)
+          const md = ['', '| ' + cols.join(' | ') + ' |', '|' + cols.map(() => '---').join('|') + '|',
+            ...rows.map(r => '| ' + r.map((v: any) => v == null ? '' : String(v).slice(0, 60)).join(' | ') + ' |')]
+          if (genieAnswer.rows.length > 20) md.push(`_… ${genieAnswer.rows.length - 20} more rows_`)
+          content += '\n\n' + md.join('\n')
+        }
+        setMsgs(p => [...p, { role: 'assistant', content, status: 'genie', ts: Date.now() }])
+      } else {
+        // Fall back to the Claude advisor when Genie can't answer.
+        const history = msgs.map(m => ({ role: m.role, content: m.content }))
+        const res = await fetch('/api/advisor/chat', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ question: text.trim(), well_id: wellId, history }),
+        })
+        const d = await res.json()
+        setMsgs(p => [...p, { role: 'assistant', content: d.answer || 'No response.', status: d.status || 'fallback', ts: Date.now() }])
+      }
       fetch(`/api/advisor/quick/${wellId}`).then(r => r.json()).then(setQs).catch(() => {})
     } catch {
       setMsgs(p => [...p, { role: 'assistant', content: 'Connection error — please retry.', status: 'error', ts: Date.now() }])
@@ -143,10 +183,15 @@ export default function AdvisorTab({ wellId, onWellChange }: Props) {
       {/* Chat panel */}
       <div className="card" style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <div style={{ padding: '11px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 30, height: 30, background: 'var(--blue-dim)', border: '1px solid var(--blue)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15 }}>🤖</div>
+          <div style={{ width: 30, height: 30, background: 'var(--blue-dim)', border: '1px solid var(--blue)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15 }}>✨</div>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text-primary)' }}>Petrophysics AI</div>
-            <div style={{ fontSize: 10, color: 'var(--blue)' }}>Databricks Claude · {wellId}</div>
+            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text-primary)' }}>
+              Petrophysics AI &nbsp;<span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>Powered by</span>{' '}
+              <a href="https://fevm-oil-pump-monitor.cloud.databricks.com/genie/rooms/01f1595064ca198a8cebb0b3982589d2" target="_blank" rel="noopener" style={{ color: '#67e8f9', textDecoration: 'none', fontWeight: 600 }}>
+                ✨ Databricks Genie ↗
+              </a>
+            </div>
+            <div style={{ fontSize: 10, color: 'var(--blue)' }}>NL-to-SQL over UC tables · {wellId}</div>
           </div>
           <div style={{ marginLeft: 'auto' }}>
             <span className="badge badge-gold">⭐ las_gold context</span>
@@ -166,7 +211,7 @@ export default function AdvisorTab({ wellId, onWellChange }: Props) {
               }}>
                 {m.role === 'assistant' && (
                   <div style={{ fontSize: 9, color: 'var(--text-muted)', marginBottom: 5, fontWeight: 700 }}>
-                    PETROPHYSICS AI {m.status === 'fallback' ? '· DEMO MODE' : '· DATABRICKS CLAUDE'}
+                    PETROPHYSICS AI {m.status === 'genie' ? '· DATABRICKS GENIE · NL→SQL' : m.status === 'fallback' ? '· CLAUDE FALLBACK' : '· DATABRICKS CLAUDE'}
                   </div>
                 )}
                 <div style={{ fontSize: 12, lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>{m.content}</div>
