@@ -16,18 +16,18 @@ def _dt(delta_days: int) -> str:
 
 # SAP Equipment Master data (EQUI table)
 _EQUIPMENT: Dict[str, Dict[str, Any]] = {
-    "ESP-001": {"EQUNR": "10001234", "EQKTX": "Electric Submersible Pump - Meridian-1A",     "INGRP": "I01", "HERST": "Baker Hughes REDA",    "SERGE": "BH-REDA-D950N-001", "BAUJJ": "2023", "ANLNR": "100023401"},
-    "ESP-002": {"EQUNR": "10001235", "EQKTX": "Electric Submersible Pump - Meridian-2B",     "INGRP": "I01", "HERST": "Baker Hughes REDA",    "SERGE": "BH-REDA-D950N-002", "BAUJJ": "2023", "ANLNR": "100023402"},
-    "ESP-003": {"EQUNR": "10001236", "EQKTX": "Electric Submersible Pump - Crawford-1",      "INGRP": "I02", "HERST": "Schlumberger",          "SERGE": "SLB-GN4000-003",    "BAUJJ": "2022", "ANLNR": "100023403"},
-    "ESP-004": {"EQUNR": "10001237", "EQKTX": "Electric Submersible Pump - Crawford-3A",     "INGRP": "I02", "HERST": "Schlumberger",          "SERGE": "SLB-GN4000-004",    "BAUJJ": "2025", "ANLNR": "100023404"},
-    "ESP-005": {"EQUNR": "10001238", "EQKTX": "Electric Submersible Pump - Oakhurst-7",      "INGRP": "I03", "HERST": "Borets",                "SERGE": "BOR-D600-005",      "BAUJJ": "2022", "ANLNR": "100023405"},
-    "ESP-006": {"EQUNR": "10001239", "EQKTX": "Electric Submersible Pump - Oakhurst-12",     "INGRP": "I03", "HERST": "Borets",                "SERGE": "BOR-D600-006",      "BAUJJ": "2024", "ANLNR": "100023406"},
-    "ESP-007": {"EQUNR": "10001240", "EQKTX": "Electric Submersible Pump - Redstone-4",      "INGRP": "I04", "HERST": "Baker Hughes REDA",    "SERGE": "BH-REDA-DN1750-007","BAUJJ": "2023", "ANLNR": "100023407"},
-    "ESP-008": {"EQUNR": "10001241", "EQKTX": "Electric Submersible Pump - Redstone-9A",     "INGRP": "I04", "HERST": "Baker Hughes REDA",    "SERGE": "BH-REDA-DN1750-008","BAUJJ": "2023", "ANLNR": "100023408"},
-    "ESP-009": {"EQUNR": "10001242", "EQKTX": "Electric Submersible Pump - Sunrise-2",       "INGRP": "I05", "HERST": "Schlumberger",          "SERGE": "SLB-FLEX31-009",    "BAUJJ": "2021", "ANLNR": "100023409"},
-    "ESP-010": {"EQUNR": "10001243", "EQKTX": "Electric Submersible Pump - Sunrise-5B",      "INGRP": "I05", "HERST": "Schlumberger",          "SERGE": "SLB-FLEX31-010",    "BAUJJ": "2024", "ANLNR": "100023410"},
-    "ESP-011": {"EQUNR": "10001244", "EQKTX": "Electric Submersible Pump - Prairie-1",       "INGRP": "I01", "HERST": "Centrilift (Baker Hughes)","SERGE":"CL-GN3600-011",    "BAUJJ": "2025", "ANLNR": "100023411"},
-    "ESP-012": {"EQUNR": "10001245", "EQKTX": "Electric Submersible Pump - Prairie-3",       "INGRP": "I01", "HERST": "Centrilift (Baker Hughes)","SERGE":"CL-GN3600-012",    "BAUJJ": "2025", "ANLNR": "100023412"},
+    "ESP-001": {"EQUNR": "10001234", "EQKTX": "Electric Submersible Pump - Meridian-1A",     "INGRP": "I01", "HERST": "OEM-A",    "SERGE": "OEMA-M1-001", "BAUJJ": "2023", "ANLNR": "100023401"},
+    "ESP-002": {"EQUNR": "10001235", "EQKTX": "Electric Submersible Pump - Meridian-2B",     "INGRP": "I01", "HERST": "OEM-A",    "SERGE": "OEMA-M1-002", "BAUJJ": "2023", "ANLNR": "100023402"},
+    "ESP-003": {"EQUNR": "10001236", "EQKTX": "Electric Submersible Pump - Crawford-1",      "INGRP": "I02", "HERST": "OEM-B",          "SERGE": "OEMB-M1-003",    "BAUJJ": "2022", "ANLNR": "100023403"},
+    "ESP-004": {"EQUNR": "10001237", "EQKTX": "Electric Submersible Pump - Crawford-3A",     "INGRP": "I02", "HERST": "OEM-B",          "SERGE": "OEMB-M1-004",    "BAUJJ": "2025", "ANLNR": "100023404"},
+    "ESP-005": {"EQUNR": "10001238", "EQKTX": "Electric Submersible Pump - Oakhurst-7",      "INGRP": "I03", "HERST": "OEM-C",                "SERGE": "OEMC-M1-005",      "BAUJJ": "2022", "ANLNR": "100023405"},
+    "ESP-006": {"EQUNR": "10001239", "EQKTX": "Electric Submersible Pump - Oakhurst-12",     "INGRP": "I03", "HERST": "OEM-C",                "SERGE": "OEMC-M1-006",      "BAUJJ": "2024", "ANLNR": "100023406"},
+    "ESP-007": {"EQUNR": "10001240", "EQKTX": "Electric Submersible Pump - Redstone-4",      "INGRP": "I04", "HERST": "OEM-A",    "SERGE": "OEMA-M2-007","BAUJJ": "2023", "ANLNR": "100023407"},
+    "ESP-008": {"EQUNR": "10001241", "EQKTX": "Electric Submersible Pump - Redstone-9A",     "INGRP": "I04", "HERST": "OEM-A",    "SERGE": "OEMA-M2-008","BAUJJ": "2023", "ANLNR": "100023408"},
+    "ESP-009": {"EQUNR": "10001242", "EQKTX": "Electric Submersible Pump - Sunrise-2",       "INGRP": "I05", "HERST": "OEM-B",          "SERGE": "OEMB-M2-009",    "BAUJJ": "2021", "ANLNR": "100023409"},
+    "ESP-010": {"EQUNR": "10001243", "EQKTX": "Electric Submersible Pump - Sunrise-5B",      "INGRP": "I05", "HERST": "OEM-B",          "SERGE": "OEMB-M2-010",    "BAUJJ": "2024", "ANLNR": "100023410"},
+    "ESP-011": {"EQUNR": "10001244", "EQKTX": "Electric Submersible Pump - Prairie-1",       "INGRP": "I01", "HERST": "OEM-A","SERGE":"OEMA-M3-011",    "BAUJJ": "2025", "ANLNR": "100023411"},
+    "ESP-012": {"EQUNR": "10001245", "EQKTX": "Electric Submersible Pump - Prairie-3",       "INGRP": "I01", "HERST": "OEM-A","SERGE":"OEMA-M3-012",    "BAUJJ": "2025", "ANLNR": "100023412"},
 }
 
 # Open Notifications (QMEL) — only wells with active issues

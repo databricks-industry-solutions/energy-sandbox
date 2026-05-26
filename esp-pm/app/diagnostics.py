@@ -1,7 +1,7 @@
 """
 ESP Diagnostic Rules Engine.
 Based on industry best practices: API RP 11S series, SPE papers,
-Baker Hughes REDA and Schlumberger OEM guidelines.
+OEM-A and OEM-B guidelines (industry-standard ESP failure-mode references).
 """
 from __future__ import annotations
 from typing import List, Dict, Any
@@ -23,7 +23,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
     flow  = params.get("flow_rate_bpd", 1200)
 
     # Rule 1: MOTOR_OVERLOAD
-    # Ref: Baker Hughes REDA Application Engineering Guide — motor loading section
+    # Ref: OEM Application Engineering Guide — motor loading section
     if cur > 112:
         results.append({
             "fault_code":               "MOTOR_OVERLOAD",
@@ -37,7 +37,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "Throttle production choke. Verify downhole conditions have not changed."
             ),
             "estimated_hours_to_failure": max(2, round((120 - cur) * 0.5)),
-            "reference":               "API RP 11S3; Baker Hughes REDA Motor Sizing Guide",
+            "reference":               "API RP 11S3; OEM Motor Sizing Guide",
         })
 
     # Rule 2: GAS_INTERFERENCE
@@ -60,7 +60,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
         })
 
     # Rule 3: BEARING_WEAR
-    # Ref: Schlumberger Oilfield Review — ESP Failure Mode Analysis
+    # Ref: Industry ESP Failure Mode Review — ESP Failure Mode Analysis
     if vib > 3.5 and temp > 183:
         results.append({
             "fault_code":               "BEARING_WEAR",
@@ -76,7 +76,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "Review run-life data and consider full pump inspection."
             ),
             "estimated_hours_to_failure": max(12, round(72 - (vib - 3.5) * 20)),
-            "reference":               "SPE-171374; Schlumberger ESP Diagnostics Manual §4.3",
+            "reference":               "SPE-171374; OEM ESP Diagnostics Manual §4.3",
         })
 
     # Rule 4: CRITICAL_TEMP
@@ -117,7 +117,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "vs. workover (stage replacement) economics."
             ),
             "estimated_hours_to_failure": max(168, round((eff - 20) * 8)),
-            "reference":               "SPE-93987; Baker Hughes REDA Pump Wear Diagnostics §7",
+            "reference":               "SPE-93987; OEM Pump Wear Diagnostics §7",
         })
 
     # Rule 6: SCALE_BUILDUP
@@ -138,11 +138,11 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "Review produced water chemistry for scaling tendency (Stiff-Davis index)."
             ),
             "estimated_hours_to_failure": max(48, round((3800 - dp) * 0.1)),
-            "reference":               "SPE-164075; Schlumberger Scale Removal Guidelines §3.2",
+            "reference":               "SPE-164075; OEM Scale Removal Guidelines §3.2",
         })
 
     # Rule 7: UNDERLOAD
-    # Ref: Baker Hughes REDA Application Guide — Minimum Rate Operation
+    # Ref: OEM Application Guide — Minimum Rate Operation
     if cur < 40 and flow < 400:
         results.append({
             "fault_code":               "UNDERLOAD",
@@ -158,7 +158,7 @@ def diagnose(params: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "skin damage. Consider stimulation or frequency adjustment."
             ),
             "estimated_hours_to_failure": 96,
-            "reference":               "Baker Hughes REDA Application Guide §5.4; API RP 11S2",
+            "reference":               "OEM Application Guide §5.4; API RP 11S2",
         })
 
     # Rule 8: NORMAL (no issues)
