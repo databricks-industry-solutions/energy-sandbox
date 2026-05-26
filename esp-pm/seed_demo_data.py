@@ -8,8 +8,8 @@ import sys
 import time
 from datetime import datetime, timedelta, timezone
 
-PROFILE = "YOUR-PROFILE"
-WAREHOUSE_ID = "<your-warehouse-id>"
+PROFILE = "fevm-oil-pump-monitor"
+WAREHOUSE_ID = "87e069097741b56c"
 CATALOG = "oil_pump_monitor_catalog"
 
 def execute_sql(statement, label="SQL"):

@@ -16,8 +16,28 @@ env:
     value: "7"
   - name: CLAUDE_MODEL
     value: "databricks-claude-sonnet-4-5"
+  # ── Supervisor + Genie (multi-agent decision flow) ──────────────────────
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  - name: GENIE_SPACE_ID
+    value: "01f1557d4c8215079d3ec0a8ef02c33b"
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "esp_pm"
+  - name: ESP_FAILURE_MODEL
+    value: "oil_pump_monitor_catalog.gold.esp_failure_72h_model"
+  - name: ESP_FAILURE_MODEL_ALIAS
+    value: "production"
+  - name: ESP_FAILURE_ENDPOINT
+    value: "esp-failure-72h"
+  - name: ESP_VS_ENDPOINT
+    value: "esp-failures-vs"
+  - name: ESP_VS_INDEX
+    value: "oil_pump_monitor_catalog.esp_pm.failure_narratives_vs"
+  # ── Existing config ─────────────────────────────────────────────────────
   - name: DATABRICKS_WAREHOUSE_ID
-    value: "<your-warehouse-id>"
+    value: "87e069097741b56c"
   - name: PGUSER
     valueFrom: esp-pm-lakebase
   - name: PGPORT

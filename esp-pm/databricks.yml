@@ -1,19 +1,30 @@
 bundle:
   name: esp-pm
 
+variables:
+  lakebase_instance:
+    description: "Lakebase PostgreSQL instance name"
+    default: esp-pm-db
+  lakebase_database:
+    description: "Lakebase database name"
+    default: esp_pm_app
+  claude_model:
+    description: "Foundation Model API endpoint name"
+    default: databricks-claude-sonnet-4-5
+
 resources:
   apps:
     esp-pm:
       name: esp-pm
-      description: ESP Performance Monitor
+      description: "ESP Predictive Maintenance — Permian Basin ESP Monitoring"
       source_code_path: .
 
       resources:
         - name: esp-pm-lakebase
           description: "Lakebase PostgreSQL for ESP PM alerts and work orders"
           database:
-            instance_name: esp-pm-db
-            database_name: esp_pm_app
+            instance_name: ${var.lakebase_instance}
+            database_name: ${var.lakebase_database}
             permission: CAN_CONNECT_AND_CREATE
 
       env:
@@ -24,32 +35,24 @@ resources:
         - name: DEFAULT_WINDOW_DAYS
           value: "7"
         - name: CLAUDE_MODEL
-          value: "databricks-claude-sonnet-4-5"
-        - name: DATABRICKS_WAREHOUSE_ID
-          value: "<your-warehouse-id>"
+          value: ${var.claude_model}
         - name: PGUSER
           value_from: esp-pm-lakebase
         - name: PGPORT
           value_from: esp-pm-lakebase
         - name: PGDATABASE_OVERRIDE
-          value: "esp_pm_app"
+          value: ${var.lakebase_database}
 
 targets:
   dev:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west
