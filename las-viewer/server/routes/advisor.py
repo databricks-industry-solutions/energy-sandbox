@@ -21,7 +21,7 @@ If a correction or processing step is warranted, explain the petrophysical reaso
 
 class ChatReq(BaseModel):
     question: str
-    well_id: str = "BAKER-001"
+    well_id: str = "WELL-001-A"
     history: list = []
 
 
@@ -188,7 +188,7 @@ def _fallback(question: str, well_id: str) -> str:
                 "Spikes are corrected by linear interpolation between surrounding valid samples. "
                 "GR spikes > 250 API and density spikes > 0.2 g/cc discontinuity are auto-flagged as CRITICAL.")
     if "sonic" in q or "dt" in q or "acoustic" in q:
-        return ("For CONOCO-7H where DT is missing, the High Fidelity Reservoir recipe includes a synthetic "
+        return ("For WELL-003-7H where DT is missing, the High Fidelity Reservoir recipe includes a synthetic "
                 "sonic module. An XGBoost model is trained on offset wells to predict DT from "
                 "GR_c, RHOB_c, NPHI_c, and RT_c. Typical RMSE ~4.5 μs/ft on validation wells.")
     return (f"I'm analysing well {well_id}. To get detailed petrophysical insights, "

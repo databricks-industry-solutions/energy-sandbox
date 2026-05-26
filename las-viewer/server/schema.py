@@ -146,22 +146,22 @@ _ZONES = [
 
 _WELLS = [
     # well_id, well_name, field, basin, county, state, api, lat, lon, kb_ft, td_ft, spud, type, status, quality, notes
-    ("BAKER-001", "Baker 1-A", "Blanco", "San Juan", "Rio Arriba", "NM",
+    ("WELL-001-A", "Well 1-A", "Blanco", "San Juan", "Rio Arriba", "NM",
      "30-039-00001", 36.72, -107.58, 5842, 10000, "2022-03-15", "vertical",   "gold",      88,
      "Showcase well: full petrophysical processing and derived curves"),
-    ("BAKER-002", "Baker 2-B", "Blanco", "San Juan", "Rio Arriba", "NM",
+    ("WELL-002-B", "Well 2-B", "Blanco", "San Juan", "Rio Arriba", "NM",
      "30-039-00002", 36.69, -107.54, 5860, 10000, "2022-06-20", "vertical",   "corrected", 72,
      "Corrections applied; washout zones in Brushy Basin shale affect RHOB/NPHI"),
-    ("CONOCO-7H", "Conoco 7-H", "Wamsutter", "Green River", "Sweetwater", "WY",
+    ("WELL-003-7H", "Well 3-7H", "Wamsutter", "Green River", "Sweetwater", "WY",
      "49-037-00701", 41.68,  -107.92, 6105,  9800, "2023-01-10", "horizontal","qc_complete",61,
      "No DT curve available — synthetic sonic needed for geomechanics bundle"),
-    ("MARATHON-15X", "Marathon 15-X", "Midland", "Permian Basin", "Midland", "TX",
+    ("WELL-004-15X", "Well 4-15X", "Midland", "Permian Basin", "Midland", "TX",
      "42-329-15000", 31.95,  -102.11, 2740, 10000, "2023-09-05", "vertical",   "raw",       0,
      "Freshly ingested — QC not yet run"),
-    ("SHELL-3D", "Shell 3-D", "East Texas", "East Texas", "Nacogdoches", "TX",
+    ("WELL-005-3D", "Well 5-3D", "East Texas", "East Texas", "Nacogdoches", "TX",
      "42-347-03000", 31.53,  -94.58,  180,  10000, "2021-11-30", "deviated",  "gold",      95,
      "Best-in-class QC; all correction modules applied; full derived curve bundle"),
-    ("PIONEER-22S", "Pioneer 22-S", "Edwards", "Permian Basin", "Irion", "TX",
+    ("WELL-006-22S", "Well 6-22S", "Edwards", "Permian Basin", "Irion", "TX",
      "42-235-22000", 31.22,  -100.93, 2560,  9800, "2022-08-14", "vertical",  "corrected", 78,
      "Carbonate well; Edwards Lime karst porosity; tight matrix corrections applied"),
 ]
@@ -476,19 +476,19 @@ async def seed_data(conn):
 
     well_configs = [
         # well_id, seed, has_dt, add_spikes
-        ("BAKER-001",   42,  True,  True),
-        ("BAKER-002",   77,  True,  True),
-        ("CONOCO-7H",   13,  False, True),
-        ("MARATHON-15X",99,  True,  True),
-        ("SHELL-3D",    55,  True,  False),
-        ("PIONEER-22S", 31,  True,  True),
+        ("WELL-001-A",   42,  True,  True),
+        ("WELL-002-B",   77,  True,  True),
+        ("WELL-003-7H",   13,  False, True),
+        ("WELL-004-15X",99,  True,  True),
+        ("WELL-005-3D",    55,  True,  False),
+        ("WELL-006-22S", 31,  True,  True),
     ]
 
     for wdata in _WELLS:
         (wid, wname, field, basin, county, state, api, lat, lon, kb, td, spud,
          wtype, status, qscore, notes) = wdata
         spud_date = datetime.date.fromisoformat(spud) if spud else None
-        curve_count = 9 if not wid.startswith("CONOCO") else 8
+        curve_count = 8 if wid == "WELL-003-7H" else 9
         await conn.execute(INSERT_WELL,
             wid, wname, field, basin, county, state, api, lat, lon, kb, td,
             spud_date, wtype, status, qscore, curve_count, notes
@@ -516,17 +516,17 @@ async def seed_data(conn):
 
     # ── Seed some anomaly records ────────────────────────────────────────────
     anomalies = [
-        ("BAKER-002",   "rhob_raw", 7520.0, 7540.0, "washout",     "warning",  None,
+        ("WELL-002-B",   "rhob_raw", 7520.0, 7540.0, "washout",     "warning",  None,
          "Caliper > 12in suggests borehole washout; density unreliable"),
-        ("BAKER-002",   "nphi_raw", 7520.0, 7540.0, "washout",     "warning",  None,
+        ("WELL-002-B",   "nphi_raw", 7520.0, 7540.0, "washout",     "warning",  None,
          "Washout-induced apparent porosity increase"),
-        ("CONOCO-7H",   "dt_raw",   5000.0, 10000.0,"curve_missing","critical", None,
+        ("WELL-003-7H",   "dt_raw",   5000.0, 10000.0,"curve_missing","critical", None,
          "No DT acquisition — synthetic sonic required for geomechanics"),
-        ("MARATHON-15X","gr_raw",   8100.0, 8104.0,  "spike",       "warning",  421.5,
+        ("WELL-004-15X","gr_raw",   8100.0, 8104.0,  "spike",       "warning",  421.5,
          "GR spike 421 API at 8100 ft — likely tool noise during connection"),
-        ("MARATHON-15X","rt_raw",   6804.0, 6812.0,  "spike",       "warning",  0.003,
+        ("WELL-004-15X","rt_raw",   6804.0, 6812.0,  "spike",       "warning",  0.003,
          "Resistivity dropout to 0.003 Ω·m — probable mud invasion artifact"),
-        ("PIONEER-22S", "rhob_raw", 6850.0, 6920.0,  "karst",       "warning",  None,
+        ("WELL-006-22S", "rhob_raw", 6850.0, 6920.0,  "karst",       "warning",  None,
          "Karst-related density anomaly in Todilto carbonate"),
     ]
     for a in anomalies:
@@ -537,19 +537,19 @@ async def seed_data(conn):
 
     # ── Seed a couple of processing run history records ──────────────────────
     runs = [
-        ("RUN-001", "BAKER-001",   "STD-PETRO-V1",  "complete",
+        ("RUN-001", "WELL-001-A",   "STD-PETRO-V1",  "complete",
          datetime.datetime(2024, 3, 10, 8, 0),
          datetime.datetime(2024, 3, 10, 8, 4),
          {"samples": 2501, "spikes_corrected": 5, "gaps_filled": 8, "phi_mean": 0.12, "sw_mean": 0.42}),
-        ("RUN-002", "SHELL-3D",    "HIFI-RSVR-V1",  "complete",
+        ("RUN-002", "WELL-005-3D",    "HIFI-RSVR-V1",  "complete",
          datetime.datetime(2024, 5, 18, 14, 0),
          datetime.datetime(2024, 5, 18, 14, 9),
          {"samples": 2501, "spikes_corrected": 0, "gaps_filled": 2, "phi_mean": 0.14, "sw_mean": 0.38}),
-        ("RUN-003", "BAKER-002",   "STD-PETRO-V1",  "complete",
+        ("RUN-003", "WELL-002-B",   "STD-PETRO-V1",  "complete",
          datetime.datetime(2024, 4, 2, 9, 30),
          datetime.datetime(2024, 4, 2, 9, 33),
          {"samples": 2501, "spikes_corrected": 12, "gaps_filled": 15, "phi_mean": 0.10, "sw_mean": 0.51}),
-        ("RUN-004", "MARATHON-15X","STD-PETRO-V1",  "pending",
+        ("RUN-004", "WELL-004-15X","STD-PETRO-V1",  "pending",
          None, None, {}),
     ]
     for (rid, wid, recipe, status, ts_start, ts_end, metrics) in runs:

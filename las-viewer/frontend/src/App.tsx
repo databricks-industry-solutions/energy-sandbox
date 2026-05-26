@@ -17,7 +17,7 @@ const TABS = [
 
 export default function App() {
   const [active, setActive]     = useState('wells')
-  const [activeWell, setActiveWell] = useState('BAKER-001')
+  const [activeWell, setActiveWell] = useState('WELL-001-A')
 
   const openWell = (wellId: string, tab: string = 'viewer') => {
     setActiveWell(wellId)

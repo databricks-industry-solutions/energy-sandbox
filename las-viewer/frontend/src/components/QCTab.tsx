@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-const WELLS = ['BAKER-001','BAKER-002','CONOCO-7H','MARATHON-15X','SHELL-3D','PIONEER-22S']
+const WELLS = ['WELL-001-A','WELL-002-B','WELL-003-7H','WELL-004-15X','WELL-005-3D','WELL-006-22S']
 
 interface CQ { curve_name: string; coverage_pct: number; spike_count: number; gap_count: number; quality_score: number }
 interface Anomaly { id: number; curve_name: string; depth_start: number; depth_end: number; anomaly_type: string; severity: string; description: string }
