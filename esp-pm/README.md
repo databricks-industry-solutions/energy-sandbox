@@ -19,8 +19,10 @@ ESPs are the most common form of artificial lift in unconventional oil productio
 
 <img src="images/esp_sap_maintenance.png" alt="ESP Predictive Maintenance — SAP Work Orders" width="100%">
 
-- **ESP Advisor** — Foundation Model API-powered AI assistant for well-specific troubleshooting and optimization recommendations
-- **Data & AI Flow** — Interactive architecture diagram showing the medallion pipeline from SCADA ingestion through Bronze/Silver/Gold to ML serving
+- **ESP Advisor (Genie)** — Databricks Genie Space wired into a chat panel; ask natural-language questions and get governed SQL answers over UC tables (alerts, work orders, telemetry) with conversation memory
+- **AI Maintenance Scheduler** — Agentic perceive–reason–act loop that pulls telemetry + diagnostics + SAP history, predicts failures, ranks urgency, and dispatches work orders to a 6-technician roster matched on skill, zone, and capacity
+- **Floating Genie panel** — Always-available bottom-right Genie chat floater for ad-hoc questions across any tab
+- **Data & AI Flow** — Interactive architecture diagram showing the medallion pipeline from SCADA ingestion through Bronze/Silver/Gold to ML serving and Genie
 
 ## Architecture
 
@@ -66,8 +68,9 @@ ESPs are the most common form of artificial lift in unconventional oil productio
 | **Well Diagnostics** | Per-well deep dive with sensor trends, diagnostic fault codes, and root cause analysis |
 | **Live Alerts** | Streaming alert feed with severity-based filtering, acknowledgment, and alert history |
 | **SAP Maintenance** | Work order management, spare parts inventory, vendor tracking, planned vs reactive KPIs |
-| **ESP Advisor** | AI-powered troubleshooting assistant using Foundation Model API |
+| **ESP Advisor** | Genie chat over UC tables (alerts, work orders, telemetry) with natural-language SQL and conversation memory |
 | **Data & AI Flow** | Interactive architecture diagram showing the end-to-end data pipeline |
+| **AI Scheduler** | Agentic perceive–reason–act maintenance scheduler — predicts failures, ranks urgency, dispatches work orders to skill/zone-matched technicians |
 
 ## Simulated Event Cycle
 
