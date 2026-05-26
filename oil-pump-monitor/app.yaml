@@ -12,7 +12,7 @@ resources:
   - name: database
     description: "Lakebase Postgres for vibration data"
     database:
-      instance: oil-pump-monitor-db
+      instance: <your-lakebase-instance>
 
 env:
   - name: PGHOST

@@ -104,7 +104,7 @@ export default function AgentTab({ activeRunId, activeScenarioId }: Props) {
             <div style={{ fontSize: 10, color: 'var(--amber)' }}>Databricks Claude &middot; Eagle Ford</div>
           </div>
           <div style={{ marginLeft: 'auto' }}>
-            <span className="badge badge-gold">Res Flow context</span>
+            <span className="badge badge-gold">OPM Flow context</span>
           </div>
         </div>
 

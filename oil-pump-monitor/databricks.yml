@@ -1,18 +1,23 @@
 bundle:
   name: oil-pump-monitor
 
+variables:
+  lakebase_instance:
+    description: "Lakebase PostgreSQL instance name"
+    default: <your-lakebase-instance>
+
 resources:
   apps:
     oil-pump-monitor:
       name: oil-pump-monitor
-      description: Oil Pump Vibration Monitor
+      description: "Oil Pump Vibration Monitor — Bakken Formation"
       source_code_path: .
 
       resources:
         - name: database
           description: "Lakebase Postgres for vibration data"
           database:
-            instance: oil-pump-monitor-db
+            instance: ${var.lakebase_instance}
 
       env:
         - name: PGHOST
@@ -37,9 +42,3 @@ targets:
     workspace:
       host: https://YOUR-WORKSPACE.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west

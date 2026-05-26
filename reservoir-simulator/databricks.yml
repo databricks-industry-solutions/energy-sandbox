@@ -1,18 +1,23 @@
 bundle:
   name: reservoir-simulator
 
+variables:
+  warehouse_id:
+    description: "SQL warehouse ID for the app"
+    default: "87e069097741b56c"
+
 resources:
   apps:
     reservoir-simulator:
       name: reservoir-simulator
-      description: Reservoir Simulator
+      description: "Reservoir Simulator — Norne Field Digital Twin"
       source_code_path: .
 
       resources:
         - name: sql-warehouse
           description: "SQL warehouse for reading sim results from Unity Catalog"
           sql_warehouse:
-            id: "<your-warehouse-id>"
+            id: ${var.warehouse_id}
             permission: CAN_USE
 
       env:
@@ -24,17 +29,11 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west

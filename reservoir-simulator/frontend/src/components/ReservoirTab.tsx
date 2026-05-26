@@ -647,7 +647,7 @@ export default function ReservoirTab({ activeRunId, onRunSelect }: Props) {
             fontFamily: 'monospace',
           }}>
             <div style={{ fontSize: 8.5, color: RI_MUTED, letterSpacing: '0.07em' }}>
-              NORNE FIELD · RES FLOW ENGINE
+              NORNE FIELD · OPM FLOW BENCHMARK
             </div>
             <div style={{ fontSize: 10, color: RI_TEXT, marginTop: 2 }}>
               Grid: {NI}×{NJ}×{NK} &nbsp;·&nbsp; {NI*NJ*NK} cells

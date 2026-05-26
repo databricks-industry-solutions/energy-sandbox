@@ -7,166 +7,141 @@ interface NodeDef {
   detail: string[]
 }
 
-// ── Data pipeline nodes ───────────────────────────────────────────────────
+// ── Data pipeline nodes ─────────────────────────────────────────────────────────────────────────────────────────────────
 const PIPELINE: NodeDef[] = [
   {
-    id: 'norne', label: 'Norne Field Dataset', sub: 'North Sea benchmark model',
-    x: 20, y: 130, w: 175, h: 76,
+    id: 'norne', label: 'Norne OPM Dataset', sub: 'github.com/OPM/opm-data',
+    x: 30, y: 120, w: 150, h: 64,
     color: '#27AE60', badge: 'SOURCE',
     detail: [
       'NORNE_ATW2013.DATA (Eclipse deck)',
-      'Grid: 46x112x22 = 113,344 cells',
+      'Grid: 46×112×22 = 113,344 cells',
       'Includes: GRID, PVT, RELPERM, VFP',
       'METRIC units · Start: Nov 1997',
       'Wells: B-2H, D-1H, E-3H, D-2H, C-4H',
     ],
   },
   {
-    id: 'simulator', label: 'Res Flow Engine', sub: 'Python simulator.py',
-    x: 225, y: 130, w: 180, h: 76,
+    id: 'parser', label: 'Grid Parser', sub: 'Python · OPM deck reader',
+    x: 255, y: 120, w: 140, h: 64,
+    color: '#E67E22', badge: 'PARSE',
+    detail: [
+      'Reads DIMENS: 46×112×22',
+      'Extracts ACTNUM (active cells)',
+      'Parses COORD / ZCORN geometry',
+      'Scales to 20×10×5 vis grid',
+      'Well positions from WELSPECS',
+    ],
+  },
+  {
+    id: 'simulator', label: 'OPM Flow Engine', sub: 'Python simulator.py',
+    x: 470, y: 120, w: 150, h: 64,
     color: '#2980B9', badge: 'SIMULATE',
     detail: [
       'Norne-calibrated physics:',
-      'P0 = 360 bar · phi = 25% · k = 120 mD',
+      'P₀ = 360 bar · φ = 25% · k = 120 mD',
       'Bubble point: 250 bar (DISGAS)',
-      '40 timesteps x 91 days',
-      'Post-sim: ops derivation + cost estimation',
+      '40 timesteps × 91 days',
+      'Sparse cell updates via WebSocket',
     ],
   },
   {
-    id: 'ops_engine', label: 'Operations Engine', sub: 'operations.py + costs.py',
-    x: 435, y: 130, w: 180, h: 76,
-    color: '#E67E22', badge: 'OPS',
-    detail: [
-      'Derives well activities from sim results:',
-      'Drilling, completions, ESP, workovers',
-      'Full-cycle cost estimation per activity',
-      'SAP material + service pricing lookup',
-      'Lifting cost $/BOE per well',
-    ],
-  },
-  {
-    id: 'sqlite', label: 'SQLite + Snapshots', sub: '/tmp/reservoir_sim.db',
-    x: 645, y: 130, w: 175, h: 76,
+    id: 'sqlite', label: 'SQLite Database', sub: '/tmp/reservoir_sim.db',
+    x: 695, y: 120, w: 140, h: 64,
     color: '#8E9AAF', badge: 'STORE',
     detail: [
       'Tables: scenarios, simulation_runs,',
-      '  economics_results, run_operations,',
-      '  run_costs, delta_sharing_log',
-      'In-memory: grid snapshots, well series',
-      'WAL mode + foreign keys',
+      '  economics_results',
+      'WAL mode + foreign keys ON',
+      'In-memory grid snapshots (dict)',
+      'Seeded: 3 Norne scenarios',
     ],
   },
   {
-    id: 'unity', label: 'Unity Catalog', sub: 'norne_digital_twin',
-    x: 855, y: 130, w: 180, h: 76,
+    id: 'unity', label: 'Unity Catalog', sub: 'oil_pump_monitor_catalog',
+    x: 910, y: 120, w: 150, h: 64,
     color: '#F39C12', badge: 'CATALOG',
     detail: [
-      'Catalog: norne_digital_twin',
-      'Schemas: sap_supply_chain, ops_forecast,',
-      '  sim_results',
-      'Row-level security + audit logging',
-      'Governs all Delta Sharing tables',
+      'SQL Warehouse: 87e069097741b56c',
+      'Schema: sim · econ',
+      'Tables: sim_summary, sim_grid_cells',
+      '  econ_cashflows, econ_assumptions',
+      'Governed by Unity Catalog',
     ],
   },
 ]
 
-// ── SAP / Delta Sharing / App nodes ───────────────────────────────────────
-const V2_NODES: NodeDef[] = [
-  {
-    id: 'sap_bdc', label: 'SAP Business Data Cloud', sub: 'Supply Chain · Pricing · Inventory',
-    x: 20, y: 330, w: 195, h: 76,
-    color: '#0FAAFF', badge: 'SAP BDC',
-    detail: [
-      'Material pricing: 18 items (live)',
-      'Service contracts: 10 vendors',
-      'Equipment inventory: 8 assets',
-      'Vendor lead times',
-      'Bidirectional via Delta Sharing',
-    ],
-  },
-  {
-    id: 'delta_sharing', label: 'Delta Sharing', sub: 'Open protocol · Bidirectional',
-    x: 255, y: 330, w: 180, h: 76,
-    color: '#8E44AD', badge: 'SHARE',
-    detail: [
-      'INBOUND: material_pricing, equipment,',
-      '  service_contracts, vendor_lead_times',
-      'OUTBOUND: production_forecast,',
-      '  material_requirements, cost_estimates,',
-      '  procurement_triggers',
-    ],
-  },
+// ── App / AI nodes ────────────────────────────────────────────────────────────────────────────────────────────────────────
+const APP_NODES: NodeDef[] = [
   {
     id: 'fastapi', label: 'FastAPI Backend', sub: 'Python 3.11 · uvicorn',
-    x: 500, y: 330, w: 180, h: 76,
+    x: 270, y: 350, w: 155, h: 64,
     color: '#9B59B6', badge: 'API',
     detail: [
-      'POST /api/simulate  (+ ops + costs)',
-      'GET  /api/operations/{run_id}',
-      'GET  /api/costs/{run_id}/lifting',
-      'POST /api/compare',
-      'GET  /api/delta-sharing/status',
-      'GET  /api/sap/materials|services|equipment',
+      'POST /api/simulate → starts run',
+      'GET  /api/scenarios → list',
+      'GET  /api/runs/{id}/grid/{ts}',
+      'POST /api/economics',
+      'POST /api/agent/chat',
+      'WS   /ws/simulate/{run_id}',
     ],
   },
   {
-    id: 'react', label: 'React UI — 9 Tabs', sub: 'TypeScript · Three.js · Recharts',
-    x: 500, y: 460, w: 180, h: 76,
+    id: 'react', label: 'React UI', sub: 'TypeScript · Three.js · Vite',
+    x: 510, y: 350, w: 155, h: 64,
     color: '#16A085', badge: 'UI',
     detail: [
-      'Scenarios · 3D Reservoir · Well Results',
-      'Operations (Gantt) · Cost Analysis',
-      'Economics · Compare',
-      'Agent · Data & AI Flow',
-      'SAP material/service/equipment views',
+      'Scenarios: run Norne simulations',
+      '3D Reservoir: InstancedMesh 1000 cells',
+      '  Jet colormap · WebSocket streaming',
+      'Well Results: Recharts time-series',
+      'Economics: NPV · IRR · DCF',
+      'Agent: Claude chat with context',
     ],
   },
   {
-    id: 'claude', label: 'Digital Twin Agent', sub: 'Databricks FMAPI · Sonnet 4.5',
-    x: 740, y: 330, w: 180, h: 76,
+    id: 'claude', label: 'claude-sonnet-4-6', sub: 'Databricks FMAPI',
+    x: 270, y: 480, w: 155, h: 64,
     color: '#8E44AD', badge: 'LLM',
     detail: [
       'Endpoint: databricks-claude-sonnet-4-5',
-      'Context: sim + ops + costs + SAP data',
-      'Reservoir + operations expertise',
-      'Full-cycle cost analysis guidance',
-      'Scenario comparison insights',
+      'System: Norne reservoir expert',
+      'Context: scenario + rates + economics',
+      'Tools: pressure analysis, NPV calc',
+      'Fallback: offline heuristic answers',
     ],
   },
   {
-    id: 'user', label: 'Reservoir Engineer', sub: 'Operations · Planning · Economics',
-    x: 740, y: 460, w: 180, h: 76,
+    id: 'user', label: 'Reservoir Engineer', sub: 'Norne Field Operations',
+    x: 760, y: 350, w: 155, h: 64,
     color: '#2C3E50', badge: 'USER',
     detail: [
-      'Runs simulations + views 3D reservoir',
-      'Reviews operations timeline (Gantt)',
-      'Analyzes SAP-sourced cost estimates',
-      'Compares scenarios: NPV + lifting $/BOE',
-      'Asks AI for optimization guidance',
+      'Selects: Norne Base/GasInj/FullField',
+      'Watches: 3D cell saturation evolve',
+      'Analyzes: well rates & BHP decline',
+      'Computes: NPV at $75/bbl Brent',
+      'Asks: AI for recovery optimization',
     ],
   },
 ]
 
 interface EdgeDef { from: string; to: string; label: string; color?: string; dashed?: boolean }
 
-const EDGES: EdgeDef[] = [
-  { from: 'norne',         to: 'simulator',     label: 'deck data',       color: '#27AE60' },
-  { from: 'simulator',     to: 'ops_engine',    label: 'well series',     color: '#2980B9' },
-  { from: 'ops_engine',    to: 'sqlite',        label: 'ops + costs',     color: '#E67E22' },
-  { from: 'sqlite',        to: 'unity',         label: 'SQL Warehouse',   color: '#8E9AAF' },
-  { from: 'sap_bdc',       to: 'delta_sharing', label: 'pricing / inventory', color: '#0FAAFF' },
-  { from: 'delta_sharing', to: 'unity',         label: 'inbound tables',  color: '#8E44AD' },
-  { from: 'unity',         to: 'delta_sharing', label: 'outbound tables', color: '#F39C12', dashed: true },
-  { from: 'delta_sharing', to: 'sap_bdc',       label: 'forecasts / MRP', color: '#F39C12', dashed: true },
-  { from: 'sqlite',        to: 'fastapi',       label: 'queries',         color: '#8E9AAF' },
-  { from: 'fastapi',       to: 'react',         label: 'REST + WS',      color: '#9B59B6' },
-  { from: 'react',         to: 'user',          label: 'browser',         color: '#16A085' },
-  { from: 'fastapi',       to: 'claude',        label: 'FMAPI call',     color: '#8E44AD' },
-  { from: 'claude',        to: 'fastapi',       label: 'AI response',    color: '#8E44AD', dashed: true },
+const PIPELINE_EDGES: EdgeDef[] = [
+  { from: 'norne',     to: 'parser',    label: 'git clone',       color: '#27AE60' },
+  { from: 'parser',    to: 'simulator', label: 'grid params',     color: '#E67E22' },
+  { from: 'simulator', to: 'sqlite',    label: 'run results',     color: '#2980B9' },
+  { from: 'sqlite',    to: 'unity',     label: 'SQL Warehouse',   color: '#8E9AAF' },
+]
+const APP_EDGES: EdgeDef[] = [
+  { from: 'sqlite',  to: 'fastapi', label: 'asyncio queries',   color: '#8E9AAF' },
+  { from: 'fastapi', to: 'react',   label: 'REST + WebSocket',  color: '#9B59B6' },
+  { from: 'react',   to: 'user',    label: 'browser',           color: '#16A085' },
+  { from: 'fastapi', to: 'claude',  label: 'FMAPI call',        color: '#8E44AD' },
+  { from: 'claude',  to: 'fastapi', label: 'AI response',       color: '#8E44AD', dashed: true },
 ]
 
-function allNodes() { return [...PIPELINE, ...V2_NODES] }
+function allNodes() { return [...PIPELINE, ...APP_NODES] }
 function nodeById(id: string) { return allNodes().find(n => n.id === id) }
 function cx(n: NodeDef) { return n.x + n.w / 2 }
 function cy(n: NodeDef) { return n.y + n.h / 2 }
@@ -175,55 +150,26 @@ function arrowPath(e: EdgeDef): string {
   const a = nodeById(e.from)!, b = nodeById(e.to)!
   if (!a || !b) return ''
   const ax = cx(a), ay = cy(a), bx = cx(b), by = cy(b)
-
-  // Same row — horizontal
+  // Horizontal pipeline edges
   if (Math.abs(ay - by) < 15) {
-    const fromRight = a.x + a.w
-    return `M${fromRight},${ay} L${b.x},${by}`
+    return `M${a.x + a.w},${ay} L${b.x},${by}`
   }
-
-  // sqlite → fastapi (down then left to fastapi top)
+  // sqlite → fastapi (down then across)
   if (e.from === 'sqlite' && e.to === 'fastapi') {
-    const sx = cx(a), sy = a.y + a.h, ex = cx(b), ey = b.y
-    const mid = (sy + ey) / 2
+    const sx = cx(a), sy = a.y + a.h, ex = b.x + b.w, ey = cy(b)
+    const mid = sy + 35
     return `M${sx},${sy} L${sx},${mid} L${ex},${mid} L${ex},${ey}`
   }
-
-  // delta_sharing → unity (up-right)
-  if (e.from === 'delta_sharing' && e.to === 'unity') {
-    const sx = cx(a), sy = a.y, ex = cx(b), ey = b.y + b.h
-    const mid = (sy + ey) / 2
-    return `M${sx},${sy} L${sx},${mid} L${ex},${mid} L${ex},${ey}`
-  }
-
-  // unity → delta_sharing (down-left)
-  if (e.from === 'unity' && e.to === 'delta_sharing') {
-    const sx = cx(a) - 20, sy = a.y + a.h, ex = cx(b) + 20, ey = b.y
-    const mid = (sy + ey) / 2
-    return `M${sx},${sy} L${sx},${mid} L${ex},${mid} L${ex},${ey}`
-  }
-
-  // fastapi → react (straight down)
-  if (e.from === 'fastapi' && e.to === 'react') {
-    return `M${cx(a)},${a.y + a.h} L${cx(b)},${b.y}`
-  }
-
-  // fastapi → claude (horizontal right)
+  // fastapi → claude
   if (e.from === 'fastapi' && e.to === 'claude') {
-    return `M${a.x + a.w},${cy(a)} L${b.x},${cy(b)}`
+    const sx = cx(a), sy = a.y + a.h, ex = cx(b), ey = b.y
+    return `M${sx},${sy} L${sx},${(sy + ey) / 2} L${ex},${(sy + ey) / 2} L${ex},${ey}`
   }
-
-  // claude → fastapi (horizontal left, offset down)
+  // claude → fastapi
   if (e.from === 'claude' && e.to === 'fastapi') {
-    const sx = b.x + b.w, sy = cy(b) + 12, ex = a.x, ey = cy(a) + 12
-    return `M${ex},${ey} L${sx},${sy}`
+    const sx = cx(a) + 22, sy = a.y, ex = cx(b) + 22, ey = b.y + b.h
+    return `M${sx},${sy} L${sx},${(sy + ey) / 2} L${ex},${(sy + ey) / 2} L${ex},${ey}`
   }
-
-  // Generic vertical
-  if (Math.abs(ax - bx) < 80) {
-    return `M${ax},${a.y + a.h} L${bx},${b.y}`
-  }
-
   return `M${ax},${ay} L${bx},${by}`
 }
 
@@ -242,8 +188,8 @@ function FlowEdge({ e, idx }: { e: EdgeDef; idx: number }) {
         strokeDasharray={e.dashed ? '5 4' : '6 3'} strokeOpacity={0.22} />
       <path d={d} fill="none" stroke={col} strokeWidth={2}
         strokeDasharray="6 3"
-        style={{ animation: `flow-dash 1.6s linear ${idx * 0.2}s infinite` }}
-        markerEnd={`url(#${markerId})`} />
+        style={{ animation: `flow-dash 1.6s linear ${idx * 0.28}s infinite` }} />
+      <path d={d} fill="none" stroke="none" markerEnd={`url(#${markerId})`} />
     </g>
   )
 }
@@ -257,16 +203,15 @@ function FlowNode({ n, selected, onSelect }: { n: NodeDef; selected: boolean; on
         strokeWidth={selected ? 2 : 1}
         style={{ filter: selected ? `drop-shadow(0 0 8px ${n.color}99)` : 'none', transition: 'all 0.2s' }}
       />
-      {/* Badge — top-right, small row */}
-      <rect x={n.x + n.w - 66} y={n.y + 6} width={60} height={17} rx={3}
+      {/* Badge */}
+      <rect x={n.x + n.w - 56} y={n.y + 6} width={50} height={15} rx={3}
         fill={n.color + '30'} stroke={n.color} strokeWidth={0.8} />
-      <text x={n.x + n.w - 36} y={n.y + 18} textAnchor="middle"
-        fill={n.color} fontSize={9} fontFamily="monospace" fontWeight={700}>{n.badge}</text>
-      {/* Label — below badge, full width */}
-      <text x={n.x + 12} y={n.y + 40} fill="var(--text-primary)" fontSize={12.5}
+      <text x={n.x + n.w - 31} y={n.y + 17} textAnchor="middle"
+        fill={n.color} fontSize={8} fontFamily="monospace" fontWeight={700}>{n.badge}</text>
+      {/* Label */}
+      <text x={n.x + 10} y={n.y + 26} fill="var(--text-primary)" fontSize={11}
         fontFamily="system-ui,sans-serif" fontWeight={700}>{n.label}</text>
-      {/* Sub — bottom row */}
-      <text x={n.x + 12} y={n.y + 58} fill="var(--text-muted)" fontSize={10.5}
+      <text x={n.x + 10} y={n.y + 42} fill="var(--text-muted)" fontSize={9.5}
         fontFamily="system-ui,sans-serif">{n.sub}</text>
     </g>
   )
@@ -280,17 +225,16 @@ export default function DataFlowTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-      {/* Stats strip */}
+      {/* ── Stats strip ── */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         {[
-          { label: 'Simulation Engine',   val: 'Res Flow (Norne)',         color: 'var(--green)' },
-          { label: 'Operations Engine',   val: 'D&C + ESP + Workover',     color: '#E67E22' },
-          { label: 'Cost Engine',         val: 'SAP Material + Service',   color: 'var(--amber)' },
-          { label: 'Delta Sharing',       val: 'SAP BDC \u2194 Databricks',    color: '#8E44AD' },
-          { label: 'Unity Catalog',       val: 'norne_digital_twin',       color: '#F39C12' },
-          { label: 'AI Agent',            val: 'claude-sonnet-4-6 (FMAPI)', color: 'var(--blue)' },
+          { label: 'Simulation Engine',  val: 'OPM Flow (Norne benchmark)',   color: 'var(--green)' },
+          { label: 'Dataset',            val: 'Norne ATW2013 · 46×112×22',    color: 'var(--blue)' },
+          { label: 'Storage',            val: 'SQLite + Unity Catalog',        color: 'var(--amber)' },
+          { label: 'AI Agent',           val: 'claude-sonnet-4-6 (FMAPI)',     color: '#8E44AD' },
+          { label: '3D Rendering',       val: 'Three.js InstancedMesh',        color: 'var(--teal)' },
         ].map(k => (
-          <div key={k.label} className="card" style={{ padding: '8px 14px', flex: 1, minWidth: 140 }}>
+          <div key={k.label} className="card" style={{ padding: '8px 14px', flex: 1, minWidth: 160 }}>
             <div style={{ fontSize: 9, color: 'var(--text-muted)', letterSpacing: '0.06em', marginBottom: 4 }}>
               {k.label.toUpperCase()}
             </div>
@@ -301,16 +245,19 @@ export default function DataFlowTab() {
         ))}
       </div>
 
-      {/* Diagram + detail */}
+      {/* ── Main: diagram + detail ── */}
       <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
 
+        {/* SVG diagram */}
         <div className="card" style={{ flex: 1, overflow: 'hidden', padding: 0 }}>
           <div style={{ padding: '10px 16px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span className="label">RES SIM V2 — DIGITAL TWIN DATA &amp; AI FLOW</span>
-            <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--text-muted)' }}>Click any node for details</span>
+            <span className="label">RESERVOIR SIMULATOR — DATA &amp; AI FLOW</span>
+            <span style={{ marginLeft: 'auto', fontSize: 10, color: 'var(--text-muted)' }}>
+              Click any node for details
+            </span>
           </div>
 
-          <svg viewBox="0 0 1180 600" style={{ width: '100%', display: 'block' }}>
+          <svg viewBox="0 0 1120 600" style={{ width: '100%', display: 'block' }}>
             <style>{`
               @keyframes flow-dash {
                 from { stroke-dashoffset: 18; }
@@ -319,69 +266,69 @@ export default function DataFlowTab() {
             `}</style>
 
             {/* Section divider */}
-            <line x1={20} y1={275} x2={1160} y2={275} stroke="var(--border)" strokeWidth={1} strokeDasharray="4 4" />
+            <line x1={20} y1={305} x2={1100} y2={305} stroke="var(--border)" strokeWidth={1} strokeDasharray="4 4" />
 
             {/* Section labels */}
-            <text x={28} y={116} fill="var(--text-muted)" fontSize={12} fontFamily="system-ui" fontWeight={700} letterSpacing="0.07em">
-              SIMULATION &amp; OPERATIONS PIPELINE
+            <text x={28} y={108} fill="var(--text-muted)" fontSize={10} fontFamily="system-ui" fontWeight={700} letterSpacing="0.07em">
+              DATA PIPELINE
             </text>
-            <text x={28} y={318} fill="var(--text-muted)" fontSize={12} fontFamily="system-ui" fontWeight={700} letterSpacing="0.07em">
-              SAP INTEGRATION &amp; APP LAYER
+            <text x={28} y={335} fill="var(--text-muted)" fontSize={10} fontFamily="system-ui" fontWeight={700} letterSpacing="0.07em">
+              APP &amp; AI LAYER
             </text>
 
             {/* Unity Catalog governance band */}
-            <rect x={200} y={112} width={860} height={108} rx={10}
+            <rect x={225} y={102} width={850} height={82} rx={10}
               fill="none" stroke="#F39C12" strokeWidth={1} strokeDasharray="6 3" strokeOpacity={0.45} />
-            <rect x={209} y={104} width={178} height={16} rx={4} fill="var(--bg-card)" />
-            <text x={215} y={115} fill="#F39C12" fontSize={10.5} fontFamily="system-ui" fontWeight={700}>
+            <rect x={234} y={94} width={162} height={16} rx={4} fill="var(--bg-card)" />
+            <text x={240} y={106} fill="#F39C12" fontSize={10} fontFamily="system-ui" fontWeight={700}>
               Unity Catalog Governance
             </text>
 
-            {/* Edges */}
-            {EDGES.map((e, i) => <FlowEdge key={`e${i}`} e={e} idx={i} />)}
+            {/* Pipeline edges */}
+            {PIPELINE_EDGES.map((e, i) => <FlowEdge key={`p${i}`} e={e} idx={i} />)}
+            {/* App edges */}
+            {APP_EDGES.map((e, i) => <FlowEdge key={`a${i}`} e={e} idx={i + 4} />)}
 
-            {/* Edge labels for horizontal pipeline */}
-            {EDGES.slice(0, 4).map(e => {
+            {/* Pipeline edge labels */}
+            {PIPELINE_EDGES.map(e => {
               const a = nodeById(e.from)!, b = nodeById(e.to)!
               if (!a || !b) return null
+              const mx = (a.x + a.w + b.x) / 2
+              const my = cy(a) - 12
               return (
-                <text key={`lbl-${e.label}`} x={(a.x + a.w + b.x) / 2} y={cy(a) - 14}
-                  textAnchor="middle" fill={e.color} fontSize={10.5} fontFamily="system-ui" fontWeight={600}
+                <text key={e.label} x={mx} y={my} textAnchor="middle"
+                  fill={e.color} fontSize={9} fontFamily="system-ui" fontWeight={600}
                   style={{ pointerEvents: 'none' }}>
                   {e.label}
                 </text>
               )
             })}
 
-            {/* All nodes */}
+            {/* Pipeline nodes */}
             {PIPELINE.map(n => <FlowNode key={n.id} n={n} selected={sel === n.id} onSelect={select} />)}
-            {V2_NODES.map(n => <FlowNode key={n.id} n={n} selected={sel === n.id} onSelect={select} />)}
+            {/* App nodes */}
+            {APP_NODES.map(n => <FlowNode key={n.id} n={n} selected={sel === n.id} onSelect={select} />)}
 
-            {/* Legend — two rows */}
-            <g transform="translate(28, 555)">
+            {/* Inline labels for vertical edges */}
+            <text x={247} y={305} fill="#8E9AAF" fontSize={9} fontFamily="system-ui" fontWeight={600}>SQLite reads</text>
+            <text x={247} y={445} fill="#8E44AD" fontSize={9} fontFamily="system-ui" fontWeight={600}>FMAPI</text>
+            <text x={265} y={462} fill="#8E44AD" fontSize={9} fontFamily="system-ui" fontWeight={600}>response</text>
+
+            {/* Legend */}
+            <g transform="translate(28, 562)">
               {[
-                { color: '#27AE60', label: 'Norne Source' },
+                { color: '#27AE60', label: 'OPM Source' },
+                { color: '#E67E22', label: 'Parser' },
                 { color: '#2980B9', label: 'Simulator' },
-                { color: '#E67E22', label: 'Ops Engine' },
                 { color: '#8E9AAF', label: 'SQLite' },
                 { color: '#F39C12', label: 'Unity Catalog' },
-              ].map((l, i) => (
-                <g key={l.label} transform={`translate(${i * 210}, 0)`}>
-                  <rect x={0} y={0} width={12} height={12} rx={2} fill={l.color} />
-                  <text x={17} y={10} fill="var(--text-muted)" fontSize={10.5} fontFamily="system-ui">{l.label}</text>
-                </g>
-              ))}
-            </g>
-            <g transform="translate(28, 575)">
-              {[
-                { color: '#0FAAFF', label: 'SAP BDC' },
-                { color: '#8E44AD', label: 'Delta Sharing' },
                 { color: '#9B59B6', label: 'FastAPI' },
                 { color: '#16A085', label: 'React UI' },
+                { color: '#8E44AD', label: 'Claude AI' },
               ].map((l, i) => (
-                <g key={l.label} transform={`translate(${i * 210}, 0)`}>
-                  <rect x={0} y={0} width={12} height={12} rx={2} fill={l.color} />
-                  <text x={17} y={10} fill="var(--text-muted)" fontSize={10.5} fontFamily="system-ui">{l.label}</text>
+                <g key={l.label} transform={`translate(${i * 128}, 0)`}>
+                  <rect x={0} y={0} width={11} height={11} rx={2} fill={l.color} />
+                  <text x={15} y={9} fill="var(--text-muted)" fontSize={9} fontFamily="system-ui">{l.label}</text>
                 </g>
               ))}
             </g>
@@ -413,35 +360,43 @@ export default function DataFlowTab() {
                     fontSize: 11, color: 'var(--text-secondary)',
                     padding: '5px 9px', background: 'var(--bg-panel)',
                     borderRadius: 5, fontFamily: 'monospace', lineHeight: 1.5,
-                  }}>{d}</div>
+                  }}>
+                    {d}
+                  </div>
                 ))}
               </div>
               <button onClick={() => setSel(null)} style={{
                 marginTop: 12, width: '100%',
                 background: 'transparent', border: '1px solid var(--border)',
                 borderRadius: 5, color: 'var(--text-muted)', fontSize: 11, padding: '5px 0',
-              }}>Dismiss</button>
+              }}>
+                Dismiss
+              </button>
             </div>
           ) : (
             <div className="card" style={{ padding: 16 }}>
-              <div className="label" style={{ marginBottom: 12 }}>HOW IT WORKS — V2</div>
+              <div className="label" style={{ marginBottom: 12 }}>HOW IT WORKS</div>
               {[
-                { step: '1', color: '#27AE60', text: 'Norne field data — real North Sea benchmark field model' },
-                { step: '2', color: '#2980B9', text: 'Simulator runs 40 timesteps with calibrated physics (360 bar, 25% porosity)' },
-                { step: '3', color: '#E67E22', text: 'Operations engine derives D&C, ESP, chemical, workover activities per well' },
-                { step: '4', color: '#F39C12', text: 'Cost engine estimates full-cycle costs using SAP material & service pricing' },
-                { step: '5', color: '#0FAAFF', text: 'SAP BDC shares live supply chain data inbound via Delta Sharing' },
-                { step: '6', color: '#8E44AD', text: 'Production forecasts & MRP triggers shared back to SAP BDC outbound' },
-                { step: '7', color: '#F39C12', text: 'All data governed in Unity Catalog with row-level security' },
-                { step: '8', color: '#16A085', text: 'Compare scenarios: production, NPV, and lifting cost in one interface' },
+                { step: '1', color: '#27AE60', text: 'Norne OPM data cloned from GitHub — real North Sea field deck' },
+                { step: '2', color: '#E67E22', text: 'Parser reads DIMENS 46×112×22 and scales to 20×10×5 vis grid' },
+                { step: '3', color: '#2980B9', text: 'Simulator runs 40 timesteps with Norne-calibrated physics (360 bar, φ=25%)' },
+                { step: '4', color: '#8E9AAF', text: 'Run results stored in SQLite; grid snapshots streamed live via WebSocket' },
+                { step: '5', color: '#F39C12', text: 'Unity Catalog holds sim & econ Delta tables for ad-hoc SQL' },
+                { step: '6', color: '#9B59B6', text: 'FastAPI serves cells, scenarios, economics, and agent endpoints' },
+                { step: '7', color: '#16A085', text: 'React renders 1000-cell 3D with jet colormap updating in real time' },
+                { step: '8', color: '#8E44AD', text: 'Claude answers reservoir engineering questions with full simulation context' },
               ].map(s => (
                 <div key={s.step} style={{ display: 'flex', gap: 10, marginBottom: 9, alignItems: 'flex-start' }}>
                   <div style={{
                     width: 20, height: 20, borderRadius: '50%', flexShrink: 0,
                     background: s.color + '30', border: `1px solid ${s.color}`, color: s.color,
                     fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  }}>{s.step}</div>
-                  <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.5 }}>{s.text}</div>
+                  }}>
+                    {s.step}
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    {s.text}
+                  </div>
                 </div>
               ))}
             </div>

@@ -1,10 +1,10 @@
-[![Databricks](https://img.shields.io/badge/Databricks-Apps-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
+[![Databricks](https://img.shields.io/badge/Databricks-Solution_Accelerator-FF3621?style=for-the-badge&logo=databricks)](https://databricks.com)
 [![Unity Catalog](https://img.shields.io/badge/Unity_Catalog-Enabled-00A1C9?style=for-the-badge)](https://docs.databricks.com/en/data-governance/unity-catalog/index.html)
 [![Serverless](https://img.shields.io/badge/Serverless-Compute-00C851?style=for-the-badge)](https://docs.databricks.com/en/compute/serverless.html)
 
 # ROP Prediction — Real-Time Drilling Optimization
 
-A real-time Rate of Penetration (ROP) prediction and drilling optimization platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This Databricks App demonstrates an end-to-end ML pipeline — from MSEEL field data ingestion through feature engineering, XGBoost model training, Spark Structured Streaming inference, and an operational Streamlit dashboard — for upstream oil & gas drilling operations.
+A real-time Rate of Penetration (ROP) prediction and drilling optimization platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html). This solution accelerator demonstrates an end-to-end ML pipeline — from MSEEL field data ingestion through feature engineering, XGBoost model training, Spark Structured Streaming inference, and an operational Streamlit dashboard — for upstream oil & gas drilling operations.
 
 <img src="images/rop_drilling_command.png" alt="ROP Prediction — Drilling Command Dashboard" width="100%">
 
@@ -104,14 +104,7 @@ The simulator runs a 30-tick cycle to demonstrate real-time hazard detection:
 - Unity Catalog enabled
 - MSEEL drilling data mounted or uploaded to volumes
 
-### Deploy with Databricks Asset Bundles (recommended)
-
-```bash
-databricks bundle deploy -t dev
-databricks bundle run -t dev
-```
-
-### Deploy manually
+### Deploy the Databricks App
 
 1. Update `app.yaml` with your Lakebase instance name if different.
 
@@ -133,35 +126,40 @@ databricks bundle run -t dev
 2. Import pipelines to your workspace and run in order (01 → 05).
 3. Start the replay producer job (`jobs/replay_producer_job.json`) for continuous streaming.
 
+### Run Locally
+
+```bash
+pip install -r app/requirements.txt
+streamlit run app/main.py --server.port=8000
+```
+
 ## Project Support
 
 Please note the code in this project is provided for your exploration only, and is not formally supported by Databricks with Service Level Agreements (SLAs). It is provided AS-IS and we do not make any guarantees of any kind. Please do not submit a support ticket relating to any issues arising from the use of this project.
 
 Any issues discovered through the use of this project should be filed as GitHub Issues on this repository. They will be reviewed on a best-effort basis but no formal SLA or support is guaranteed.
 
+## Third-Party Library Licenses
 
+(c) 2025 Databricks, Inc. All rights reserved. The source in this project is provided subject to the [Databricks License](LICENSE). All included or referenced third-party libraries are subject to the licenses set forth below.
 
-## License
+### App Dependencies
 
-**Definitions.**
+| Library | License | Source |
+|---------|---------|--------|
+| streamlit | Apache 2.0 | https://github.com/streamlit/streamlit |
+| pandas | BSD 3-Clause | https://github.com/pandas-dev/pandas |
+| plotly | MIT | https://github.com/plotly/plotly.py |
+| numpy | BSD 3-Clause | https://github.com/numpy/numpy |
+| sqlalchemy | MIT | https://github.com/sqlalchemy/sqlalchemy |
+| psycopg2 | LGPL 3.0 | https://github.com/psycopg/psycopg2 |
+| databricks-sdk | Databricks License | https://github.com/databricks/databricks-sdk-py |
+| python-dotenv | BSD 3-Clause | https://github.com/theskumar/python-dotenv |
 
-**Agreement:** The agreement between Databricks, Inc., and you governing the use of the Databricks Services, as that term is defined in the Master Cloud Services Agreement (MCSA) located at www.databricks.com/legal/mcsa.
+### ML Pipeline Dependencies
 
-**Licensed Materials:** The source code, object code, data, and/or other works to which this license applies.
-
-**Scope of Use.** You may not use the Licensed Materials except in connection with your use of the Databricks Services pursuant to the Agreement. Your use of the Licensed Materials must comply at all times with any restrictions applicable to the Databricks Services, generally, and must be used in accordance with any applicable documentation. You may view, use, copy, modify, publish, and/or distribute the Licensed Materials solely for the purposes of using the Licensed Materials within or connecting to the Databricks Services. If you do not agree to these terms, you may not view, use, copy, modify, publish, and/or distribute the Licensed Materials.
-
-**Redistribution.** You may redistribute and sublicense the Licensed Materials so long as all use is in compliance with these terms. In addition:
-
-- You must give any other recipients a copy of this License;
-- You must cause any modified files to carry prominent notices stating that you changed the files;
-- You must retain, in any derivative works that you distribute, all copyright, patent, trademark, and attribution notices, excluding those notices that do not pertain to any part of the derivative works; and
-- If a "NOTICE" text file is provided as part of its distribution, then any derivative works that you distribute must include a readable copy of the attribution notices contained within such NOTICE file, excluding those notices that do not pertain to any part of the derivative works.
-
-You may add your own copyright statement to your modifications and may provide additional license terms and conditions for use, reproduction, or distribution of your modifications, or for any such derivative works as a whole, provided your use, reproduction, and distribution of the Licensed Materials otherwise complies with the conditions stated in this License.
-
-**Termination.** This license terminates automatically upon your breach of these terms or upon the termination of your Agreement. Additionally, Databricks may terminate this license at any time on notice. Upon termination, you must permanently delete the Licensed Materials and all copies thereof.
-
-**DISCLAIMER; LIMITATION OF LIABILITY.**
-
-THE LICENSED MATERIALS ARE PROVIDED "AS-IS" AND WITH ALL FAULTS. DATABRICKS, ON BEHALF OF ITSELF AND ITS LICENSORS, SPECIFICALLY DISCLAIMS ALL WARRANTIES RELATING TO THE LICENSED MATERIALS, EXPRESS AND IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES, CONDITIONS AND OTHER TERMS OF MERCHANTABILITY, SATISFACTORY QUALITY OR FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. DATABRICKS AND ITS LICENSORS TOTAL AGGREGATE LIABILITY RELATING TO OR ARISING OUT OF YOUR USE OF OR DATABRICKS' PROVISIONING OF THE LICENSED MATERIALS SHALL BE LIMITED TO ONE THOUSAND ($1,000) DOLLARS. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE LICENSED MATERIALS OR THE USE OR OTHER DEALINGS IN THE LICENSED MATERIALS.
+| Library | License | Source |
+|---------|---------|--------|
+| xgboost | Apache 2.0 | https://github.com/dmlc/xgboost |
+| mlflow | Apache 2.0 | https://github.com/mlflow/mlflow |
+| pyspark | Apache 2.0 | https://github.com/apache/spark |

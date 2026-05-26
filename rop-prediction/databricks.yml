@@ -1,18 +1,29 @@
 bundle:
   name: rop-prediction
 
+variables:
+  lakebase_instance:
+    description: "Lakebase PostgreSQL instance name"
+    default: drilling-demo-lakebase
+  lakebase_database:
+    description: "Lakebase database name"
+    default: drilling_demo_app
+  mlflow_model:
+    description: "MLflow model name for ROP prediction"
+    default: rop_xgb_mseel
+
 resources:
   apps:
     rop-prediction:
       name: rop-prediction
-      description: Rate of Penetration Prediction
+      description: "ROP Prediction — Real-Time Drilling Optimization"
       source_code_path: .
 
       resources:
         - name: drilling-lakebase
-          description: "Lakebase PostgreSQL — predictions and alerts for ROP demo app"
+          description: "Lakebase PostgreSQL for predictions and alerts"
           database:
-            instance: drilling-demo-lakebase
+            instance: ${var.lakebase_instance}
 
       env:
         - name: PGHOST
@@ -22,32 +33,20 @@ resources:
         - name: PGPORT
           value: "5432"
         - name: PGDATABASE_OVERRIDE
-          value: "drilling_demo_app"
-        - name: ROP_GAP_THRESHOLD
-          value: "20.0"
-        - name: MSE_HIGH_THRESHOLD
-          value: "150000.0"
-        - name: DEFAULT_WELL
-          value: "MIP_3H"
+          value: ${var.lakebase_database}
         - name: MLFLOW_MODEL_NAME
-          value: "rop_xgb_mseel"
+          value: ${var.mlflow_model}
 
 targets:
   dev:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west

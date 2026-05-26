@@ -3,30 +3,39 @@ Copyright (2025) Databricks, Inc.
 
 Definitions.
 
-"Agreement" shall mean this Databricks License.
+Agreement: The agreement between Databricks, Inc., and you governing
+the use of the Databricks Services, as that term is defined in the
+Master Cloud Services Agreement (MCSA) between Databricks, Inc., and
+you or the Beta Services Terms between Databricks, Inc., and you, or
+the Databricks License Agreement between Databricks, Inc. and you
+(collectively, the "Agreement").
 
-"Software" shall mean the copyrightable portions of the software provided under this Agreement, if any.
+Software: The source code and object code to which this license
+applies.
 
-"You" (or "Your") shall mean the individual or Legal Entity exercising permissions granted by this Agreement.
+Scope of Use. You may not use this Software except in connection with
+your use of the Databricks Services pursuant to the Agreement. Your
+use of the Software must comply at all times with any restrictions
+applicable to the Databricks Services, generally, and must be used in
+accordance with any applicable documentation. You may view, use, copy,
+modify, publish, and/or distribute the Software solely for your
+internal, non-commercial purposes.  You may not sublicense any of your
+rights under this license.
 
-"Legal Entity" shall mean the union of the acting entity and all other entities that control, are controlled by, or are under common control with that entity. For the purposes of this definition, "control" means (i) the power, direct or indirect, to cause the direction or management of such entity, whether by contract or otherwise, or (ii) ownership of fifty percent (50%) or more of the outstanding shares, or (iii) beneficial ownership of such entity.
+Redistribution. You may redistribute and sublicense the Software so
+long as all use is in connection with the Databricks Services. You may
+reproduce and distribute copies of the Software with modifications
+under the terms of this License if you add a prominent notice stating
+that you changed the Software.
 
-Notice; License Grant.
+Termination. The license granted to you in this License forms part of
+the Agreement and shall terminate upon the termination of the
+Agreement.
 
-This Agreement is between You and Databricks, Inc. ("Databricks"). The Software is provided to You on an "AS IS" basis, and Databricks hereby grants You a non-exclusive, non-transferable, non-sublicensable, limited license to copy, modify, and redistribute the Software; provided that all copies and redistributions must include the following text in all code, file headers, and any documentation or materials accompanying the redistribution:
-
-"This software includes code from Databricks, Inc., and is provided under the Databricks License. A copy of the license can be found at https://github.com/databricks/databricks-license/blob/main/LICENSE."
-
-Additionally, if You make any modifications to the Software, you must include a prominent notice stating that You have modified the Software.
-
-Redistribution Conditions.
-
-In addition to the above, any redistribution of the Software must comply with the following conditions:
-
-a. You may not use Databricks' trademarks, service marks, or trade names in connection with the Software without prior written consent.
-
-b. If You institute patent litigation against any entity (including a cross-claim or counterclaim in a lawsuit) alleging that the Software constitutes direct or contributory patent infringement, then any licenses granted to You under this Agreement for the Software shall terminate as of the date such litigation is filed.
-
-Disclaimer; Limitation of Liability.
-
-THE SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED INCLUDING, WITHOUT LIMITATION, ANY WARRANTIES OR CONDITIONS OF TITLE, NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE. DATABRICKS DISCLAIMS ALL LIABILITY FOR DAMAGES, INCLUDING DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OF ANY KIND ARISING FROM THE USE OF THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL DATABRICKS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.

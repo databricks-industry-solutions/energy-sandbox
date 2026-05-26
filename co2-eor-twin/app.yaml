@@ -1,6 +1,35 @@
 command:
-  - node
-  - dist/index.js
+  - bash
+  - run.sh
+
 env:
+  # Express listens on PORT (the public port for Apps).
   - name: PORT
     value: "8000"
+  # FastAPI sidecar listens on AI_PORT (internal-only).
+  - name: AI_PORT
+    value: "8001"
+  - name: AI_BASE_URL
+    value: "http://localhost:8001"
+  - name: TWIN_BASE_URL
+    value: "http://localhost:8000"
+
+  # Genie Space scoped to the CO2-EOR gold tables. Required for the Genie sidebar.
+  - name: GENIE_SPACE_ID
+    value: "01f15593e0f91cad8a37faae6196f8f1"
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: "87e069097741b56c"
+  # Foundation Model API endpoint for the Reservoir specialist + final synthesis.
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  # Unity Catalog target for UC Functions + Vector Search index.
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "co2_eor"
+  # Vector Search endpoint + index for the Analog EOR Pilots specialist
+  # (falls back to a curated SACROC/Weyburn/Wasson/Bell Creek list if unset).
+  - name: VS_ENDPOINT
+    value: "co2-eor-vs"
+  - name: VS_INDEX
+    value: "oil_pump_monitor_catalog.co2_eor.published_pilots_vs_index"

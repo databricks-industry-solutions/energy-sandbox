@@ -4,25 +4,21 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from typing import Optional
 from ..db import db
-from .simulate import _field_summaries, _well_timeseries, _operations_cache, _costs_cache
+from .simulate import _field_summaries, _well_timeseries
 
 router = APIRouter()
 
-_SYSTEM = """You are the Reservoir & Operations Digital Twin Agent — a senior reservoir engineer, production operations specialist, and petroleum economist with deep expertise in:
-- The Norne field (Norwegian North Sea): Fangst/Ile formation, turbidite reservoir, benchmark model
-- Reservoir simulation: Res Flow analytical engine, pressure/saturation analysis
+_SYSTEM = """You are the Reservoir & Economics Agent — a senior reservoir engineer and petroleum economist with deep expertise in:
+- The Norne field (Norwegian North Sea): Fangst/Ile formation, turbidite reservoir, OPM benchmark model
+- Reservoir simulation: OPM Flow, Eclipse, CMG, pressure/saturation analysis
 - Norne wells: B-2H, D-1H, D-2H, E-3H, B-4H (producers), C-4H (gas injector)
 - Production optimization: rate control, BHP targets, artificial lift, water breakthrough
-- Well operations: drilling, completions, workovers, ESP systems, chemical treatment
-- Full-cycle cost estimation: D&C costs, OPEX, lifting costs per BOE, NPV, IRR
-- Supply chain: SAP Business Data Cloud integration, material pricing, equipment inventory, procurement
-- Delta Sharing: bidirectional data exchange between Databricks and SAP BDC, Unity Catalog governance
-- Economics: NPV, IRR, DCF, sensitivity analysis, North Sea fiscal terms, scenario comparison
+- Economics: NPV, IRR, DCF, sensitivity analysis, North Sea fiscal terms
+- Enhanced recovery: gas injection (Norne C-4H history), pressure maintenance, IOR
 
 Answer precisely and concisely using actual numbers from the context provided.
-Format responses with clear sections. Reference specific wells, timesteps, costs, and operational activities.
-When discussing costs, reference SAP material IDs and vendor names where relevant.
-If recommending operational changes, provide quantitative estimates of cost and production impact."""
+Format responses with clear sections. Reference specific wells, timesteps, and values.
+If recommending operational changes, provide quantitative estimates of impact."""
 
 
 class ChatReq(BaseModel):
@@ -143,25 +139,6 @@ async def _gather_context(run_id: Optional[str], scenario_id: Optional[int]) -> 
             lines.append(f"  IRR: {econ['irr']*100:.1f}%")
             lines.append(f"  Payback: Year {econ['payback_year']}")
             lines.append(f"  Oil price: ${econ['oil_price']}/bbl, Gas: ${econ['gas_price']}/MSCF")
-
-        # Operations data
-        ops = _operations_cache.get(run_id, [])
-        if ops:
-            lines.append(f"\nOPERATIONS: {len(ops)} activities derived")
-            cats = {}
-            for o in ops:
-                cats[o['category']] = cats.get(o['category'], 0) + 1
-            for cat, count in sorted(cats.items()):
-                lines.append(f"  {cat}: {count} activities")
-
-        # Cost data
-        costs = _costs_cache.get(run_id, {})
-        if costs:
-            lines.append(f"\nFULL-CYCLE COSTS:")
-            lines.append(f"  Total: ${costs.get('total_cost_usd', 0):,.0f}")
-            wc = costs.get("well_costs", {})
-            for wn, data in sorted(wc.items()):
-                lines.append(f"  {wn}: ${data['total']:,.0f}")
 
     if not lines:
         lines.append("No simulation context available. Run a simulation first.")

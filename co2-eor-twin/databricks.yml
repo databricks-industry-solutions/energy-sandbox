@@ -17,17 +17,11 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
 
   prod:
     mode: production
     workspace:
-      host: https://YOUR-WORKSPACE.cloud.databricks.com
+      host: https://fevm-oil-pump-monitor.cloud.databricks.com
       profile: fe-vm-oil-pump-monitor
-
-  demo:
-    mode: production
-    workspace:
-      host: https://e2-demo-west.cloud.databricks.com
-      profile: e2-demo-west
