@@ -7,6 +7,32 @@ command:
   - "--server.enableCORS=false"
   - "--server.enableXsrfProtection=false"
 
+resources:
+  - name: sql-warehouse
+    description: "SQL warehouse for UC Functions + Genie + supervisor analytics"
+    sql_warehouse:
+      id: 87e069097741b56c
+      permission: CAN_USE
+
 env:
   - name: ENVIRONMENT
     value: "production"
+  - name: DATABRICKS_WAREHOUSE_ID
+    valueFrom: sql-warehouse
+  # Genie Space scoped to the demo's gold tables. Required for the floating Genie sidebar.
+  - name: GENIE_SPACE_ID
+    value: "01f155909f29179bb29656d4fbe03a2f"
+  # Foundation Model API endpoint for the Anomaly Classifier specialist + final synthesis.
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  # Unity Catalog target for UC Functions + Vector Search index (per Rules of the Road).
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "pipeline_command_center"
+  # Vector Search endpoint + index for the Historical Similar Event specialist
+  # (falls back to curated FAILURE_PATTERNS analogs if unset).
+  - name: VS_ENDPOINT
+    value: "pipeline-incidents-vs"
+  - name: VS_INDEX
+    value: "oil_pump_monitor_catalog.pipeline_command_center.incident_reports_vs_index"

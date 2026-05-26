@@ -16,6 +16,16 @@ from mock_data import (
     ASSETS, SENSOR_DEFS, RUL_PREDICTIONS, FAILURE_PATTERNS,
     WORK_ORDERS, SPARE_PARTS, CREW, OPERATIONS_CYCLE,
 )
+import os
+from genie_panel import ask_genie
+
+
+def _genie_space_url() -> str:
+    space_id = os.getenv("GENIE_SPACE_ID", "")
+    host = os.getenv("DATABRICKS_HOST", "fevm-oil-pump-monitor.cloud.databricks.com").rstrip("/")
+    if host and not host.startswith("http"):
+        host = "https://" + host
+    return f"{host}/genie/rooms/{space_id}" if space_id else "#"
 
 # ── Colour Palette (Dark HMI) ─────────────────────────────────────
 BG       = "#0B0F1A"
@@ -38,8 +48,8 @@ NAV_ITEMS = [
     ("\u26A0\uFE0F  Events & Alarms",          "events"),
     ("\U0001F4E1  SCADA / ERP",               "scada"),
     ("\U0001F477  Crew & Ops",                "crew"),
-    ("\U0001F4CA  Data & AI Flow",            "dataflow"),
     ("\U0001F916  Pipeline Advisor",          "advisor"),
+    ("\U0001F4CA  Data & AI Flow",            "dataflow"),
 ]
 
 # ── CSS Injection ──────────────────────────────────────────────────
@@ -545,7 +555,7 @@ body{background:#0B0F1A;margin:0 auto;max-width:960px;padding:4px}
 @keyframes fd{from{stroke-dashoffset:18}to{stroke-dashoffset:0}}
 .fd{animation:fd 1.6s linear infinite}
 </style></head><body>
-<svg viewBox="0 0 860 430" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 860 500" style="width:100%;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <defs>
   <!-- Lakeflow-style gradient fills -->
   <linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1">
@@ -767,6 +777,32 @@ body{background:#0B0F1A;margin:0 auto;max-width:960px;padding:4px}
 
 <!-- Divider -->
 <line x1="12" y1="318" x2="848" y2="318" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 4"/>
+
+<!-- ═══ SUPERVISOR + GENIE ROW (new) ═══ -->
+<text x="12" y="425" fill="#64748b" font-size="11" font-weight="700" font-family="sans-serif" letter-spacing=".5">SUPERVISOR · GENIE</text>
+
+<!-- Supervisor: wide pill on the left covering specialists fan-out -->
+<g filter="url(#ds)">
+  <rect x="20" y="440" width="500" height="48" rx="8" fill="url(#gPurple)" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="20" y="440" width="500" height="4" rx="8" fill="#8b5cf6" opacity=".6"/>
+  <text x="270" y="461" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700" font-family="sans-serif">Decision Supervisor · 5 specialists fan out in parallel</text>
+  <text x="270" y="478" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">FM API · Vector Search · UC Functions · UC tags · Lakebase+Genie · Claude synthesis</text>
+</g>
+
+<!-- Genie sidebar pill on the right -->
+<g filter="url(#ds)">
+  <rect x="540" y="440" width="300" height="48" rx="8" fill="url(#gGreen)" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="540" y="440" width="300" height="4" rx="8" fill="#22c55e" opacity=".5"/>
+  <text x="690" y="461" text-anchor="middle" fill="#e2e8f0" font-size="13" font-weight="700" font-family="sans-serif">Genie Sidebar · NL → SQL</text>
+  <text x="690" y="478" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">scoped to demo gold schema · always-on</text>
+</g>
+
+<!-- Edges: agent layer → Supervisor; Lakebase/Gold → Genie -->
+<path d="M270,395 L270,440" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6 3" stroke-opacity=".25"/>
+<path d="M270,395 L270,440" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6 3" class="fd" style="animation-delay:1.3s"/>
+<path d="M565,226 L565,420 L690,420 L690,440" fill="none" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="6 3" stroke-opacity=".25"/>
+<path d="M565,226 L565,420 L690,420 L690,440" fill="none" stroke="#22c55e" stroke-width="2" stroke-dasharray="6 3" class="fd" style="animation-delay:1.4s"/>
+
 </svg>
 </body></html>"""
 
@@ -799,13 +835,16 @@ def _render_rec_card(rec: Recommendation):
             + "".join(crew_items) + '</div>'
         )
     actions_html = "".join(f"<li>{_html.escape(a)}</li>" for a in rec.actions)
-    st.markdown(f"""<div class="rec-card">
-        {sev_badge} {agent_badge} <span style="color:{MUTED};font-size:11px;margin-left:8px">{_html.escape(rec.asset_id)}</span>
-        <div class="rec-title">{_html.escape(rec.title)}</div>
-        <div class="rec-detail">{_html.escape(rec.detail)}</div>
-        <ul class="rec-actions">{actions_html}</ul>
-        {crew_html}
-    </div>""", unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="rec-card">'
+        f'{sev_badge} {agent_badge} <span style="color:{MUTED};font-size:11px;margin-left:8px">{_html.escape(rec.asset_id)}</span>'
+        f'<div class="rec-title">{_html.escape(rec.title)}</div>'
+        f'<div class="rec-detail">{_html.escape(rec.detail)}</div>'
+        f'<ul class="rec-actions">{actions_html}</ul>'
+        f'{crew_html}'
+        f'</div>',
+        unsafe_allow_html=True,
+    )
 
 
 # ══════════════════════════════════════════════════════════════════
@@ -1130,13 +1169,13 @@ def _render_dataflow():
     kpi_items = [
         ("Components", "18 / 18", "monitored", CYAN),
         ("Bronze Latency", "1.2 s", "avg ingest", GREEN),
-        ("ML Inference", "4.8 s", "anomaly + RUL", PURPLE),
-        ("Agent Layer", "5 agents", "per tick", ORANGE),
+        ("Supervisor", "5 specialists", "fan-out · parallel", PURPLE),
+        ("Genie", "NL → SQL", "scoped sidebar", ORANGE),
     ]
     for c, (t, v, s, clr) in zip(kcols, kpi_items):
         c.markdown(_kpi(t, v, s, clr), unsafe_allow_html=True)
 
-    st.components.v1.html(_dataflow_html(), height=450, scrolling=False)
+    st.components.v1.html(_dataflow_html(), height=540, scrolling=False)
 
     # How It Works — 6 cards in 3-column grid (BOP Guardian style)
     st.markdown("### How It Works")
@@ -1147,12 +1186,13 @@ def _render_dataflow():
          "health in Silver, and aggregate KPIs + RUL predictions in Gold."),
         ("Lakebase Serving", "Gold-layer results sync to managed PostgreSQL via JDBC for sub-10ms "
          "indexed queries, connection pooling, and auto-scaling."),
-        ("5 AI Agents", "Health, Integrity, Leak Detection, Operations, and Compliance agents run "
-         "each tick — auto-dispatching crew by certification and zone proximity."),
-        ("Digital Twin", "Live SVG schematic with health dots, flow animation, pressure readouts, "
-         "and industry icons for every asset class on the 87-mile trunk line."),
-        ("Pipeline Advisor", "Natural-language chat with 9 intent types and 10+ component aliases "
-         "for instant insights on health, RUL, crew, compliance, and operations."),
+        ("6 Sub-Agents → 5 Specialists", "Health · Integrity · Leak · Operations · Compliance · Crew "
+         "wrapped into 5 Supervisor specialists, each demonstrating a different Databricks AI primitive."),
+        ("Decision Supervisor", "Foundation Model API + Vector Search + UC Functions + UC tags + "
+         "Lakebase/Genie fan out in parallel. Claude synthesises a dispatch verdict "
+         "(DISPATCH-NOW · SCHEDULE-INSPECTION · LOG-AND-WATCH · ESCALATE-CONTROL-ROOM)."),
+        ("Genie Sidebar", "Always-on natural-language sidebar scoped to the demo's gold schema for "
+         "ad-hoc questions on throughput, RUL, work orders, and crew availability."),
     ]
     for row_start in range(0, len(cards), 3):
         cols = st.columns(3)
@@ -1164,16 +1204,74 @@ def _render_dataflow():
             )
 
 
+def _ask_pipe_genie(question: str, agent_obj: PipelineGuardian) -> str:
+    """Send question to Genie; render text + rows as markdown table.
+    Falls back to the local PipelineGuardian agent if Genie errors."""
+    if "pipe_genie_conv" not in st.session_state:
+        st.session_state.pipe_genie_conv = None
+    try:
+        shaped = ask_genie(question=question, conversation_id=st.session_state.get("pipe_genie_conv"))
+    except Exception as e:
+        shaped = {"error": str(e)}
+    if shaped.get("error"):
+        return f"_(Genie unavailable: {shaped['error']})_\n\n{agent_obj.handle_query(question)}"
+    st.session_state.pipe_genie_conv = shaped.get("conversation_id")
+    parts = []
+    txt = shaped.get("text", "")
+    if txt and txt != "(Genie returned no text)":
+        parts.append(txt)
+    rows = shaped.get("rows") or []
+    cols = shaped.get("columns") or []
+    if rows and cols:
+        md = ["", "| " + " | ".join(cols) + " |", "|" + "|".join(["---"] * len(cols)) + "|"]
+        for r in rows[:15]:
+            md.append("| " + " | ".join("" if v is None else str(v)[:60] for v in r) + " |")
+        if len(rows) > 15:
+            md.append(f"_… {len(rows)-15} more rows_")
+        parts.append("\n".join(md))
+    return "\n\n".join(parts) if parts else "_(Genie didn't return a usable answer — try rephrasing.)_"
+
+
 def _render_advisor(agent_obj: PipelineGuardian):
-    """Tab 8 — Pipeline Advisor Chat"""
-    st.markdown("### Pipeline Advisor")
+    """Pipeline Advisor — Genie-powered chat over UC pipeline tables."""
+    _genie_url = _genie_space_url()
     st.markdown(
-        f'<span style="color:{MUTED};font-size:13px">'
-        f'Ask about pipeline health, RUL predictions, crew, work orders, leak detection, compliance, operations, or spare parts.</span>',
+        f'<div style="background:linear-gradient(135deg,#0a0e1a 0%,#0d1729 100%);'
+        f'border:1px solid {BORDER};border-radius:14px;padding:18px 22px;'
+        f'margin-bottom:14px;display:flex;align-items:center;gap:16px">'
+        f'<div style="width:48px;height:48px;background:radial-gradient(circle at 30% 30%,#67e8f9,#06b6d4 70%);'
+        f'border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:24px;'
+        f'box-shadow:0 0 20px #06b6d433">✨</div>'
+        f'<div style="flex:1">'
+        f'<div style="color:{TXT};font-size:16px;font-weight:700">'
+        f'Pipeline Advisor &nbsp;<span style="font-size:11px;color:#94a3b8;font-weight:500">Powered by</span> '
+        f'<a href="{_genie_url}" target="_blank" rel="noopener" '
+        f'style="color:#67e8f9;text-decoration:none;font-weight:600;font-size:13px">✨ Databricks Genie ↗</a>'
+        f'</div>'
+        f'<div style="font-size:11px;color:#94a3b8;margin-top:3px">'
+        f'Natural-language access to pipeline data — assets, events, work orders, crews, throughput, compliance.</div>'
+        f'</div>'
+        f'<span style="background:#0c2333;border:1px solid #06b6d444;border-radius:12px;padding:3px 9px;'
+        f'font-size:10px;color:#67e8f9;font-weight:600">UC governed</span>'
+        f'</div>',
         unsafe_allow_html=True,
     )
 
-    # Display chat history
+    # Empty state
+    if not agent_obj.state.chat_history:
+        st.markdown(
+            f'<div style="background:{PANEL};border:1px dashed {BORDER};border-radius:12px;'
+            f'padding:24px;text-align:center;margin-bottom:12px">'
+            f'<div style="color:{TXT};font-size:14px;font-weight:600;margin-bottom:6px">'
+            f'Ask anything about the pipeline</div>'
+            f'<div style="font-size:11px;color:{MUTED}">Genie queries governed UC tables: '
+            f'<code>assets</code>, <code>events</code>, <code>work_orders</code>, '
+            f'<code>crew_availability</code>, <code>throughput_hourly</code>, <code>compliance_log</code>.</div>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
+    # Chat history
     for msg in agent_obj.state.chat_history:
         role = msg["role"]
         with st.chat_message(role):
@@ -1188,23 +1286,27 @@ def _render_advisor(agent_obj: PipelineGuardian):
     # Chat input
     user_input = st.chat_input("Ask Pipeline Command Center...")
     if user_input:
-        with st.chat_message("user"):
-            st.markdown(user_input)
-        response = agent_obj.handle_query(user_input)
-        with st.chat_message("assistant"):
-            st.markdown(
-                f'<div style="color:{TXT};font-size:13px">{_md_to_html(response)}</div>',
-                unsafe_allow_html=True,
-            )
+        agent_obj.state.chat_history.append({"role": "user", "content": user_input})
+        response = _ask_pipe_genie(user_input, agent_obj)
+        agent_obj.state.chat_history.append({"role": "assistant", "content": response})
+        st.rerun()
 
-    # Quick action buttons
-    st.markdown("---")
-    st.markdown(f'<span style="color:{MUTED};font-size:12px">Quick Actions:</span>', unsafe_allow_html=True)
-    qcols = st.columns(5)
-    prompts = ["Pipeline summary", "Show RUL predictions", "Crew status", "Leak detection", "Compliance report"]
-    for c, prompt in zip(qcols, prompts):
-        if c.button(prompt, key=f"qa_{prompt}"):
-            response = agent_obj.handle_query(prompt)
+    # Quick action buttons — directive, Genie-friendly
+    st.markdown(f'<span style="color:{MUTED};font-size:10px;text-transform:uppercase;letter-spacing:.04em;font-weight:600">Try one of these</span>', unsafe_allow_html=True)
+    qcols = st.columns(3)
+    prompts = [
+        "Show assets with health_pct below 75",
+        "Open events ordered by severity",
+        "Crews available this week",
+        "Top 5 assets by lowest rul_days",
+        "Throughput by segment for the last 4 hours",
+        "Spare parts with lead_time > 14 days",
+    ]
+    for i, prompt in enumerate(prompts):
+        if qcols[i % 3].button(prompt, key=f"qa_{i}", use_container_width=True):
+            agent_obj.state.chat_history.append({"role": "user", "content": prompt})
+            response = _ask_pipe_genie(prompt, agent_obj)
+            agent_obj.state.chat_history.append({"role": "assistant", "content": response})
             st.rerun()
 
     # Recent recommendations banner
@@ -1215,7 +1317,6 @@ def _render_advisor(agent_obj: PipelineGuardian):
         for i, rec in enumerate(reversed(recs[-6:])):
             with cols[i % 2]:
                 _render_rec_card(rec)
-
 
 # ══════════════════════════════════════════════════════════════════
 #  MAIN APP RENDER
