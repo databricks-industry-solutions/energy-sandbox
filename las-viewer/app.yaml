@@ -9,11 +9,11 @@ command:
   - "8000"
 
 env:
-  # Genie Space scoped to the LAS Viewer gold tables. Create a Genie Space first
-  # (oil_pump_monitor_catalog.las_viewer schema covering wells, depth_logs,
-  # curve_quality, anomalies, processing_runs, formation_tops), then set the ID.
+  # Genie Space scoped to the LAS Viewer gold tables in Unity Catalog
+  # (oil_pump_monitor_catalog.las_viewer: wells, depth_logs, curve_quality,
+  # anomalies, processing_runs, formation_tops).
   - name: GENIE_SPACE_ID
-    value: ""
+    value: "01f1595064ca198a8cebb0b3982589d2"
   # Foundation Model API endpoint used by the existing AI advisor.
   - name: AGENT_MODEL
     value: "databricks-claude-sonnet-4-6"
