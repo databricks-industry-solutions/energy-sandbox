@@ -8,18 +8,16 @@ command:
   - "--port"
   - "8000"
 
-resources:
-  - name: database
-    description: "Lakebase Postgres for LAS well log storage and processing"
-    database:
-      instance: las-viewer-db
-
 env:
-  - name: PGHOST
-    valueFrom: database
-  - name: PGPORT
-    valueFrom: database
-  - name: PGDATABASE
-    valueFrom: database
-  - name: PGUSER
-    valueFrom: database
+  # Genie Space scoped to the LAS Viewer gold tables. Create a Genie Space first
+  # (oil_pump_monitor_catalog.las_viewer schema covering wells, depth_logs,
+  # curve_quality, anomalies, processing_runs, formation_tops), then set the ID.
+  - name: GENIE_SPACE_ID
+    value: ""
+  # Foundation Model API endpoint used by the existing AI advisor.
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-6"
+  - name: DEMO_CATALOG
+    value: "oil_pump_monitor_catalog"
+  - name: DEMO_SCHEMA
+    value: "las_viewer"

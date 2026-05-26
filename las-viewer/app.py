@@ -35,12 +35,14 @@ from server.routes.logs    import router as logs_router
 from server.routes.qc      import router as qc_router
 from server.routes.recipes import router as recipes_router
 from server.routes.advisor import router as advisor_router
+from server.routes.genie   import router as genie_router
 
 app.include_router(wells_router,   prefix="/api")
 app.include_router(logs_router,    prefix="/api")
 app.include_router(qc_router,      prefix="/api")
 app.include_router(recipes_router, prefix="/api")
 app.include_router(advisor_router, prefix="/api")
+app.include_router(genie_router,   prefix="/api")
 
 # Serve React SPA
 frontend_dist = os.path.join(os.path.dirname(__file__), "frontend", "dist")
