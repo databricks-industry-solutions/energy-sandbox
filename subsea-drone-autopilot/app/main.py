@@ -31,8 +31,14 @@ from agents.knowledge_agent import (
 )
 import db
 from simulator import get_simulator
+from routes.genie import router as genie_router
+from routes.supervisor import router as supervisor_router
 
 app = FastAPI(title="Subsea Drone Autopilot", version="1.0.0")
+
+# ── AI routes (Genie + Supervisor — additive) ──
+app.include_router(genie_router, prefix="/api")
+app.include_router(supervisor_router, prefix="/api")
 
 # ── Request / Response Models ───────────────────────────────
 

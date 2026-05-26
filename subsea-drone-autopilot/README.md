@@ -89,6 +89,29 @@ Fleet health analysis with condition-based maintenance recommendations. 5 tools:
 ### 4. Knowledge Assistant Agent
 Operator Q&A with RAG over subsea manuals, fleet status, and inspection history. 4 tools: `query_manuals`, `get_fleet_status`, `get_inspection_history`, `get_telemetry_data`.
 
+## Ask Genie (Natural-Language SQL)
+
+The `/knowledge` route is powered by a **Databricks Genie Space** scoped to the subsea gold tables (`drone_status`, `assets`, `inspections`, `alerts`, `autopilot_decisions`, `telemetry_features`). Operators ask plain-language questions and Genie translates to governed SQL against Unity Catalog. Backed by `app/routes/genie.py` with two endpoints:
+
+- `POST /api/genie/ask` — blocking JSON response (used by the Supervisor's Lakebase + Genie specialist)
+- `POST /api/genie/ask_stream` — SSE stream with friendly status updates ("Writing SQL…", "Running on warehouse…") for the AskGenie UI
+
+A `_safe()` accessor defends against the Databricks SDK's `__getattr__` raising `KeyError` on missing response fields; results are cached for 90 seconds.
+
+## Decision Supervisor (5-Specialist Fan-Out)
+
+The `/supervisor` route demonstrates an agentic dispatch verdict — given an asset, location, and severity, five specialists fan out in parallel and Claude synthesises the result:
+
+| Specialist | Databricks Primitive | Returns |
+|------------|----------------------|---------|
+| **CV Anomaly Classifier** | Foundation Model API (Claude) | Defect category + confidence from the last inspection frame |
+| **Mission History** | Vector Search over `mission_reports_vs_index` | Closest prior mission outcomes |
+| **Asset Risk** | UC Function (`subsea_asset_risk`) | Risk tier + due-by date |
+| **Live Fleet Data** | Lakebase + Genie | Current drone availability, battery, and depth |
+| **Governance Tags** | UC tags | Operator, compliance regime, environmental sensitivity |
+
+Claude consolidates the five results into one of `DISPATCH-NOW`, `SCHEDULE-INSPECTION`, `LOG-AND-WATCH`, or `ESCALATE-CONTROL-ROOM` with crew + ETA + parts.
+
 ## Dashboard Pages
 
 | Page | Route | Description |
@@ -98,7 +121,8 @@ Operator Q&A with RAG over subsea manuals, fleet status, and inspection history.
 | Mission Planner | `/planner` | Mission form with Autopilot Agent streaming |
 | Live Viewer | `/live` | Real-time CV frame streaming with defect annotations |
 | Inspection Report | `/inspection` | Mission picker with analytics, defect cards, recommended actions |
-| Knowledge | `/knowledge` | Claude-powered Q&A with source citations |
+| **Ask Genie** | `/knowledge` | NL-to-SQL over UC subsea tables via Databricks Genie |
+| **Supervisor** | `/supervisor` | 5-specialist parallel decision fan-out with synthesised verdict |
 | Architecture | `/dataflow` | Interactive SVG data flow diagram |
 
 ## Delta Tables
