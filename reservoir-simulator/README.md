@@ -45,8 +45,10 @@ Reservoir simulation is the cornerstone of field development planning. A single 
 | **Cost Analysis** | CAPEX/OPEX breakdown with SAP BDC integration, procurement tracking, and vendor contracts |
 | **Economics** | NPV, IRR, payout, cashflow waterfall with configurable price decks and fiscal assumptions |
 | **Compare** | Side-by-side scenario comparison with production, economics, and efficiency delta analysis |
-| **Agent** | AI-powered reservoir engineering assistant using Foundation Model API |
+| **Supervisor** | Reservoir Decision Supervisor — 5 specialists fan out in parallel (FM API + Vector Search field analogs + UC Functions + Lakebase/Genie + UC tags) and Claude synthesises an engineering recommendation with citations |
 | **Data & AI Flow** | Interactive architecture diagram showing the simulation pipeline |
+
+Plus a floating **✨ Ask Genie** sidebar that's available on every tab — natural-language SQL over UC scenario, run, economics, and SAP BDC supply-chain tables. Backed by `server/routes/genie.py` (Databricks Genie Conversation API with SSE streaming + 90s cache; `_safe()` accessor defends against SDK `KeyError` on missing response fields).
 
 <img src="images/ressim_sap.png" alt="Reservoir Simulator — SAP Work Orders" width="100%">
 

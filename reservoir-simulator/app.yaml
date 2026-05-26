@@ -12,9 +12,25 @@ resources:
   - name: sql-warehouse
     description: "SQL warehouse for sim results and Unity Catalog"
     sql_warehouse:
-      id: <your-warehouse-id>
+      id: 87e069097741b56c
       permission: CAN_USE
 
 env:
   - name: DATABRICKS_WAREHOUSE_ID
     valueFrom: sql-warehouse
+  # Genie Space scoped to the demo's gold tables. Required for the floating Genie sidebar.
+  - name: GENIE_SPACE_ID
+    value: "01f1556eb1f21a328e2e00f971359222"
+  # Foundation Model API endpoint for the Reservoir specialist + final synthesis.
+  - name: AGENT_MODEL
+    value: "databricks-claude-sonnet-4-5"
+  # Unity Catalog target for UC Functions + Vector Search index (per Rules of the Road).
+  - name: DEMO_CATALOG
+    value: "energy_utilities"
+  - name: DEMO_SCHEMA
+    value: "reservoir_simulator"
+  # Vector Search endpoint + index for the Analog specialist (falls back to curated list if unset).
+  - name: VS_ENDPOINT
+    value: "subsurface-vs"
+  - name: VS_INDEX
+    value: "energy_utilities.reservoir_simulator.field_analogs_vs_index"
