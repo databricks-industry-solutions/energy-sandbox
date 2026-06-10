@@ -6,6 +6,8 @@
 
 A real-time ESP (Electric Submersible Pump) fleet monitoring platform built as a [Databricks App](https://docs.databricks.com/en/dev-tools/databricks-apps/index.html) with a Streamlit frontend. It combines high-frequency pump telemetry, threshold and statistical anomaly detection, an ML failure-prediction model, and a natural-language AI assistant, all on Unity Catalog and serverless compute.
 
+<img src="images/hero.png" alt="ESP Fleet Operations Command Center" width="100%">
+
 ## Overview
 
 ESP failures are costly and hard to see coming in raw high-frequency telemetry. This app gives operators a single pane of glass:
@@ -27,6 +29,20 @@ All objects live in `oil_pump_monitor_catalog.esp_hackathon`:
 | `latest_reading_per_well` | View | Newest reading per well, drives the live dashboard |
 | `pump_features` / `pump_features_hourly` | Managed Delta | Aggregated features for ML (per well-hour) |
 | `pump_failure_predictions` | Managed Delta | ML failure-probability score per well-hour |
+
+## Screens
+
+Fleet Dashboard:
+
+<img src="images/dashboard.png" alt="Fleet Dashboard" width="100%">
+
+AI Investigation (Supervisor routing telemetry + ESP procedures):
+
+<img src="images/ai_investigation.png" alt="AI Investigation" width="100%">
+
+Data & AI Flow:
+
+<img src="images/dataflow.png" alt="Data and AI Flow" width="100%">
 
 ## Architecture
 
