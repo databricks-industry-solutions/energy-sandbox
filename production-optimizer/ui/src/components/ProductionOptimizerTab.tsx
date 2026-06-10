@@ -395,7 +395,10 @@ function OptimizeView({ recs }: { recs: RecsResponse | null }) {
   const [autoRan, setAutoRan] = useState(false);
 
   useEffect(() => {
-    fetch('/api/commercial/field-summary').then(r => r.json()).then(setEcon).catch(() => {});
+    fetch('/api/commercial/field-summary')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => setEcon(d && typeof d.fieldNetback === 'number' ? d : null))
+      .catch(() => {});
   }, []);
 
   // When a recommendation is selected, pre-populate sliders and auto-run
@@ -444,7 +447,8 @@ function OptimizeView({ recs }: { recs: RecsResponse | null }) {
           wagRatioChange: 0,
         }),
       });
-      setWhatIf(await r.json());
+      const j = await r.json();
+      setWhatIf(j && j.summary && Array.isArray(j.results) ? j : null);
     } catch (e) { console.error(e); }
     setLoading(false);
   }, [injChange, chokeChange, co2PriceChange]);

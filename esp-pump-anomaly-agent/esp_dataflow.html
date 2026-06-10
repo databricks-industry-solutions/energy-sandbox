@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>ESP Data & AI Flow</title><style>
+:root { --bg: #0B0F1A; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:6px 4px;max-width:1590px;margin:0 auto}
+html{background:var(--bg)}
+@keyframes fd{from{stroke-dashoffset:18}to{stroke-dashoffset:0}}
+.fe{fill:none;stroke-dasharray:6 12;animation:fd 1.2s linear infinite}
+.et{fill:none;stroke-opacity:.18}
+.ng{cursor:pointer}
+.ng rect{transition:filter .15s}
+.ng:hover rect{filter:brightness(1.4)}
+.ng.sel rect{stroke-width:2.5!important;filter:brightness(1.6)}
+.nl{fill:#E8EDF5;font-size:11px;font-weight:600}
+.ns{fill:#6B7A99;font-size:8.5px}
+.sl{fill:#4B5563;font-size:9px;font-weight:700;letter-spacing:1.5px}
+.sep{stroke:#1E2D4F;stroke-width:1}
+.ucb{fill:none;stroke:#f97316;stroke-width:1.2;stroke-dasharray:4 4;opacity:.45}
+.ucl{fill:#f97316;font-size:8.5px;font-weight:600;opacity:.65}
+.lt{fill:#6B7A99;font-size:8px}
+.info{background:#141B2D;border:1px solid #1E2D4F;border-radius:8px;padding:12px;margin-top:8px}
+.hw{display:flex;gap:8px;flex-wrap:wrap}
+.hc{flex:1;min-width:130px;background:#0e1624;border:1px solid #1E2D4F;border-radius:6px;padding:9px}
+.hn{color:#FFB020;font-size:10px;font-weight:700;margin-bottom:5px}
+.ht{color:#94A3B8;font-size:9px;line-height:1.5}
+.db2{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:6px}
+.dt2{font-size:13px;font-weight:700;color:#E8EDF5;margin-bottom:8px}
+.dl2{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px}
+.di{font-size:10px;color:#94A3B8;line-height:1.6}
+</style></head><body>
+
+<svg viewBox="0 0 1060 424" width="100%" style="display:block">
+<defs>
+  <marker id="m_blue"   markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3b82f6"/></marker>
+  <marker id="m_indigo" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#4f46e5"/></marker>
+  <marker id="m_purple" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#7c3aed"/></marker>
+  <marker id="m_violet" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#8b5cf6"/></marker>
+  <marker id="m_lilac"  markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#a78bfa"/></marker>
+  <marker id="m_indi2"  markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#6366f1"/></marker>
+  <marker id="m_green"  markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#22c55e"/></marker>
+</defs>
+
+<rect class="ucb" x="150" y="168" width="560" height="84" rx="6"/>
+<text class="ucl" x="158" y="163">Unity Catalog Governance · oil_pump_monitor_catalog.esp_hackathon</text>
+
+<text class="sl" x="530" y="20"  text-anchor="middle">SOURCES &amp; INGESTION</text>
+<line x1="8" y1="28"  x2="1052" y2="28"  class="sep"/>
+<line x1="8" y1="140" x2="1052" y2="140" class="sep"/>
+<text class="sl" x="530" y="154" text-anchor="middle">DATA PLATFORM &amp; MEDALLION</text>
+<line x1="8" y1="268" x2="1052" y2="268" class="sep"/>
+<text class="sl" x="530" y="282" text-anchor="middle">ANALYSIS &amp; AI SERVING</text>
+
+<!-- Edges -->
+<!-- sensors -> bronze -->
+<path class="et" d="M200,101 C200,150 230,150 230,184" stroke="#3b82f6" stroke-width="2"/>
+<path class="fe" d="M200,101 C200,150 230,150 230,184" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#m_blue)" style="animation-delay:0s"/>
+<!-- bronze -> silver -->
+<path class="et" d="M300,210 L350,210" stroke="#4f46e5" stroke-width="2"/>
+<path class="fe" d="M300,210 L350,210" stroke="#4f46e5" stroke-width="2.5" marker-end="url(#m_indigo)" style="animation-delay:.15s"/>
+<!-- silver -> gold -->
+<path class="et" d="M490,210 L550,210" stroke="#7c3aed" stroke-width="2"/>
+<path class="fe" d="M490,210 L550,210" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#m_purple)" style="animation-delay:.3s"/>
+<!-- silver -> rules (drop) -->
+<path class="et" d="M420,236 L420,319" stroke="#a78bfa" stroke-width="2"/>
+<path class="fe" d="M420,236 L420,319" stroke="#a78bfa" stroke-width="2.5" marker-end="url(#m_lilac)" style="animation-delay:.12s"/>
+<!-- gold -> ml (drop) -->
+<path class="et" d="M620,236 L620,319" stroke="#8b5cf6" stroke-width="2"/>
+<path class="fe" d="M620,236 L620,319" stroke="#8b5cf6" stroke-width="2.5" marker-end="url(#m_violet)" style="animation-delay:.24s"/>
+<!-- ml -> advisor -->
+<path class="et" d="M690,345 L740,345" stroke="#6366f1" stroke-width="2"/>
+<path class="fe" d="M690,345 L740,345" stroke="#6366f1" stroke-width="2.5" marker-end="url(#m_indi2)" style="animation-delay:.45s"/>
+<!-- advisor -> dashboard -->
+<path class="et" d="M880,345 L916,345" stroke="#22c55e" stroke-width="2"/>
+<path class="fe" d="M880,345 L916,345" stroke="#22c55e" stroke-width="2.5" marker-end="url(#m_green)" style="animation-delay:.6s"/>
+
+<!-- ROW 1 NODES -->
+<g class="ng" id="n-sensors" onclick="sel('sensors')">
+  <rect x="130" y="49" width="140" height="52" rx="6" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text class="nl" x="200" y="70" text-anchor="middle">ESP Sensors</text>
+  <text class="ns" x="200" y="83" text-anchor="middle">25 wells · downhole</text>
+  <text class="ns" x="200" y="94" text-anchor="middle">pressure · temp · vibration</text>
+</g>
+
+<!-- ROW 2 NODES -->
+<g class="ng" id="n-bronze" onclick="sel('bronze')">
+  <rect x="160" y="184" width="140" height="52" rx="6" fill="#1a1430" stroke="#4f46e5" stroke-width="1.5"/>
+  <text class="nl" x="230" y="205" text-anchor="middle">Bronze</text>
+  <text class="ns" x="230" y="219" text-anchor="middle">pump_telemetry</text>
+  <text class="ns" x="230" y="230" text-anchor="middle">high-frequency Delta</text>
+</g>
+<g class="ng" id="n-silver" onclick="sel('silver')">
+  <rect x="350" y="184" width="140" height="52" rx="6" fill="#2d1b69" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="nl" x="420" y="205" text-anchor="middle">Silver</text>
+  <text class="ns" x="420" y="219" text-anchor="middle">latest_reading_per_well</text>
+  <text class="ns" x="420" y="230" text-anchor="middle">newest per well</text>
+</g>
+<g class="ng" id="n-gold" onclick="sel('gold')">
+  <rect x="550" y="184" width="140" height="52" rx="6" fill="#2d1b69" stroke="#7c3aed" stroke-width="1.5"/>
+  <text class="nl" x="620" y="205" text-anchor="middle">Gold Features</text>
+  <text class="ns" x="620" y="219" text-anchor="middle">pump_features</text>
+  <text class="ns" x="620" y="230" text-anchor="middle">per well-hour</text>
+</g>
+
+<!-- ROW 3 NODES -->
+<g class="ng" id="n-rules" onclick="sel('rules')">
+  <rect x="350" y="319" width="140" height="52" rx="6" fill="#1e1040" stroke="#a78bfa" stroke-width="1.5"/>
+  <text class="nl" x="420" y="340" text-anchor="middle">Rules &amp; Anomaly</text>
+  <text class="ns" x="420" y="353" text-anchor="middle">1200-2400 psi · 250&#176;F</text>
+  <text class="ns" x="420" y="364" text-anchor="middle">3&#963; detection</text>
+</g>
+<g class="ng" id="n-ml" onclick="sel('ml')">
+  <rect x="550" y="319" width="140" height="52" rx="6" fill="#1a0d4a" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text class="nl" x="620" y="340" text-anchor="middle">Predictive ML</text>
+  <text class="ns" x="620" y="353" text-anchor="middle">pump_failure_predictions</text>
+  <text class="ns" x="620" y="364" text-anchor="middle">failure probability</text>
+</g>
+<g class="ng" id="n-advisor" onclick="sel('advisor')">
+  <rect x="740" y="319" width="140" height="52" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-width="1.5"/>
+  <text class="nl" x="810" y="340" text-anchor="middle">Advisor AI</text>
+  <text class="ns" x="810" y="353" text-anchor="middle">Mosaic AI agent</text>
+  <text class="ns" x="810" y="364" text-anchor="middle">6 live SQL tools</text>
+</g>
+<g class="ng" id="n-dashboard" onclick="sel('dashboard')">
+  <rect x="916" y="319" width="140" height="52" rx="6" fill="#052e16" stroke="#22c55e" stroke-width="1.5"/>
+  <text class="nl" x="986" y="340" text-anchor="middle">Ops Dashboard</text>
+  <text class="ns" x="986" y="353" text-anchor="middle">this Streamlit app</text>
+  <text class="ns" x="986" y="364" text-anchor="middle">fleet · detail · AI</text>
+</g>
+
+<!-- Legend -->
+<circle cx="8"   cy="418" r="3.5" fill="#3b82f6"/><text class="lt" x="16"  y="422">Sensors</text>
+<circle cx="78"  cy="418" r="3.5" fill="#4f46e5"/><text class="lt" x="86"  y="422">Bronze</text>
+<circle cx="148" cy="418" r="3.5" fill="#7c3aed"/><text class="lt" x="156" y="422">Silver/Gold</text>
+<circle cx="248" cy="418" r="3.5" fill="#a78bfa"/><text class="lt" x="256" y="422">Rules</text>
+<circle cx="308" cy="418" r="3.5" fill="#8b5cf6"/><text class="lt" x="316" y="422">ML</text>
+<circle cx="356" cy="418" r="3.5" fill="#6366f1"/><text class="lt" x="364" y="422">AI</text>
+<circle cx="406" cy="418" r="3.5" fill="#22c55e"/><text class="lt" x="414" y="422">Dashboard</text>
+</svg>
+
+<div id="howto" class="info">
+  <div class="hw">
+    <div class="hc"><div class="hn">1 - Ingest</div><div class="ht">25 ESP wells stream pressure, temperature, vibration and current into pump_telemetry as high-frequency Delta.</div></div>
+    <div class="hc"><div class="hn">2 - Refine</div><div class="ht">latest_reading_per_well snapshots the newest reading per well; pump_features aggregates per well-hour for ML.</div></div>
+    <div class="hc"><div class="hn">3 - Detect</div><div class="ht">Threshold rules (1200-2400 psi, motor temp 250&#176;F) and 3&#963; anomaly detection flag at-risk wells.</div></div>
+    <div class="hc"><div class="hn">4 - Predict</div><div class="ht">A classifier scores each well-hour and writes pump_failure_predictions with a failure probability.</div></div>
+    <div class="hc"><div class="hn">5 - Advise</div><div class="ht">A Mosaic AI agent calls 6 live SQL tools to investigate a well and recommend actions.</div></div>
+    <div class="hc"><div class="hn">6 - Visualize</div><div class="ht">This dashboard unifies fleet KPIs, well-level telemetry, and the AI investigator.</div></div>
+  </div>
+  <div style="margin-top:6px;font-size:9px;color:#4B5563;text-align:center">Click any node for details</div>
+</div>
+
+<div id="detail" class="info" style="display:none">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+    <span class="db2" id="db2">TYPE</span>
+    <button onclick="clr()" style="font-size:10px;background:#1E2D4F;color:#94A3B8;border:none;border-radius:4px;padding:3px 10px;cursor:pointer">&#8592; Back</button>
+  </div>
+  <div class="dt2" id="dt2">Node Title</div>
+  <div class="dl2" id="dl2"></div>
+</div>
+
+<script>
+const D = {
+  sensors:   {b:"SENSORS",  b_c:"#3b82f6", t:"ESP Downhole Sensors",
+              l:["25 ESP-equipped wells","Pressure, temperature, vibration","Motor current &amp; drive frequency","High-frequency telemetry"]},
+  bronze:    {b:"BRONZE",   b_c:"#4f46e5", t:"pump_telemetry (Bronze)",
+              l:["Raw high-frequency readings","Delta table in Unity Catalog","Liquid-clustered by well &amp; time","Source of truth for replay"]},
+  silver:    {b:"SILVER",   b_c:"#7c3aed", t:"latest_reading_per_well",
+              l:["Newest reading per well","Drives the live dashboard","Feeds threshold + anomaly checks","Always-current snapshot"]},
+  gold:      {b:"GOLD",     b_c:"#7c3aed", t:"pump_features (Gold)",
+              l:["Aggregated per well-hour","Rolling temp/pressure/vibration","ML training + scoring table","Label: failure_flag"]},
+  rules:     {b:"RULES",    b_c:"#a78bfa", t:"Rules &amp; Anomaly",
+              l:["Intake pressure 1200-2400 psi","Motor temp threshold 250&#176;F","3&#963; vs 7-day baseline","Hard-threshold breach flags"]},
+  ml:        {b:"ML",       b_c:"#8b5cf6", t:"Predictive ML",
+              l:["Classifier on pump_features","Writes pump_failure_predictions","Failure probability per window","Registered in Unity Catalog"]},
+  advisor:   {b:"AI",       b_c:"#6366f1", t:"Advisor AI Agent",
+              l:["Mosaic AI Model Serving","6 live SQL function tools","Grounded in current telemetry","Returns ranked actions"]},
+  dashboard: {b:"APP",      b_c:"#22c55e", t:"ESP Ops Dashboard",
+              l:["Streamlit on Databricks Apps","Fleet posture + risk charts","Per-well telemetry deep-dive","Embedded AI investigator"]},
+};
+let s = null;
+function sel(id){
+  if(s) document.getElementById('n-'+s)?.classList.remove('sel');
+  s = id; document.getElementById('n-'+id)?.classList.add('sel');
+  const d = D[id]; if(!d) return;
+  const b = document.getElementById('db2');
+  b.textContent = d.b;
+  b.style.cssText = 'background:'+d.b_c+'22;color:'+d.b_c+';border:1px solid '+d.b_c+'55;display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;margin-bottom:6px';
+  document.getElementById('dt2').innerHTML = d.t;
+  document.getElementById('dl2').innerHTML = d.l.map(x => '<div class="di">'+x+'</div>').join('');
+  document.getElementById('howto').style.display = 'none';
+  document.getElementById('detail').style.display = 'block';
+}
+function clr(){
+  if(s){ document.getElementById('n-'+s)?.classList.remove('sel'); s = null; }
+  document.getElementById('howto').style.display = 'block';
+  document.getElementById('detail').style.display = 'none';
+}
+</script>
+</body></html>

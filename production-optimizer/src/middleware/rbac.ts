@@ -31,6 +31,8 @@ export function attachDemoUser(req: Request, _res: Response, next: NextFunction)
     roles: [
       ROLES.PROD_ENGINEER,
       ROLES.RESERVOIR_ENGINEER,
+      ROLES.COMMERCIAL_ANALYST,
+      ROLES.SHIFT_SUPERVISOR,
     ],
   };
   next();

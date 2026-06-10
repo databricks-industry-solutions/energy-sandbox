@@ -1,62 +1,64 @@
 import { Router, Request, Response } from 'express';
 import { requireRole, ROLES } from '../middleware/rbac';
 import { InMemoryTwinDataProvider } from '../twin/provider';
-import { getWellEconomics, getFieldEconomicsSummary } from '../commercial/economics';
+import { genieClient } from './genie';
 
 const router = Router();
 const provider = new InMemoryTwinDataProvider();
 
-// POST /api/agent/query
+const HIDDEN_PROP_KEYS = new Set(['color', 'geometry', 'layerType', '_vectorTileFeature']);
+
+function describeFeature(f: Record<string, unknown>): string {
+  const name = (f.name as string) || (f.id as string) || (f.well_id as string) || 'asset';
+  const pairs = Object.entries(f)
+    .filter(([k, v]) => !HIDDEN_PROP_KEYS.has(k) && v !== null && v !== undefined && v !== '' && k !== 'name')
+    .slice(0, 8)
+    .map(([k, v]) => `${k}=${v}`)
+    .join(', ');
+  return pairs ? `${name} (${pairs})` : name;
+}
+
+// POST /api/agent/query — delegates to Genie
 router.post(
   '/query',
   requireRole(ROLES.PROD_ENGINEER, ROLES.RESERVOIR_ENGINEER, ROLES.COMMERCIAL_ANALYST, ROLES.AI_AGENT_PROD, ROLES.AI_AGENT_COMM),
   async (req: Request, res: Response) => {
-    const { prompt, selectedEntities, agentRole } = req.body as {
+    const { prompt, selectedEntities, conversation_id } = req.body as {
       prompt?: string;
-      selectedEntities?: string[];
-      agentRole?: string;
+      selectedEntities?: Array<Record<string, unknown>>;
+      conversation_id?: string;
     };
 
     if (!prompt) {
       return res.status(400).json({ error: 'prompt is required' });
     }
 
-    const state = await provider.loadState();
+    const features = Array.isArray(selectedEntities) ? selectedEntities : [];
+    const contextLine = features.length
+      ? `Context — selected ${features.length === 1 ? 'asset' : 'assets'}: ${features.map(describeFeature).join('; ')}.`
+      : '';
+    const question = contextLine ? `${contextLine}\n\n${prompt.trim()}` : prompt.trim();
 
-    // Gather context for selected entities
-    const entities = selectedEntities ?? [];
-    const relevantWells = state.wells.filter((w) => entities.includes(w.id));
-    const relevantFacilities = state.facilities.filter((f) => entities.includes(f.id));
-    const relevantPatterns = state.patterns.filter((p) => entities.includes(p.id));
-    const relevantAlerts = state.alerts.filter((a) => entities.includes(a.source));
-
-    // Gather economics if commercial role
-    let economics = null;
-    if (!agentRole || agentRole === 'commercial') {
-      const wellEcon = getWellEconomics(state).filter((e) => entities.includes(e.wellId));
-      const fieldSummary = getFieldEconomicsSummary(state);
-      economics = { wellEcon, fieldSummary };
+    try {
+      const result = await genieClient.askSync(question, conversation_id);
+      const counts: Record<string, number> = { selected: features.length };
+      if (Array.isArray(result.rows)) counts.rows = result.rows.length;
+      res.json({
+        summary: result.text || result.error || 'No response from Genie.',
+        agentRole: 'genie',
+        contextCounts: counts,
+        conversation_id: result.conversation_id,
+        sql: result.sql,
+        columns: result.columns,
+        rows: result.rows,
+      });
+    } catch (e: any) {
+      console.error('[agent.query] genie error:', e?.message || e);
+      res.status(502).json({
+        summary: `Genie error: ${e?.message || e}`,
+        agentRole: 'genie',
+      });
     }
-
-    res.json({
-      summary: 'TODO: Claude API integration — this endpoint will forward the prompt and context to Claude for analysis',
-      prompt,
-      agentRole: agentRole ?? 'general',
-      contextCounts: {
-        wells: relevantWells.length,
-        facilities: relevantFacilities.length,
-        patterns: relevantPatterns.length,
-        alerts: relevantAlerts.length,
-        hasEconomics: economics !== null,
-      },
-      context: {
-        wells: relevantWells,
-        facilities: relevantFacilities,
-        patterns: relevantPatterns,
-        alerts: relevantAlerts,
-        economics,
-      },
-    });
   },
 );
 

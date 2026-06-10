@@ -1,0 +1,29 @@
+command:
+  - streamlit
+  - run
+  - app.py
+  - --server.port=8000
+  - --server.headless=true
+  - --server.enableCORS=false
+  - --server.enableXsrfProtection=false
+
+env:
+  - name: AGENT_MODEL
+    value: databricks-claude-sonnet-4-6
+  - name: DATABRICKS_WAREHOUSE_ID
+    value: 87e069097741b56c
+  - name: GENIE_SPACE_ID
+    value: 01f1647fb02a12d7ae6fa90c0378546d
+  - name: MAS_ENDPOINT
+    value: mas-5115482b-endpoint
+
+resources:
+  - name: pump_telemetry
+    type: table
+    identifier: oil_pump_monitor_catalog.esp_hackathon.pump_telemetry
+  - name: latest_reading_per_well
+    type: table
+    identifier: oil_pump_monitor_catalog.esp_hackathon.latest_reading_per_well
+  - name: pump_failure_predictions
+    type: table
+    identifier: oil_pump_monitor_catalog.esp_hackathon.pump_failure_predictions
